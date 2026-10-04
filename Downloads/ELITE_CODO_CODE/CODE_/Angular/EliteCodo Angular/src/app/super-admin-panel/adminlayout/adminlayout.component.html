@@ -1,0 +1,152 @@
+<nz-layout class="app-layout">
+  <nz-sider class="menu-sidebar" nzCollapsible nzWidth="250px" nzBreakpoint="md" [(nzCollapsed)]="isCollapsed"
+    [nzTrigger]="null">
+    <div class="sidebar-logo">
+      <a>
+        <img src="../../../assets/images/elitecodo.png" alt="logo" />
+        <h1>EliteCodo</h1>
+      </a>
+    </div>
+    <ul nz-menu nzTheme="dark" nzMode="inline" [nzInlineCollapsed]="isCollapsed">
+      <!-- Dashboard Page -->
+      <li nz-menu-item routerLink="../../super_admin/Slayout" routerLinkActive="active-menu-item">
+        <i nz-icon nzType="dashboard"></i>
+        <span>Dashboard</span>
+      </li>
+      <!-- Questions-Management Page -->
+      <li nz-menu-item routerLink="question-management" routerLinkActive="active-menu-item">
+        <i nz-icon nzType="info-circle"></i>
+        <span>Questions-Management</span>
+      </li>
+      <!-- Institution Section -->
+      <li nz-menu-item routerLink="Institution-management" routerLinkActive="active-menu-item">
+        <i nz-icon nzType="info-circle"></i>
+        <span>Institution Management</span>
+      </li>
+      <!-- Admin Section -->
+      <li nz-menu-item routerLink="admin-management" routerLinkActive="active-menu-item">
+        <i nz-icon nzType="info-circle"></i>
+        <span>Admin Management</span>
+      </li>
+      <!-- Teacher Section -->
+      <li nz-menu-item routerLink="teacher-management" routerLinkActive="active-menu-item">
+        <i nz-icon nzType="info-circle"></i>
+        <span>Teacher Management</span>
+      </li>
+      <!-- Manage Student -->
+      <li nz-menu-item routerLink="student-management" routerLinkActive="active-menu-item">
+        <i nz-icon nzType="info-circle"></i>
+        <span style="text-transform: capitalize">Student Management</span>
+      </li>
+      <!-- Study Resources -->
+      <li nz-submenu nzTitle="Study Resources" nzIcon="home">
+        <ul>
+          <!-- standard-management -->
+          <li nz-menu-item routerLink="standard-management" routerLinkActive="active-menu-item">
+            <i nz-icon nzType="info-circle"></i>
+            <span style="text-transform: capitalize">Standard</span>
+          </li>
+          <!-- Exam -->
+          <li nz-menu-item routerLink="exam-management" routerLinkActive="active-menu-item">
+            <i nz-icon nzType="info-circle"></i>
+            <span style="text-transform: capitalize">Exam</span>
+          </li>
+          <!-- subject -->
+          <li nz-menu-item routerLink="subject-management" routerLinkActive="active-menu-item">
+            <i nz-icon nzType="info-circle"></i>
+            <span style="text-transform: capitalize">Subject</span>
+          </li>
+          <!-- Chapter -->
+          <li nz-menu-item routerLink="chapter-management" routerLinkActive="active-menu-item">
+            <i nz-icon nzType="info-circle"></i>
+            <span style="text-transform: capitalize">Chapter</span>
+          </li>
+          <!-- Topic -->
+          <li nz-menu-item routerLink="topic-management" routerLinkActive="active-menu-item">
+            <i nz-icon nzType="info-circle"></i>
+            <span style="text-transform: capitalize">Topic</span>
+          </li>
+          <!-- subTopic-management -->
+          <li nz-menu-item routerLink="subTopic-management" routerLinkActive="active-menu-item">
+            <i nz-icon nzType="info-circle"></i>
+            <span style="text-transform: capitalize">Sub-Topic</span>
+          </li>
+          <li nz-menu-item routerLink="Chapter-Wise-weightage" routerLinkActive="active-menu-item">
+            <i nz-icon nzType="info-circle"></i>
+            <span style="text-transform: capitalize">Chapter Wise Weightage</span>
+          </li>
+        </ul>
+      </li>
+      <!-- Question Format -->
+      <li nz-submenu nzTitle="Question Format" nzIcon="home">
+        <ul>
+          <!-- year Of Appearance-management -->
+          <li nz-menu-item routerLink="year-management" routerLinkActive="active-menu-item">
+            <i nz-icon nzType="info-circle"></i>
+            <span style="text-transform: capitalize">Year Of Appearance</span>
+          </li>
+          <!-- Pattern Level-management -->
+          <li nz-menu-item routerLink="pattern-management" routerLinkActive="active-menu-item">
+            <i nz-icon nzType="info-circle"></i>
+            <span style="text-transform: capitalize">Pattern Master</span>
+          </li>
+          <!-- question Type-management -->
+          <li nz-menu-item routerLink="questionType-management" routerLinkActive="active-menu-item">
+            <i nz-icon nzType="info-circle"></i>
+            <span style="text-transform: capitalize">Question Type</span>
+          </li>
+        </ul>
+      </li>
+      <!-- Question_Report Page -->
+      <li nz-menu-item routerLink="question_report" routerLinkActive="active-menu-item">
+        <i nz-icon nzType="info-circle"></i>
+        <span>Report</span>
+      </li>
+    </ul>
+  </nz-sider>
+  <nz-layout>
+    <nz-header>
+      <div class="app-header" nzTheme="dark" nzMode="inline">
+        <span class="header-trigger" (click)="isCollapsed = !isCollapsed">
+          <span class="trigger" nz-icon [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"></span>
+        </span>
+        
+        <!-- Back button with conditional display - only shows on sub-pages, not on dashboard -->
+        <button 
+          *ngIf="showBackButton" 
+          class="btn btn-outline-primary mx-3 btn-claaa" 
+          type="button" 
+          title="Go back" 
+          (click)="goBack()">
+          <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="1em" width="1em"
+            xmlns="http://www.w3.org/2000/svg">
+            <path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="48"
+              d="M244 400L100 256l144-144M120 256h292"></path>
+          </svg>
+        </button>
+        
+        <span class="account my_accout">
+          <div class="action">
+            <div class="profile">
+              <img src="../../../assets/images/elitecodo.png" alt="profile-img" />
+            </div>
+            <div class="menu">
+              <p>{{ NameOFSuperAdmin }}</p>
+              <ul>
+                <li (click)="Logout()">
+                  <i class="far fa-user-circle"></i>
+                  <a>Log Out</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </span>
+      </div>
+    </nz-header>
+    <nz-content>
+      <div class="inner-content">
+        <router-outlet></router-outlet>
+      </div>
+    </nz-content>
+  </nz-layout>
+</nz-layout>

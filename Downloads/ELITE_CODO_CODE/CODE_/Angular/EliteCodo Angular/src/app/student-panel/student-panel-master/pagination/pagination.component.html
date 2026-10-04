@@ -1,0 +1,29 @@
+<div class="pagination-container" *ngIf="totalPages > 1">
+    <div class="pagination-wrapper">
+        <button class="pagination-btn" [class.disabled]="currentPage === 1" (click)="changePage(currentPage - 1)"
+            [disabled]="currentPage === 1">
+            <i class="fa fa-chevron-left"></i>
+        </button>
+
+        <div class="page-numbers">
+            <button *ngFor="let page of visiblePages" class="page-number" [class.active]="page === currentPage"
+                (click)="changePage(page)">
+                {{ page }}
+            </button>
+        </div>
+
+        <button class="pagination-btn" [class.disabled]="currentPage === totalPages"
+            (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">
+            <i class="fa fa-chevron-right"></i>
+        </button>
+    </div>
+
+    <div class="items-per-page">
+        <select [(ngModel)]="itemsPerPage" (change)="onItemsPerPageChange()" class="items-select">
+            <option [value]="5">5 / page</option>
+            <option [value]="10">10 / page</option>
+            <option [value]="25">25 / page</option>
+            <option [value]="50">50 / page</option>
+        </select>
+    </div>
+</div>

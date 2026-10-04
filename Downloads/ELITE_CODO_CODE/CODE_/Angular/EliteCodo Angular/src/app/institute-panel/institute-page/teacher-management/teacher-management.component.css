@@ -1,0 +1,69 @@
+/* Form Group Wrapper */
+.form-group-wrapper {
+    margin-bottom: 20px;
+}
+
+.form-group {
+    position: relative;
+}
+
+/* Input Group Styles */
+.input-group {
+    position: relative;
+}
+
+.input-group .form-control {
+    padding-right: 40px;
+    /* Space for toggle button */
+}
+
+.input-group .toggle-password {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+/* Invalid Feedback Container */
+.invalid-feedback-container {
+    min-height: 20px;
+    margin-top: 5px;
+}
+
+/* Error State */
+.is-invalid .form-control {
+    border-color: red;
+}
+
+/* Additional Styles */
+.profile_picture {
+    border-radius: 50%;
+    height: 100px;
+    padding: 10px;
+}
+
+/* Status Styles - Match Admin/Institution/Student */
+.status {
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+.activeStatus {
+    color: #28a745 !important;
+    background-color: #d4edda !important;
+    border-radius: 4px;
+    padding: 4px 12px;
+}
+
+.inactiveStatus {
+    color: #dc3545 !important;
+    background-color: #f8d7da !important;
+    border-radius: 4px;
+    padding: 4px 12px;
+}

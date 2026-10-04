@@ -1,0 +1,200 @@
+<section [ngStyle]="{ 'background-color': http.getBackgroundColor() }">
+    <ng-container *ngIf="loading">
+        <div class="loading-container">
+            <div class="loading-spinner">
+                <i class="fas fa-circle-notch fa-3x fa-spin" style="color: #3b82f6;"></i>
+            </div>
+            <h3>Loading your exam results...</h3>
+        </div>
+    </ng-container>
+
+    <ng-container *ngIf="errorMsg">
+        <div class="error-container">
+            <i class="fas fa-exclamation-triangle fa-3x" style="color: #ef4444;"></i>
+            <h3>Oops! Something went wrong</h3>
+            <p>{{errorMsg}}</p>
+            <button mat-raised-button color="primary" (click)="retryLoading()">Try Again</button>
+        </div>
+    </ng-container>
+
+    <ng-container *ngIf="!loading && !errorMsg">
+        <mat-card class="m-2 p-3 intro-card">
+            <h3 class="text-center form-heaading">Exam Results</h3>
+            <p class="text-center result-subtitle">Your performance at a glance</p>
+        </mat-card>
+        <!-- HTML Template -->
+        <div class="results-summary">
+            <h4>Exam Summary</h4>
+            <div class="summary-grid">
+                <div class="summary-item">
+                    <div class="summary-icon"><i class="fas fa-list-ol fa-2x"></i></div>
+                    <div class="summary-label">Total Questions</div>
+                    <div class="summary-value">{{ questions.length }}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-icon"><i class="fas fa-pen fa-2x"></i></div>
+                    <div class="summary-label">Attempted Questions</div>
+                    <div class="summary-value">{{ getAttemptedQuestions() }}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-icon"><i class="fas fa-check-circle fa-2x"></i></div>
+                    <div class="summary-label">Correct Answers</div>
+                    <div class="summary-value">{{ getCorrectAnswersCount() }}</div>
+                </div>
+                <div class="summary-item wrong-answers">
+                    <div class="summary-icon"><i class="fas fa-times-circle fa-2x"></i></div>
+                    <div class="summary-label">Wrong Answers</div>
+                    <div class="summary-value">{{ getWrongAnswersCount() }}</div>
+                </div>
+                <div class="summary-item unattempted">
+                    <div class="summary-icon"><i class="fas fa-minus-circle fa-2x"></i></div>
+                    <div class="summary-label">Unattempted Questions</div>
+                    <div class="summary-value">{{ getUnattemptedQuestionsCount() }}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-icon"><i class="fas fa-award fa-2x"></i></div>
+                    <div class="summary-label">Total Score</div>
+                    <div class="summary-value">{{ getTotalScore() }} / {{ getTotalPossibleScore() }}</div>
+                </div>
+                <!-- <div class="summary-item percentage">
+                    <div class="summary-icon"><i class="fas fa-percent fa-2x"></i></div>
+                    <div class="summary-label">Percentage</div>
+                    <div class="summary-value">{{ getPercentage() }}%</div>
+                </div>
+                <div class="summary-item percentile">
+                    <div class="summary-icon"><i class="fas fa-chart-line fa-2x"></i></div>
+                    <div class="summary-label">Percentile</div>
+                    <div class="summary-value">{{ getPercentile() }}</div>
+                </div> -->
+            </div>
+
+            <!-- Performance Section -->
+            <div class="performance-section" *ngIf="getTotalPossibleScore() > 0">
+                <div class="progress-container">
+                    <div class="progress-bar"
+                        [ngStyle]="{'width': (getTotalScore() / getTotalPossibleScore() * 100) + '%'}">
+                    </div>
+                </div>
+                <div class="progress-text">
+                    {{ (getTotalScore() / getTotalPossibleScore() * 100).toFixed(1) }}% Score
+                </div>
+
+                <div class="feedback-message">
+                    <ng-container *ngIf="(getTotalScore() / getTotalPossibleScore()) >= 0.8">
+                        <i class="fas fa-trophy"></i> Excellent performance! Well done!
+                    </ng-container>
+                    <ng-container
+                        *ngIf="(getTotalScore() / getTotalPossibleScore()) >= 0.6 && (getTotalScore() / getTotalPossibleScore()) < 0.8">
+                        <i class="fas fa-medal"></i> Good job! Keep improving!
+                    </ng-container>
+                    <ng-container *ngIf="(getTotalScore() / getTotalPossibleScore()) < 0.6">
+                        <i class="fas fa-book"></i> More practice will help you improve!
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+        <div class="question-card" *ngFor="let question of questions;let i = index">
+            <!-- Column 1 -->
+            <div class="column-1">
+                <span>Q{{i+1}}</span>
+            </div>
+
+            <!-- Column 2 -->
+            <div class="column-2">
+                <div class="question-content" [innerHTML]="question.question"></div>
+                <div class="options-grid">
+                    <div class="option-wrapper">
+                        <span class="option-label">Option A.</span>
+                        <div class="option" [innerHTML]="question.option1"
+                            [class.correct-answer]="isCorrectAnswer(question.multiAnswers, 'option1')"
+                            [class.user-selected]="isUserSelected(question.userSelectedOptions, 'option1')"
+                            [class.incorrect-selection]="isIncorrectSelection(question.userSelectedOptions, question.multiAnswers, 'option1')">
+                        </div>
+                    </div>
+                    <div class="option-wrapper">
+                        <span class="option-label">Option B.</span>
+                        <div class="option" [innerHTML]="question.option2"
+                            [class.correct-answer]="isCorrectAnswer(question.multiAnswers, 'option2')"
+                            [class.user-selected]="isUserSelected(question.userSelectedOptions, 'option2')"
+                            [class.incorrect-selection]="isIncorrectSelection(question.userSelectedOptions, question.multiAnswers, 'option2')">
+                        </div>
+                    </div>
+                    <div class="option-wrapper">
+                        <span class="option-label">Option C.</span>
+                        <div class="option" [innerHTML]="question.option3"
+                            [class.correct-answer]="isCorrectAnswer(question.multiAnswers, 'option3')"
+                            [class.user-selected]="isUserSelected(question.userSelectedOptions, 'option3')"
+                            [class.incorrect-selection]="isIncorrectSelection(question.userSelectedOptions, question.multiAnswers, 'option3')">
+                        </div>
+                    </div>
+                    <div class="option-wrapper">
+                        <span class="option-label">Option D.</span>
+                        <div class="option" [innerHTML]="question.option4"
+                            [class.correct-answer]="isCorrectAnswer(question.multiAnswers, 'option4')"
+                            [class.user-selected]="isUserSelected(question.userSelectedOptions, 'option4')"
+                            [class.incorrect-selection]="isIncorrectSelection(question.userSelectedOptions, question.multiAnswers, 'option4')">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question Status -->
+                <div class="status-section">
+                    <ng-container *ngIf="!question.userSelectedOptions || question.userSelectedOptions.length === 0">
+                        <div class="not-attempted-status">
+                            <i class="fas fa-minus-circle"></i> Not Attempted
+                        </div>
+                    </ng-container>
+
+                    <ng-container *ngIf="question.userSelectedOptions && question.userSelectedOptions.length > 0">
+                        <div [ngClass]="isAnswerCorrect(question.userSelectedOptions, question.multiAnswers) ? 
+                    'status-badge correct' : 'status-badge incorrect'">
+                            <i [class]="isAnswerCorrect(question.userSelectedOptions, question.multiAnswers) ? 
+                      'fas fa-check-circle' : 'fas fa-times-circle'"></i>
+                            {{isAnswerCorrect(question.userSelectedOptions, question.multiAnswers) ?
+                            'Correct Answer' : 'Incorrect Answer'}}
+                        </div>
+                    </ng-container>
+                </div>
+
+                <!-- Metadata Section -->
+                <div class="metadata">
+                    <!-- Time Spent -->
+                    <div *ngIf="question.timeSpentSeconds">
+                        <span class="time-spent-title"><i class="fas fa-clock"></i> Time Spent:</span>
+                        <span class="time-spent-content">{{ question.timeSpentSeconds }} seconds</span>
+                    </div>
+
+                    <!-- Explanation -->
+                    <div *ngIf="question.explanation">
+                        <span class="explanation-title"><i class="fas fa-lightbulb"></i> Explanation:</span>
+                        <span [innerHTML]="question.explanation" class="explanation-content"></span>
+                    </div>
+
+                    <!-- ...Marks Display... -->
+                    <div class="marks-display">
+                        <i class="fas fa-award"></i> Marks: {{ question.marks }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Column 3 -->
+            <div class="column-3">
+                <div class="score-indicator"
+                    *ngIf="question.userSelectedOptions && question.userSelectedOptions.length > 0">
+                    <div *ngIf="isAnswerCorrect(question.userSelectedOptions, question.multiAnswers)"
+                        class="score-correct">
+                        <i class="fas fa-plus-circle"></i> {{ question.marks }}
+                    </div>
+                    <div *ngIf="!isAnswerCorrect(question.userSelectedOptions, question.multiAnswers)"
+                        class="score-incorrect">
+                        <i class="fas fa-times-circle"></i> 0
+                    </div>
+                </div>
+                <div *ngIf="!question.userSelectedOptions || question.userSelectedOptions.length === 0"
+                    class="score-not-attempted">
+                    <i class="fas fa-minus-circle"></i> --
+                </div>
+            </div>
+        </div>
+    </ng-container>
+</section>

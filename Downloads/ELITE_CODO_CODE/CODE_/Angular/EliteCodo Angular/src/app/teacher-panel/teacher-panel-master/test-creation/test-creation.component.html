@@ -1,0 +1,304 @@
+<section [ngStyle]="{ 'background-color': http.getBackgroundColor() }">
+  <!-- Header -->
+  <div class="header">
+    <div class="dropdown">
+      <label for="sort">Sets Count: {{ setsList.length }}</label>
+    </div>
+    <div class="dropdown">
+      <label>
+        <input type="checkbox" />
+        Level:
+      </label>
+      <select id="type" (change)="setQuestionList($event)">
+        <option value="" disabled selected>Select</option>
+        <option *ngFor="let item of QuestionLevelsList" [value]="item.questionLevel" class="text-dark">
+          {{ item.questionLevel }}
+        </option>
+      </select>
+    </div>
+
+    <div class="dropdown">
+      <label>
+        <input type="checkbox" />
+        Type:
+      </label>
+      <select id="category" name="questionCategory" (change)="onCategoryChange($event)">
+        <option [ngValue]="null" disabled selected>Select</option>
+        <option [ngValue]="'Theoretical'">Theoretical</option>
+        <option [ngValue]="'Numerical'">Numerical</option>
+      </select>
+    </div>
+
+    <div class="dropdown">
+      <label>
+        <input type="checkbox" />
+        Used:
+      </label>
+      <select id="type" (change)="onUsedChange($event)">
+        <option value="" disabled selected>Select</option>
+        <option value="ALL">All</option>
+        <option value="USED">Used</option>
+        <option value="UNUSED">Not Used</option>
+      </select>
+    </div>
+
+    <div class="dropdown">
+      <label>
+        <input type="checkbox" />
+        Previously Asked:
+      </label>
+      <select id="pyq" (change)="onPyqChange($event)">
+        <option value="asked">Asked</option>
+        <option value="notasked" selected>Not Asked</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Edit Configuration Section -->
+  <div *ngIf="isEditMode" class="edit-config-section">
+    <div class="edit-config-header">
+      <h5>✏️ Edit Test Configuration</h5>
+      <button class="btn-toggle-config" (click)="showEditConfig = !showEditConfig">
+        {{ showEditConfig ? 'Hide' : 'Show' }} Configuration
+      </button>
+    </div>
+    
+    <div *ngIf="showEditConfig" class="edit-config-body">
+      <div class="config-group">
+        <h6>Select Subjects</h6>
+        <div class="subject-checkbox-grid">
+          <div *ngFor="let subject of allAvailableSubjects" class="subject-checkbox-item">
+            <input
+              type="checkbox"
+              [id]="'edit-subject-' + subject.subjectId"
+              [checked]="isSubjectSelectedForEdit(subject.subjectId)"
+              (change)="toggleSubjectForEdit(subject.subjectId, $event)"
+            />
+            <label [for]="'edit-subject-' + subject.subjectId">
+              {{ subject.subjectName }}
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="config-group" *ngIf="selectedSubjectIdsForEdit.length > 0">
+        <h6>Select Chapters</h6>
+        <div class="chapter-checkbox-grid">
+          <div *ngFor="let chapter of allAvailableChapters" class="chapter-checkbox-item">
+            <input
+              type="checkbox"
+              [id]="'edit-chapter-' + chapter.chapterId"
+              [checked]="isChapterSelectedForEdit(chapter.chapterId)"
+              (change)="toggleChapterForEdit(chapter.chapterId, $event)"
+            />
+            <label [for]="'edit-chapter-' + chapter.chapterId">
+              {{ chapter.chapterName }}
+              <span class="subject-tag">{{ chapter.subjectName }}</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="config-actions">
+        <button class="btn-apply-config" (click)="applyEditConfigChanges()">
+          🔄 Apply Changes & Refresh Questions
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main 3-Column Layout -->
+  <div class="main-grid">
+    <!-- Left Panel - Selected Questions -->
+    <div class="panel left-panel">
+      <div class="panel-header">
+        <h6>Selected Questions</h6>
+        <div class="selected-count" *ngIf="defaultQuestionList.length > 0">
+          <span class="count-badge">{{ defaultQuestionList.length }}</span>
+        </div>
+      </div>
+      <div class="selected-subjects-info" *ngIf="selectedSubjectsList.length > 0">
+        <strong>Subjects:</strong>
+        <span *ngFor="let subject of selectedSubjectsList; let last = last">
+          {{ subject.subjectName }}<span *ngIf="!last">, </span>
+        </span>
+      </div>
+      <div class="question-grid">
+        <button *ngFor="let item of this.defaultQuestionList; let i = index" 
+          (click)="removeQuestion(item)" class="q-btn selected-q">
+          {{ i + 1 }}
+        </button>
+        <div *ngIf="defaultQuestionList.length === 0" class="empty-msg">
+          No questions selected
+        </div>
+      </div>
+    </div>
+
+    <!-- Center Panel - Question Preview -->
+    <div class="panel center-panel">
+      <div *ngIf="questionObj.question.length > 0" class="question-preview">
+        <div class="question-text">
+          <strong>Q{{ questionObj.index + 1 }}.</strong>
+          <span [innerHTML]="questionObj.question"></span>
+        </div>
+        <div class="options-grid">
+          <div class="option-item">
+            <strong>1.</strong> <span [innerHTML]="questionObj.option1"></span>
+          </div>
+          <div class="option-item">
+            <strong>2.</strong> <span [innerHTML]="questionObj.option2"></span>
+          </div>
+          <div class="option-item">
+            <strong>3.</strong> <span [innerHTML]="questionObj.option3"></span>
+          </div>
+          <div class="option-item">
+            <strong>4.</strong> <span [innerHTML]="questionObj.option4"></span>
+          </div>
+        </div>
+        <div class="answer-section">
+          <div class="correct-answer">
+            <strong>Correct Answer:</strong>
+            <span *ngFor="let answer of questionObj.multiAnswers; let last = last">
+              {{ answer }}<span *ngIf="!last">, </span>
+            </span>
+          </div>
+          <div class="explanation">
+            <strong>Explanation:</strong>
+            <span [innerHTML]="questionObj.explanation"></span>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="questionObj.question.length <= 0" class="empty-state">
+        <div class="empty-icon">ℹ</div>
+        <p>Select a question to preview</p>
+      </div>
+    </div>
+
+    <!-- Right Panel - Available Questions -->
+    <div class="panel right-panel">
+      <div class="panel-header">
+        <h6>Available Questions</h6>
+        <div class="available-count" *ngIf="buttons.length > 0">
+          <span class="count-badge">{{ buttons.length }}</span>
+        </div>
+      </div>
+      <div class="question-grid" *ngFor="let category of categorizeQuestionsList">
+        <div class="category-label">{{ category.questionType }}</div>
+        <div class="q-grid">
+          <button *ngFor="let item of category.array; let i = index" 
+            (click)="dragquestion(item, i)"
+            [class.selected]="isQuestionSelected(item.questionId)" 
+            class="q-btn avail-q">
+            {{ i + 1 }}
+          </button>
+        </div>
+      </div>
+      <div class="pagination-controls" *ngIf="paginationData">
+        <button (click)="prevPage()" [disabled]="paginationData.currentPage === 1">
+          &laquo;
+        </button>
+        <span>Page {{ paginationData.currentPage }} of {{ paginationData.totalPages }}</span>
+        <button (click)="nextPage()" [disabled]="paginationData.currentPage === paginationData.totalPages">
+          &raquo;
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Controls -->
+  <div class="bottom-bar">
+    <!-- Row 1 -->
+    <div class="bottom-row">
+      <div class="action-buttons">
+        <button class="btn btn-add" (click)="addToQuestionList()">
+          <i class="fa fa-plus"></i> Add
+        </button>
+        <button class="btn btn-home" routerLink="/teacher/teacher_home">
+          <i class="fa fa-home"></i> Home
+        </button>
+        <button class="btn btn-shuffle" (click)="getShuffuleNewList()">
+          <i class="fa fa-random"></i> Shuffle
+        </button>
+      </div>
+
+      <div class="marks-control">
+        <div class="marks-input">
+          <label>Total Marks</label>
+          <input [(ngModel)]="marks" name="marks" #marksRef="ngModel" required min="10" type="number"
+            placeholder="100" />
+          <div class="error-text" *ngIf="marksRef.invalid && marksRef.touched">
+            Min 10
+          </div>
+        </div>
+        <div class="marks-stats">
+          <span class="stat">
+            <span class="stat-label">Questions</span>
+            <span class="stat-value">{{ defaultQuestionList.length }}</span>
+          </span>
+          <span class="stat-divider"></span>
+          <span class="stat">
+            <span class="stat-label">Selected Marks</span>
+            <span class="stat-value" [class.exceeds]="totalMarksShow > marks" [class.below]="totalMarksShow < marks">
+              {{ totalMarksShow }}
+            </span>
+          </span>
+          <span class="status-badge" *ngIf="totalMarksShow !== marks && marks">
+            <span [class.danger]="totalMarksShow > marks" [class.warning]="totalMarksShow < marks">
+              {{ totalMarksShow > marks ? '⚠️ +' + (totalMarksShow - marks) : '⚠️ -' + (marks - totalMarksShow) }}
+            </span>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 2 -->
+    <div class="bottom-row">
+      <div class="nav-controls">
+        <button (click)="firstQuestion()" class="nav-btn" title="First">⏮</button>
+        <button (click)="prevQuestion()" class="nav-btn" title="Previous">◀</button>
+        <span class="page-num">{{ questionObj.index + 1 }}</span>
+        <button (click)="nextQuestion()" class="nav-btn" title="Next">▶</button>
+        <button (click)="lastQuestion()" class="nav-btn" title="Last">⏭</button>
+      </div>
+
+      <div class="random-controls">
+        <span class="random-label">Random</span>
+        <div class="random-inputs">
+          <input 
+            type="number" 
+            [(ngModel)]="firstBoxValue" 
+            placeholder="From" 
+            min="1"
+            [class.error]="firstBoxError"
+          />
+          <span class="range-sep">to</span>
+          <input 
+            type="number" 
+            [(ngModel)]="secondBoxValue" 
+            placeholder="To" 
+            min="1"
+            [class.error]="secondBoxError"
+          />
+          <button class="btn btn-random" (click)="addRandomQuestions()">
+            <i class="fa fa-random"></i> Add Random
+          </button>
+        </div>
+        <div class="error-hint" *ngIf="firstBoxError || secondBoxError">
+          {{ firstBoxError || secondBoxError }}
+        </div>
+      </div>
+
+      <div class="bulk-actions">
+        <button class="btn btn-add-all" (click)="addAllQuestions()">
+          <i class="fa fa-plus-circle"></i> Add All
+        </button>
+        <button class="btn btn-remove-all" (click)="removeAll()">
+          <i class="fa fa-trash"></i> Remove All
+        </button>
+        <button class="btn btn-next" (click)="GotoSubmit()">
+          Next <i class="fa fa-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>

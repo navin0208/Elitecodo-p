@@ -1,0 +1,45 @@
+<section>
+
+    <div class="completion-container">
+        <div class="completion-card" @fadeIn>
+            <!-- Success Icon -->
+            <div class="success-icon">
+                <i nz-icon nzType="check-circle" nzTheme="fill"></i>
+            </div>
+
+            <!-- Main Content -->
+            <div class="content">
+                <h1>Test Submitted Successfully!</h1>
+                <p class="student-name">Thank you, {{studentName}}!</p>
+                <p class="test-name">{{testName}} has been completed</p>
+
+                <!-- Stats Cards -->
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <i nz-icon nzType="clock-circle" nzTheme="outline"></i>
+                        <p>Test Completed</p>
+                        <span>{{ currentDate | date:'medium' }}</span>
+                    </div>
+
+                    <div class="stat-card">
+                        <i nz-icon nzType="safety-certificate" nzTheme="outline"></i>
+                        <p>Responses Recorded</p>
+                        <span>All Secure</span>
+                    </div>
+                </div>
+
+                <!-- Message -->
+                <div class="message">
+                    <p>Your responses have been successfully recorded. You will receive your results as per the
+                        examination guidelines.</p>
+                </div>
+
+                <!-- Action Button -->
+                <button nz-button nzType="primary" (click)="goToDashboard()" class="dashboard-btn">
+                    <i nz-icon nzType="home" nzTheme="outline"></i>
+                    Return to Dashboard
+                </button>
+            </div>
+        </div>
+    </div>
+</section>

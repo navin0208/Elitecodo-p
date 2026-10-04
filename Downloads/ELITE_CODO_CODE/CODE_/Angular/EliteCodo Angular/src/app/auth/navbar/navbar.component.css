@@ -1,0 +1,159 @@
+/* Navbar styles */
+.navbar {
+    display: flex;
+    z-index: 40;
+    width: 100%;
+    height: auto;
+    align-items: center;
+    justify-content: center;
+    position: sticky;
+    top: 0;
+    inset: 0;
+    border-bottom: 1px solid var(--divider-color);
+    backdrop-filter: blur(20px);
+    background-color: rgba(var(--background-color), 0.7);
+}
+
+/* Header styles */
+.navbar-header {
+    display: flex;
+    padding: 0 24px;
+    gap: 16px;
+    width: 100%;
+    flex-direction: row;
+    position: relative;
+    align-items: center;
+    justify-content: space-between;
+    height: 4rem;
+    max-width: 1024px;
+}
+
+/* Navbar list styles */
+.navbar-list {
+    display: flex;
+    height: 100%;
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+}
+
+.navbar-list[data-justify="start"] {
+    justify-content: flex-start;
+    flex-grow: 1;
+}
+
+.navbar-list[data-justify="center"] {
+    justify-content: center;
+}
+
+.navbar-list[data-justify="end"] {
+    justify-content: flex-end;
+    flex-grow: 1;
+}
+
+/* Navbar item styles */
+.navbar-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    list-style: none;
+    font-size: 1rem;
+    white-space: nowrap;
+}
+
+.logo-item img {
+    height: 48px;
+    width: 48px;
+}
+
+.logo-text {
+    font-weight: bold;
+    font-size: 1.25rem;
+    color: inherit;
+}
+
+/* Hidden on medium screens and below */
+.hidden-md {
+    display: none;
+}
+
+@media (min-width: 768px) {
+    .hidden-md {
+        display: block;
+    }
+}
+
+/* Back button styles */
+.back-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    transition: transform 0.2s, opacity 0.2s;
+}
+
+.back-button:hover {
+    opacity: 0.8;
+}
+
+.back-button:active {
+    transform: scale(0.97);
+}
+
+/* Username styles */
+.username {
+    font-weight: 600;
+}
+
+/* Avatar styles */
+.avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(to bottom right, #FFB457, #FF705B);
+    color: var(--default-foreground);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    position: relative;
+    overflow: hidden;
+    user-select: none;
+}
+
+/* Logout button styles */
+.logout-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 1px solid var(--danger-color);
+    color: var(--danger-color);
+    padding: 0 16px;
+    height: 40px;
+    border-radius: 8px;
+    font-size: 1rem;
+    gap: 8px;
+    transition: transform 0.2s, opacity 0.2s;
+}
+
+.logout-button:hover {
+    opacity: 0.8;
+}
+
+.logout-button:active {
+    transform: scale(0.97);
+}
+
+.btn-claaa {
+    border-radius: 10px;
+}
+
+[nz-button] {
+    margin-right: 8px;
+    margin-bottom: 8px;
+}

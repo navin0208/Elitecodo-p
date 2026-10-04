@@ -1,0 +1,130 @@
+<div class="subscription-summary-container">
+  <div class="summary-header">
+    <h2>Subscription Summary</h2>
+    <p class="subtitle">Review your plan details before payment</p>
+  </div>
+
+  <div class="summary-card" *ngIf="customization">
+    <!-- Plan Name -->
+    <div class="plan-badge">
+      <i class="fas" [class.fa-building-columns]="customization.role === 'institute'" 
+         [class.fa-chalkboard-teacher]="customization.role === 'teacher'"
+         [class.fa-user-graduate]="customization.role === 'student'"></i>
+      <span>{{ getPlanName() }} Plan</span>
+      <span class="duration-badge-summary">{{ getDurationLabel() }}</span>
+    </div>
+
+    <!-- User Details -->
+    <div class="user-details" *ngIf="userDetails">
+      <h4>Account Details</h4>
+      <div class="detail-row">
+        <span>Name</span>
+        <span>{{ userDetails.fullName }}</span>
+      </div>
+      <div class="detail-row">
+        <span>Email</span>
+        <span>{{ userDetails.email }}</span>
+      </div>
+      <div class="detail-row">
+        <span>Phone</span>
+        <span>{{ userDetails.mobile || userDetails.phone }}</span>
+      </div>
+      <div class="detail-row" *ngIf="userDetails.instituteName">
+        <span>Institute</span>
+        <span>{{ userDetails.instituteName }}</span>
+      </div>
+    </div>
+
+    <!-- Subscription Details -->
+    <div class="subscription-details">
+      <h4>Plan Details</h4>
+      
+      <div class="detail-section">
+        <div class="section-label">Teachers</div>
+        <div class="section-details">
+          <div class="detail-item">
+            <span>Total Teachers</span>
+            <span>{{ getTotalTeachers() }}</span>
+          </div>
+          <div class="detail-item" *ngIf="isInstitutePlan()">
+            <span>Price per Teacher</span>
+            <span>₹{{ customization.teacherPrice }} / month</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="detail-section">
+        <div class="section-label">Students</div>
+        <div class="section-details">
+          <div class="detail-item">
+            <span>Total Students</span>
+            <span>{{ getTotalStudents() }}</span>
+          </div>
+          <div class="detail-item" *ngIf="isInstitutePlan()">
+            <span>Price per Student</span>
+            <span>₹{{ customization.studentPrice }} / month</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- NEW: Duration & Validity -->
+      <div class="detail-section duration-section">
+        <div class="section-label">Subscription Duration</div>
+        <div class="section-details">
+          <div class="detail-item">
+            <span>Plan Duration</span>
+            <span class="highlight-text">{{ getDurationLabel() }}</span>
+          </div>
+          <div class="detail-item">
+            <span>Validity Period</span>
+            <span class="highlight-text">{{ getValidityPeriod() }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Price Breakdown -->
+    <div class="price-breakdown">
+      <h4>Payment Summary</h4>
+      
+      <div class="price-row" *ngIf="isInstitutePlan()">
+        <span>{{ getTotalTeachers() }} Teachers × ₹{{ customization.teacherPrice }}</span>
+        <span>₹{{ getTotalTeachers() * customization.teacherPrice }} / month</span>
+      </div>
+      <div class="price-row" *ngIf="isInstitutePlan()">
+        <span>{{ getTotalStudents() }} Students × ₹{{ customization.studentPrice }}</span>
+        <span>₹{{ getTotalStudents() * customization.studentPrice }} / month</span>
+      </div>
+      
+      <div class="price-row highlight-row">
+        <span>Monthly Total</span>
+        <span class="price-highlight">₹{{ getMonthlyPrice() }}</span>
+      </div>
+      
+      <div class="price-row">
+        <span>Duration: {{ getDurationLabel() }}</span>
+        <span>× {{ getDurationInMonths() }}</span>
+      </div>
+      
+      <div class="price-row total">
+        <span>Total Amount</span>
+        <span class="total-price">₹{{ getTotalPrice() }}</span>
+      </div>
+      
+      <div class="validity-note">
+        <i class="fas fa-info-circle"></i>
+        <span>Your subscription will be valid from today for {{ getDurationLabel() }}</span>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="summary-actions">
+      <button type="button" class="btn-back" (click)="onBack()">
+        <i class="fas fa-arrow-left"></i> Back
+      </button>
+      <button type="button" class="btn-confirm" (click)="onConfirm()">
+        <i class="fas fa-lock"></i> Proceed to Payment
+      </button>
+    </div>
+  </div>
+</div>

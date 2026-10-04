@@ -1,0 +1,92 @@
+<!-- Exam Selection Component HTML -->
+<section class="exam-selection" [ngStyle]="{ 'background-color': http.getBackgroundColor() }">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-10">
+        <div class="selection-card">
+          <!-- Main Content Area -->
+          <div *ngIf="!emptyErr">
+            <div class="header-section">
+              <h1 class="text-center">Select Your Exam</h1>
+              <button class="refresh-btn" (click)="refreshExams()" [disabled]="loading" title="Refresh exams">
+                <i class="bi bi-arrow-clockwise" [ngClass]="{'spinning': loading}"></i>
+              </button>
+            </div>
+
+            <!-- Loading State -->
+            <div *ngIf="loading" class="loading-container">
+              <div class="pulse-loader">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+              <p class="loading-text">Fetching Available Exams...</p>
+            </div>
+
+            <!-- Error Message -->
+            <div *ngIf="errorMsg" class="alert-custom fade show" role="alert">
+              <div class="alert-content">
+                <div class="alert-icon">
+                  <i class="bi bi-exclamation-circle"></i>
+                </div>
+                <div class="alert-message">
+                  <h4>Connection Error</h4>
+                  <p>We couldn't load your exams at this moment. Please check your connection and try again.</p>
+                </div>
+                <div class="alert-actions">
+                  <button class="btn btn-refresh" (click)="refreshExams()">
+                    <i class="bi bi-arrow-clockwise me-2"></i>Retry
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Exam Cards -->
+            <div *ngIf="!loading && !errorMsg" class="exam-grid">
+              <div class="exam-item" *ngFor="let item of examByTeacher" (click)="routToBoardDash(item)">
+                <div class="exam-card">
+                  <div class="exam-image">
+                    <img [src]="item.image" [alt]="item.entranceExamName" class="img-fluid">
+                  </div>
+                  <div class="exam-details">
+                    <h3>{{item.entranceExamName}}</h3>
+                    <span class="exam-indicator"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- No Access Error -->
+
+          <div *ngIf="emptyErr" class="access-error">
+            <div class="error-illustration">
+              <i class="bi bi-lock"></i>
+            </div>
+            <div class="error-content">
+              <h2>Access Required</h2>
+              <p class="user-greeting">Hello, {{getUserName()}}</p>
+              <p class="error-message">Your account needs additional Exam permissions to access the exam portal. Please
+                contact your administrator to set up your access.</p>
+              <div class="error-actions">
+                <!-- <button class="btn btn-primary btn-lg" (click)="contactSupport()">
+                  <i class="bi bi-headset me-2"></i>Contact Support
+                </button> -->
+                <button class="btn btn-outline-secondary btn-lg" (click)="Logout()">
+                  <i class="bi bi-arrow-left me-2"></i>Go Back
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Background Animation -->
+  <div class="animated-background">
+    <ul class="circles">
+      <li *ngFor="let i of [1,2,3,4,5,6,7,8,9,10]"></li>
+    </ul>
+  </div>
+</section>

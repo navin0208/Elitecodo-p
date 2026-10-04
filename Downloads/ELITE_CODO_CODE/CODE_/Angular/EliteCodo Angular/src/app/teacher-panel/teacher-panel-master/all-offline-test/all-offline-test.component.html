@@ -1,0 +1,86 @@
+<section>
+    <div *ngIf="loading" class="loading-spinner">
+        <!-- Add a loading spinner here -->
+        Loading...
+    </div>
+
+    <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+    </div>
+
+    <div *ngIf="!loading && !errorMessage && filteredExams.length === 0" class="empty-state">
+        <img src="assets/images/empty-data-icon.png" alt="No data found">
+        <p>No exams available.</p>
+    </div>
+    <div class="container-fluid">
+        <nz-page-header>
+            <nz-page-header-title>Exam Management</nz-page-header-title>
+        </nz-page-header>
+        <!-- Filters -->
+        <div>
+            <nz-row class="my-4" [nzGutter]="16">
+                <nz-col [nzSpan]="8">
+                    <nz-input-group [nzPrefix]="searchPrefix">
+                        <input type="text" nz-input [(ngModel)]="searchText" (ngModelChange)="filterExams()"
+                            placeholder="Search exams..." />
+                    </nz-input-group>
+                    <ng-template #searchPrefix>
+                        <i nz-icon nzType="search"></i>
+                    </ng-template>
+                </nz-col>
+                <nz-col [nzSpan]="6">
+                    <nz-select [(ngModel)]="statusFilter" (ngModelChange)="filterExams()"
+                        nzPlaceHolder="Filter by Status" class="w-full">
+                        <nz-option nzValue="" nzLabel="All Status"></nz-option>
+                        <nz-option nzValue="upcoming" nzLabel="Upcoming"></nz-option>
+                        <nz-option nzValue="ongoing" nzLabel="Ongoing"></nz-option>
+                        <nz-option nzValue="completed" nzLabel="Completed"></nz-option>
+                    </nz-select>
+                </nz-col>
+            </nz-row>
+        </div>
+        <!-- Exams Table -->
+        <nz-table #examTable [nzData]="filteredExams" [nzPageSize]="5" [nzFrontPagination]="true"
+            [nzShowSizeChanger]="true" [nzLoading]="loading" class="centered-table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Subjects</th>
+                    <th>Date</th>
+                    <th>Total Marks</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let exam of examTable.data">
+                    <td>{{ exam.name }}</td>
+                    <td>
+                        <nz-tag *ngFor="let subject of exam.subjects">
+                            {{ subject }}
+                        </nz-tag>
+                    </td>
+                    <td>{{ exam.date | date:'mediumDate' }}</td>
+                    <td>{{ exam.totalMarks }}</td>
+                    <td>
+                        <nz-tag [nzColor]="getStatusColor(exam.status)">
+                            {{ exam.status | titlecase }}
+                        </nz-tag>
+                    </td>
+                    <td>
+                        <nz-space>
+                            <button *nzSpaceItem nz-button nzType="primary" (click)="assignMarks(exam)">
+                                <i nz-icon nzType="form"></i>
+                                Assign Marks
+                            </button>
+                            <!-- <button *nzSpaceItem nz-button (click)="viewResults(exam)">
+                                <i nz-icon nzType="bar-chart"></i>
+                                View Results
+                            </button> -->
+                        </nz-space>
+                    </td>
+                </tr>
+            </tbody>
+        </nz-table>
+    </div>
+</section>

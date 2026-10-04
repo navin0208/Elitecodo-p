@@ -1,0 +1,191 @@
+<!-- feedback-management.component.html -->
+<div class="feedback-dashboard">
+    <!-- Header Section -->
+    <div class="dashboard-header" @fadeSlideInOut>
+        <div class="header-content">
+            <div class="title-section">
+                <h1>Feedback Dashboard</h1>
+                <p class="subtitle">Manage and respond to user feedback efficiently</p>
+            </div>
+
+            <div class="action-section">
+                <nz-input-group [nzSuffix]="suffixIconSearch" class="search-box">
+                    <input type="text" nz-input placeholder="Search feedback..." [(ngModel)]="searchText" />
+                </nz-input-group>
+                <ng-template #suffixIconSearch>
+                    <i nz-icon nzType="search"></i>
+                </ng-template>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-section">
+            <div class="stat-card" [class.active]="activeTab === 'all'" (click)="filterFeedback('all')">
+                <i nz-icon nzType="message" nzTheme="outline"></i>
+                <div class="stat-content">
+                    <span class="stat-number">{{feedbacks.length}}</span>
+                    <span class="stat-label">Total</span>
+                </div>
+            </div>
+
+            <div class="stat-card" [class.active]="activeTab === 'unread'" (click)="filterFeedback('unread')">
+                <i nz-icon nzType="clock-circle" nzTheme="outline"></i>
+                <div class="stat-content">
+                    <span class="stat-number">{{unreadFeedbackCount}}</span>
+                    <span class="stat-label">Unread</span>
+                </div>
+            </div>
+
+            <div class="stat-card" [class.active]="activeTab === 'read'" (click)="filterFeedback('read')">
+                <i nz-icon nzType="read" nzTheme="outline"></i>
+                <div class="stat-content">
+                    <span class="stat-number">{{readFeedbackCount}}</span>
+                    <span class="stat-label">Read</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Feedback Cards -->
+    <div class="feedback-cards" @fadeSlideInOut>
+        <nz-spin [nzSpinning]="loading">
+            <div class="cards-container">
+                <div class="feedback-card" *ngFor="let feedback of filteredFeedbacks" @fadeSlideInOut>
+                    <div class="card-header">
+                        <div class="user-info">
+                            <nz-avatar
+                                [nzSrc]="feedback.userAvatar.startsWith('https://zplusglobalmarketinsights.com/') ? feedback.userAvatar : 'https://api.dicebear.com/7.x/avataaars/svg?seed=John'"
+                                nzSize="large"></nz-avatar>
+
+                            <div class="user-details">
+                                <h3>{{feedback.userName}}</h3>
+                                <span class="user-type">{{feedback.userType}}</span>
+                            </div>
+                        </div>
+                        <div class="feedback-status">
+                            <nz-tag [nzColor]="getPriorityColor(feedback.priority)">
+                                {{feedback.priority}} Priority
+                            </nz-tag>
+                            <!-- <nz-badge *ngIf="feedback.status === 'unread'" nzStatus="processing">
+                            </nz-badge> -->
+                        </div>
+                    </div>
+
+                    <div class="card-content">
+                        <p>{{ truncateText(feedback.message, 100) }}</p>
+                        <div class="timestamp">
+                            <i nz-icon nzType="clock-circle" nzTheme="outline"></i>
+                            {{feedback.date | date:'medium'}}
+                        </div>
+                    </div>
+
+                    <div class="card-actions">
+                        <button nz-button nzType="primary" (click)="showReplyModal(feedback)" [nzGhost]="true">
+                            <i nz-icon nzType="mail"></i>Reply
+                        </button>
+                        <!-- <button nz-button nzType="default">
+                            <i nz-icon nzType="eye"></i>View Details
+                        </button> -->
+                    </div>
+                </div>
+            </div>
+        </nz-spin>
+    </div>
+    <div *ngIf="filteredFeedbacks.length === 0" class="no-feedback">
+        <p>No feedback available for the selected filter.</p>
+    </div>
+    <!-- Reply Modal -->
+    <nz-modal [(nzVisible)]="isReplyModalVisible" nzTitle="Send Feedback Reply" (nzOnCancel)="cancelReply()"
+        (nzOnOk)="handleReply()" [nzOkDisabled]="!replyForm.valid||isLoading" nzWidth="600px">
+        <ng-container *nzModalContent>
+            <div class="feedback-reply-form">
+                <!-- User Info Header -->
+                <div class="user-info-header">
+                    <div class="user-profile">
+                        <img [src]="selectedUser.userAvatar" alt="User Avatar" class="user-avatar" width="48"
+                            height="48">
+                        <div class="user-details">
+                            <h3>{{ selectedUser.userName }}</h3>
+                            <div class="user-meta">
+                                <span class="user-type">{{ selectedUser.userType }}</span>
+                                <span class="user-email">{{ selectedUser.email }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="feedback-meta">
+                        <span class="priority-badge" [ngClass]="selectedUser.priority">
+                            {{ selectedUser.priority | titlecase }}
+                        </span>
+                        <div class="feedback-date">
+                            {{ selectedUser.date | date:'medium' }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Original Message Section -->
+                <div class="original-message">
+                    <h4> Message</h4>
+                    <p>{{ selectedUser.message }}</p>
+                    <div class="original-attachment" *ngIf="selectedUser.attachments">
+                        <button class="attachment-btn" (click)="downloadAttachment()">
+                            <i nz-icon nzType="download"></i>
+                            View Original Attachment
+                        </button>
+                    </div>
+                </div>
+                <!-- Previous Reply Section -->
+                <div class="previous-reply" *ngIf="selectedUser.reply">
+                    <h4>Your Reply</h4>
+                    <div class="reply-content">
+                        <p>{{ selectedUser.reply.message }}</p>
+                        <div class="reply-meta">
+                            <span class="reply-status">
+                                <button class="attachment-btn" (click)="downloadAttachmentOfReply()">
+                                    <i nz-icon nzType="download"></i>
+                                    View Original Attachment
+                                </button>
+                            </span>
+                            <span class="reply-date">{{ selectedUser.reply.date | date:'medium' }}</span>
+                        </div>
+                        <div>
+                            <p class="text-danger d-block" *ngIf="!attachmentPresent">No Attachment</p>
+                        </div>
+                        <div class="reply-id">
+                            <span>Reply ID: {{ selectedUser.reply.reportsToSuperAdminId }}</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Reply Section -->
+                <form [formGroup]="replyForm" class="reply-section" *ngIf="!showFormByReplyOrNot">
+                    <h4>Your Reply</h4>
+                    <div class="form-group">
+                        <textarea formControlName="description" class="form-control" rows="4"
+                            placeholder="Type your reply here..." maxlength="1000"></textarea>
+                        <div class="character-count">
+                            {{ replyForm.get('description')?.value?.length || 0 }}/1000 characters
+                        </div>
+                        <div class="validation-error"
+                            *ngIf="replyForm.get('description')?.errors?.['required'] && replyForm.get('description')?.touched">
+                            Reply message is required
+                        </div>
+                    </div>
+
+                    <div class="attachment-upload">
+                        <button nz-button nzType="default" (click)="fileInput.click()">
+                            <i nz-icon nzType="upload"></i>
+                            Attach File
+                        </button>
+                        <input #fileInput type="file" hidden (change)="onFileSelected($event)">
+                        <div class="attached-file" *ngIf="attachmentFile">
+                            <i nz-icon nzType="paper-clip"></i>
+                            <span>{{ attachmentFile.name }}</span>
+                            <i nz-icon nzType="close" (click)="removeAttachment()"></i>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </ng-container>
+    </nz-modal>
+</div>

@@ -1,0 +1,39 @@
+section {
+    position: absolute;
+    width: 100%;
+}
+
+.centered-table {
+
+    ::ng-deep th,
+    ::ng-deep td {
+        text-align: center !important;
+    }
+}
+
+.loading-spinner {
+    text-align: center;
+    padding: 20px;
+}
+
+.error-message {
+    color: red;
+    text-align: center;
+    padding: 20px;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 20px;
+
+    img {
+        width: 100px;
+        height: 100px;
+    }
+
+    p {
+        margin-top: 10px;
+        font-size: 18px;
+        color: #666;
+    }
+}

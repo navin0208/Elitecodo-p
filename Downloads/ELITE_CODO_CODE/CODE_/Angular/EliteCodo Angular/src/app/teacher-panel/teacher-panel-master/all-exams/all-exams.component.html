@@ -1,0 +1,126 @@
+<section [ngStyle]="{ 'background-color':http.getBackgroundColor()}">
+    <div class="results-container">
+        <!-- Header Section -->
+        <div class="header-section">
+            <div class="header-content">
+                <div class="title-section">
+                    <h1>All Examination Results</h1>
+                    <p class="subtitle">View and analyze all examination results in one place</p>
+                </div>
+                <div class="action-buttons">
+                    <!-- <button class="export-btn" (click)="exportResults()">
+                        <i class="fas fa-download"></i> Export Results
+                    </button>
+                    <button class="print-btn" (click)="printReport()">
+                        <i class="fas fa-print"></i> Print Report
+                    </button> -->
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-cards">
+                <div class="stat-card">
+                    <div class="stat-icon purple">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <div class="stat-details">
+                        <h3>Total Exams</h3>
+                        <p>{{examResults.length}}</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon blue">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-details">
+                        <h3>Total Students</h3>
+                        <p>{{getTotalStudents()}}</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stat-details">
+                        <h3>Average Pass Rate</h3>
+                        <p>{{getAveragePassRate()}}%</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon orange">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <div class="stat-details">
+                        <h3>Highest Score</h3>
+                        <p>{{getHighestScore()}}%</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search exams..." [(ngModel)]="searchTerm" (input)="applyFilters()">
+            </div>
+            <div class="filters">
+                <select [(ngModel)]="selectedSubject" (change)="applyFilters()">
+                    <option value="">All Subjects</option>
+                    <option *ngFor="let subject of uniqueSubjects" [value]="subject">
+                        {{ subject }}
+                    </option>
+                </select>
+                <select [(ngModel)]="selectedStatus" (change)="applyFilters()">
+                    <option value="">All Status</option>
+                    <option value="Completed">Completed</option>
+                    <option value="Ongoing">Ongoing</option>
+                    <option value="Upcoming">Upcoming</option>
+                </select>
+                <button class="filter-btn" (click)="resetFilters()">
+                    <i class="fas fa-sync-alt"></i> Reset Filters
+                </button>
+            </div>
+        </div>
+
+        <!-- Results Grid -->
+        <div class="results-grid" [@listAnimation]="filteredExams.length">
+            <div class="exam-card" *ngFor="let exam of filteredExams" (click)="viewExamDetails(exam.testId)">
+                <div class="exam-header">
+                    <div class="exam-title">
+                        <h3>{{exam.examName}}</h3>
+                        <span class="subject-tag">{{exam.subject}}</span>
+                    </div>
+                    <span class="status-badge" [ngClass]="(exam.status || 'upcoming').toLowerCase()">
+                        {{exam.status || 'Upcoming'}}
+                    </span>
+                </div>
+                <div class="exam-date">
+                    <i class="far fa-calendar-alt"></i>
+                    {{formatDate(exam.date)}}
+                </div>
+                <div class="exam-stats">
+                    <div class="stat">
+                        <span class="stat-value">{{exam.totalStudents}}</span>
+                        <span class="stat-label">Students</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value">{{exam.passPercentage}}%</span>
+                        <span class="stat-label">Pass Rate</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value">{{exam.averageScore}}%</span>
+                        <span class="stat-label">Average</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value">{{exam.highestScore}}%</span>
+                        <span class="stat-label">Highest</span>
+                    </div>
+                </div>
+                <button class="view-details-btn">
+                    View Detailed Results <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</section>

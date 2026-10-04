@@ -1,0 +1,258 @@
+<section [ngStyle]="{ 'background-color': http.getBackgroundColor() }" class="exam-detail-page">
+    <div class="detail-container" *ngIf="examDetail" [@fadeInUp]>
+        <!-- Header Section -->
+        <div class="header-section">
+            <div class="navigation">
+                <a routerLink="/teacher/all-exams" class="back-link">
+                    <i class="fas fa-arrow-left"></i> Back to All Exams
+                </a>
+                <div class="action-buttons">
+                    <!-- <button class="download-btn" (click)="downloadReport()">
+                        <i class="fas fa-download"></i> Download Report
+                    </button>
+                    <button class="export-btn" (click)="exportResults()">
+                        <i class="fas fa-file-export"></i> Export Results
+                    </button> -->
+                </div>
+            </div>
+            <div class="exam-header">
+                <div class="exam-info">
+                    <h1>{{examDetail.examName}}</h1>
+                    <div class="exam-meta">
+                        <span class="subject">
+                            <i class="fas fa-book"></i> {{examDetail.subject}}
+                        </span>
+                        <span class="date">
+                            <i class="far fa-calendar-alt"></i> {{examDetail.date}}
+                        </span>
+                        <span class="duration">
+                            <i class="far fa-clock"></i> {{examDetail.duration}}
+                        </span>
+                        <span class="questions">
+                            <i class="fas fa-tasks"></i> {{examDetail.totalQuestions}} Questions
+                        </span>
+                    </div>
+                </div>
+                <div class="status-badge" [ngClass]="examDetail.status.toLowerCase()">
+                    {{examDetail.status}}
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Stats Cards -->
+        <div class="quick-stats">
+            <div class="stat-card">
+                <div class="stat-icon purple">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Total Students</h3>
+                    <p>{{examDetail.totalStudents}}</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon green">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Pass Rate</h3>
+                    <p>{{examDetail.passPercentage}}%</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon blue">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Average Score</h3>
+                    <p>{{examDetail.averageScore}}%</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon orange">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Highest Score</h3>
+                    <p>{{examDetail.highestScore}}%</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab Navigation -->
+        <div class="tab-navigation">
+            <button [class.active]="selectedTab === 'overview'" (click)="onTabChange('overview')"
+                style="font-size: 25px;color: black;">
+                <i class="fas fa-info-circle"></i> Overview
+            </button>
+            <button [class.active]="selectedTab === 'students'" (click)="onTabChange('students')"
+                style="font-size: 25px;color: black;">
+                <i class="fas fa-user-graduate"></i> Student Results
+            </button>
+            <button [class.active]="selectedTab === 'analysis'" (click)="onTabChange('analysis')"
+                style="font-size: 25px;color: black;">
+                <i class="fas fa-chart-pie"></i> Analysis
+            </button>
+        </div>
+        <!-- Tab Content -->
+        <div class="tab-content" [@fadeInUp]>
+            <!-- Overview Tab -->
+            <div *ngIf="selectedTab === 'overview'" class="overview-tab">
+                <h2>Exam Sections</h2>
+                <div class="sections-grid">
+                    <div class="section-card" *ngFor="let section of examDetail.sections" [@fadeInUp]>
+                        <h3>{{ section.name }}</h3>
+                        <div class="section-stats">
+                            <div class="stat">
+                                <span class="value">{{ section.averageScore }}%</span>
+                                <span class="label">Average Score</span>
+                            </div>
+                            <div class="stat">
+                                <span class="value">{{ section.questions }}</span>
+                                <span class="label">Questions</span>
+                            </div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress" [style.width.%]="section.averageScore"></div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="chart-card" *ngIf="examDetail.sections && examDetail.sections.length > 0">
+                    <h2>Section Performance</h2>
+                    <div id="sectionsChart" class="chart-container"></div>
+                </div>
+            </div>
+
+
+            <!-- Students Tab -->
+            <div *ngIf="selectedTab === 'students'" class="students-tab">
+                <div class="students-table-container">
+                    <table class="students-table">
+                        <thead>
+                            <tr>
+                                <th>Student Name</th>
+                                <th>Score</th>
+                                <th>Grade</th>
+                                <th>Status</th>
+                                <th>Correct</th>
+                                <th>Incorrect</th>
+                                <th>Skipped</th>
+                                <th>Submission Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let student of examDetail.studentResults" [@listAnimation]>
+                                <td>{{student.name}}</td>
+                                <td>{{student.score}}%</td>
+                                <td>
+                                    <span class="grade-badge" [ngClass]="student.grade.toLowerCase()">
+                                        {{student.grade}}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="status-pill" [ngClass]="student.status.toLowerCase()">
+                                        {{student.status}}
+                                    </span>
+                                </td>
+                                <td class="correct">{{student.answers.correct}}</td>
+                                <td class="incorrect">{{student.answers.incorrect}}</td>
+                                <td class="skipped">{{student.answers.skipped}}</td>
+                                <td>{{student.submissionTime}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+
+            <!-- Analysis Tab -->
+            <div *ngIf="selectedTab === 'analysis'" class="analysis-tab">
+                <div class="chart-controls">
+                    <button [class.active]="chartView === 'scores'" (click)="onChartViewChange('scores')">
+                        Score Distribution
+                    </button>
+                    <button [class.active]="chartView === 'grades'" (click)="onChartViewChange('grades')">
+                        Grade Distribution
+                    </button>
+                    <button [class.active]="chartView === 'sections'" (click)="onChartViewChange('sections')">
+                        Section Performance
+                    </button>
+                    <button [class.active]="chartView === 'answers'" (click)="onChartViewChange('answers')">
+                        Answer Analysis
+                    </button>
+                </div>
+
+                <div class="charts-grid">
+                    <!-- Score Distribution Chart -->
+                    <div class="chart-card" [style.display]="chartView === 'scores' ? 'block' : 'none'">
+                        <h2>Score Distribution</h2>
+                        <div id="scoreDistributionChart" class="chart-container"></div>
+                        <div class="chart-insights">
+                            <p>This chart shows how many students scored within each 10-point range.</p>
+                            <p *ngIf="examDetail.passPercentage < 70" class="insight-warning">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                The pass rate is below 70%. Consider reviewing areas where students struggled.
+                            </p>
+                            <p *ngIf="examDetail.passPercentage >= 90" class="insight-success">
+                                <i class="fas fa-check-circle"></i>
+                                High pass rate! Most students have mastered the material.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Grade Distribution Chart -->
+                    <div class="chart-card" [style.display]="chartView === 'grades' ? 'block' : 'none'">
+                        <h2>Grade Distribution</h2>
+                        <div id="gradeDistributionChart" class="chart-container"></div>
+                        <div class="chart-insights">
+                            <p>This chart shows the distribution of letter grades among all students.</p>
+                            <p *ngIf="getFailedStudentCount() > 5">
+                                There are {{ getFailedStudentCount() }} students who failed. Consider offering
+                                additional support.
+                            </p>
+
+                        </div>
+                    </div>
+
+                    <!-- Section Performance Chart -->
+                    <div class="chart-card" [style.display]="chartView === 'sections' ? 'block' : 'none'">
+                        <h2>Section Performance Comparison</h2>
+                        <div id="sectionComparisonChart" class="chart-container"></div>
+                        <div class="chart-insights">
+                            <p>This chart compares average student performance across different sections.</p>
+                            <p *ngIf="examDetail.sections && examDetail.sections.length > 0" class="insight-info">
+                                <i class="fas fa-info-circle"></i>
+                                Students performed best in {{getBestPerformingSection().name}}
+                                ({{getBestPerformingSection().averageScore}}%) and
+                                struggled most with {{getWorstPerformingSection().name}}
+                                ({{getWorstPerformingSection().averageScore}}%).
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Answer Analysis Chart -->
+                    <div class="chart-card" [style.display]="chartView === 'answers' ? 'block' : 'none'">
+                        <h2>Answer Analysis (Average per Student)</h2>
+                        <div id="answerAnalysisChart" class="chart-container"></div>
+                        <div class="chart-insights">
+                            <p>This chart shows the average breakdown of correct, incorrect, and skipped answers per
+                                student.</p>
+                            <ng-container *ngIf="getAnswerAnalysisData() as analysisData">
+                                <p *ngIf="(analysisData?.skipped ?? 0) > 5" class="insight-warning">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    On average, students skipped {{ analysisData?.skipped ?? 0 }} questions. Time
+                                    constraints may be an issue.
+                                </p>
+                            </ng-container>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>

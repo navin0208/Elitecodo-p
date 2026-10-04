@@ -1,0 +1,52 @@
+<section>
+  <div class="container">
+    <div class="header">
+      <h1>Select Your Topics</h1>
+
+      <div class="selected-count">
+        Selected: <span class="count">{{ selectedItems.length }}</span>
+      </div>
+    </div>
+
+    <div class="cards-grid">
+      <div
+        class="card"
+        *ngFor="let card of TopicList"
+        [class.selected]="selectedItems.includes(card.topicId)"
+        (click)="toggleSelection(card)"
+      >
+        <div class="card-header">
+          <div class="checkbox-container">
+            <input
+              type="checkbox"
+              [checked]="selectedItems.includes(card.topicId)"
+              (change)="toggleSelection(card)"
+              (click)="$event.stopPropagation()"
+            />
+            <span class="checkmark"></span>
+          </div>
+        </div>
+
+        <div class="card-content">
+          <h3>{{ card.topicName }}</h3>
+        </div>
+      </div>
+    </div>
+
+    <div class="action-button" *ngIf="selectedItems.length > 0">
+      <button class="submit-btn" (click)="submitSelection()">
+        Submit Selection
+      </button>
+    </div>
+
+    <div class="selected-items" *ngIf="selectedItems.length > 0">
+      <h3>Selected Items:</h3>
+      <div class="selected-list">
+        <div class="selected-item" *ngFor="let item of getSelectedItems()">
+          <span class="item-title">{{ item.topicName }}</span>
+          <button class="remove-btn" (click)="removeSelection(item)">×</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

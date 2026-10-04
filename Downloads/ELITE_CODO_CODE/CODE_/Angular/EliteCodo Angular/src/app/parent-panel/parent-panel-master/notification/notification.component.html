@@ -1,0 +1,279 @@
+<!-- notifications.component.html -->
+<section class="notification-dashboard" [ngStyle]="{ 'background-color': http.getBackgroundColor() }">
+    <div class="container">
+        <!-- Enhanced Animated Banner with Particles -->
+        <div class="notification-banner">
+            <div class="particles-container">
+                <!-- Animated particles will be rendered here by JS -->
+                <div *ngFor="let i of [1,2,3,4,5,6,7,8,9,10]" class="particle"></div>
+            </div>
+            <div class="banner-content">
+                <div class="banner-icon-container">
+                    <div class="banner-icon pulse-animation">
+                        <i nz-icon nzType="bell" nzTheme="fill"></i>
+                    </div>
+                </div>
+                <div class="banner-text">
+                    <h1 class="reveal-text">Notifications Center</h1>
+                    <p class="reveal-text-delay">Stay connected with important school announcements and student reports
+                    </p>
+                </div>
+                <div class="banner-stats">
+                    <div class="stat-item">
+                        <div class="stat-count">{{getUnreadCount()}}</div>
+                        <div class="stat-label">Unread</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-count">{{allNotifications.length}}</div>
+                        <div class="stat-label">Total</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Floating Control Panel with Glassmorphism -->
+        <div class="floating-controls">
+            <!-- Filter Tabs with Icons -->
+            <div class="control-section filter-tabs">
+                <div class="tab-indicators">
+                    <div class="tab-indicator" [style.left.%]="getIndicatorPosition()"></div>
+                </div>
+                <div class="tab" [class.active]="activeFilter === 'all'" (click)="setActiveFilter('all')">
+                    <i nz-icon nzType="appstore" nzTheme="outline"></i>
+                    <span>All</span>
+                    <div class="tab-count">{{allNotifications.length}}</div>
+                </div>
+                <div class="tab" [class.active]="activeFilter === 'general'" (click)="setActiveFilter('general')">
+                    <i nz-icon nzType="notification" nzTheme="outline"></i>
+                    <span>General</span>
+                    <div class="tab-count">{{getCountByType('general')}}</div>
+                </div>
+                <div class="tab" [class.active]="activeFilter === 'report'" (click)="setActiveFilter('report')">
+                    <i nz-icon nzType="file-text" nzTheme="outline"></i>
+                    <span>Reports</span>
+                    <div class="tab-count">{{getCountByType('report')}}</div>
+                </div>
+            </div>
+
+            <!-- Enhanced Search -->
+            <div class="control-section search-section">
+                <div class="search-container" [class.focus]="searchFocused">
+                    <i nz-icon nzType="search" class="search-icon"></i>
+                    <input type="text" placeholder="Search notifications..." [(ngModel)]="searchTerm"
+                        (ngModelChange)="filterNotifications()" (focus)="searchFocused = true"
+                        (blur)="searchFocused = false" />
+                    <button *ngIf="searchTerm" class="clear-search" (click)="searchTerm = ''; filterNotifications()">
+                        <i nz-icon nzType="close-circle" nzTheme="fill"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- View Controls -->
+            <div class="control-section view-controls">
+                <div class="view-mode-toggle">
+                    <button [class.active]="viewMode === 'card'" (click)="viewMode = 'card'">
+                        <i nz-icon nzType="appstore" nzTheme="outline"></i>
+                    </button>
+                    <button [class.active]="viewMode === 'list'" (click)="viewMode = 'list'">
+                        <i nz-icon nzType="unordered-list" nzTheme="outline"></i>
+                    </button>
+                </div>
+                <div class="sort-control">
+                    <button nz-dropdown [nzDropdownMenu]="sortMenu" class="sort-button">
+                        <i nz-icon nzType="sort-ascending" nzTheme="outline"></i>
+                        <span>Sort</span>
+                        <i nz-icon nzType="down" nzTheme="outline"></i>
+                    </button>
+                    <nz-dropdown-menu #sortMenu="nzDropdownMenu">
+                        <ul nz-menu>
+                            <li nz-menu-item (click)="sortBy('date', 'desc')">Newest First</li>
+                            <li nz-menu-item (click)="sortBy('date', 'asc')">Oldest First</li>
+                            <li nz-menu-item (click)="sortBy('title', 'asc')">Title (A-Z)</li>
+                            <li nz-menu-item (click)="sortBy('unread')">Unread First</li>
+                        </ul>
+                    </nz-dropdown-menu>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notifications Content with Animated Transitions -->
+        <div class="notifications-content">
+            <!-- Empty State with Animation -->
+            <div *ngIf="filteredNotifications.length === 0" class="empty-state">
+                <div class="empty-animation">
+                    <div class="empty-icon-container">
+                        <i nz-icon nzType="inbox" nzTheme="outline"></i>
+                    </div>
+                    <div class="ripple-container">
+                        <div class="ripple"></div>
+                        <div class="ripple"></div>
+                        <div class="ripple"></div>
+                    </div>
+                </div>
+                <h3>No Notifications Found</h3>
+                <p>We couldn't find any notifications matching your criteria</p>
+                <div class="empty-actions">
+                    <button nz-button nzType="primary" (click)="resetFilters()">
+                        <i nz-icon nzType="reload"></i> Reset Filters
+                    </button>
+                </div>
+            </div>
+
+            <!-- Card View Mode -->
+            <div *ngIf="filteredNotifications.length > 0 && viewMode === 'card'"
+                class="notification-grid staggered-fade-in">
+                <div *ngFor="let notification of filteredNotifications; let i = index" class="notification-card"
+                    [ngClass]="{
+                 'general-notification': notification.type === 'general', 
+                 'report-notification': notification.type === 'report',
+                 'unread': !notification.read
+               }" [style.animation-delay.ms]="i * 50">
+
+                    <!-- Unread Indicator -->
+                    <div *ngIf="!notification.read" class="unread-indicator"></div>
+
+                    <!-- Card Header with Icon -->
+                    <div class="notification-header">
+                        <div class="notification-icon" [ngClass]="notification.type">
+                            <i nz-icon [nzType]="notification.type === 'general' ? 'notification' : 'file-text'"
+                                nzTheme="outline">
+                            </i>
+                        </div>
+                        <div class="notification-meta">
+                            <div class="notification-type-badge" [ngClass]="notification.type">
+                                <span>{{ notification.type === 'general' ? 'Announcement' : 'Report' }}</span>
+                            </div>
+                            <div class="notification-date">
+                                <i nz-icon nzType="calendar" nzTheme="outline"></i>
+                                <span>{{ formatDate(notification.date) }}</span>
+                            </div>
+                        </div>
+                        <div class="notification-actions-top">
+                            <button nz-dropdown [nzDropdownMenu]="menu" nzTrigger="click" nzPlacement="bottomRight">
+                                <i nz-icon nzType="more" nzTheme="outline"></i>
+                            </button>
+                            <nz-dropdown-menu #menu="nzDropdownMenu">
+                                <ul nz-menu>
+                                    <li nz-menu-item (click)="markAsRead(notification.id)">
+                                        <i nz-icon nzType="check-circle" nzTheme="outline"></i> Mark as Read
+                                    </li>
+                                    <li nz-menu-item>
+                                        <i nz-icon nzType="delete" nzTheme="outline"></i> Delete
+                                    </li>
+                                    <li nz-menu-item *ngIf="notification.uploadedFile">
+                                        <i nz-icon nzType="download" nzTheme="outline"></i> Download
+                                    </li>
+                                </ul>
+                            </nz-dropdown-menu>
+                        </div>
+                    </div>
+
+                    <!-- Card Content -->
+                    <div class="notification-body">
+                        <h3 class="notification-title">{{ notification.title }}</h3>
+                        <p class="notification-content">{{ notification.content }}</p>
+
+                        <!-- Attachment Preview -->
+                        <div *ngIf="notification.uploadedFile" class="attachment-preview">
+                            <div class="file-icon">
+                                <i nz-icon nzType="file-pdf" nzTheme="fill"></i>
+                            </div>
+                            <div class="file-info">
+                                <div class="file-name">{{ notification.uploadedFile }}</div>
+                                <div class="file-meta">PDF Document</div>
+                            </div>
+                        </div>
+
+                        <!-- Report specific information -->
+                        <div *ngIf="notification.type === 'report'" class="report-details">
+                            <div class="report-type">
+                                <i nz-icon nzType="profile" nzTheme="outline"></i>
+                                <span>{{ notification.reportType }} Report</span>
+                            </div>
+
+                            <div *ngIf="notification.students && notification.students.length > 0" class="student-tags">
+                                <span class="student-label">For Student:</span>
+                                <div class="student-avatars">
+                                    <div *ngFor="let studentId of notification.students" class="student-avatar">
+                                        <nz-avatar [nzText]="getStudentInitials(studentId)" nzSize="small"></nz-avatar>
+                                        <span class="student-name">{{ getStudentName(studentId) }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card Footer -->
+                    <div class="notification-footer">
+                        <button nz-button nzType="primary" nzShape="round" *ngIf="notification.uploadedFile" (click)="seeUploadFileOfNotification(notification.uploadedFile)">
+                            <i nz-icon nzType="eye"></i> View Attachment
+                        </button>
+                        <!-- <button *ngIf="notification.uploadedFile" nz-button nzType="default" nzShape="round">
+                            <i nz-icon nzType="download"></i> Download
+                        </button> -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- List View Mode -->
+            <div *ngIf="filteredNotifications.length > 0 && viewMode === 'list'" class="notification-list">
+                <div *ngFor="let notification of filteredNotifications; let i = index" class="notification-list-item"
+                    [ngClass]="{
+                 'general-notification': notification.type === 'general', 
+                 'report-notification': notification.type === 'report',
+                 'unread': !notification.read
+               }" [style.animation-delay.ms]="i * 50">
+
+                    <div class="list-item-icon" [ngClass]="notification.type">
+                        <i nz-icon [nzType]="notification.type === 'general' ? 'notification' : 'file-text'"
+                            nzTheme="outline">
+                        </i>
+                    </div>
+
+                    <div class="list-item-content">
+                        <div class="list-item-header">
+                            <h3 class="notification-title">{{ notification.title }}</h3>
+                            <div class="notification-meta-inline">
+                                <div class="notification-type-badge" [ngClass]="notification.type">
+                                    <span>{{ notification.type === 'general' ? 'Announcement' : 'Report' }}</span>
+                                </div>
+                                <div class="notification-date">
+                                    <i nz-icon nzType="calendar" nzTheme="outline"></i>
+                                    <span>{{ formatDate(notification.date) }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p class="notification-content">{{ notification.content }}</p>
+
+                        <div *ngIf="notification.type === 'report'" class="list-item-students">
+                            <span *ngFor="let studentId of notification.students" class="student-chip">
+                                <nz-avatar [nzText]="getStudentInitials(studentId)" nzSize="small"></nz-avatar>
+                                <span>{{ getStudentName(studentId) }}</span>
+                            </span>
+                        </div>
+
+                        <div *ngIf="notification.uploadedFile" class="list-item-attachment">
+                            <i nz-icon nzType="paper-clip" nzTheme="outline"></i>
+                            <span>{{ notification.uploadedFile }}</span>
+                        </div>
+                    </div>
+
+                    <div class="list-item-actions">
+                        <button nz-button nzType="primary" nzShape="circle" nzTooltipTitle="View Details">
+                            <i nz-icon nzType="eye" nzTheme="outline"></i>
+                        </button>
+                        <button *ngIf="notification.uploadedFile" nz-button nzType="default" nzShape="circle"
+                            nzTooltipTitle="Download">
+                            <i nz-icon nzType="download" nzTheme="outline"></i>
+                        </button>
+                        <button *ngIf="!notification.read" nz-button nzType="default" nzShape="circle"
+                            nzTooltipTitle="Mark as Read" (click)="markAsRead(notification.id)">
+                            <i nz-icon nzType="check" nzTheme="outline"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

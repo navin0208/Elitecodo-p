@@ -1,0 +1,181 @@
+version: '3.8'
+
+services:
+  # ============================================================
+  # 1. MySQL 8.4 Database
+  # ============================================================
+  mysql-db:
+    image: mysql:8.4
+    container_name: elitecodo-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-elitecodo_db}
+    ports:
+      - "${MYSQL_PORT:-3306}:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./deploy/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p$${MYSQL_ROOT_PASSWORD:-root} || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - elitecodo-network
+
+  # ============================================================
+  # 2. MongoDB 7.0 Database
+  # ============================================================
+  mongo-db:
+    image: mongo:7.0
+    container_name: elitecodo-mongo
+    restart: unless-stopped
+    ports:
+      - "${MONGO_PORT:-27017}:27017"
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD-SHELL", "mongosh --eval 'db.adminCommand(\"ping\")' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    networks:
+      - elitecodo-network
+
+  # ============================================================
+  # 3. Node.js PDF & OMR Service
+  # ============================================================
+  pdf-service:
+    build:
+      context: ./CODE_/node/elitecodo-node
+      dockerfile: Dockerfile
+    container_name: elitecodo-pdf-service
+    restart: unless-stopped
+    environment:
+      PORT: 4000
+    ports:
+      - "${PDF_SERVICE_PORT:-4000}:4000"
+    networks:
+      - elitecodo-network
+
+  # ============================================================
+  # 4. Core Java Spring Boot Backend
+  # ============================================================
+  core-backend:
+    build:
+      context: ./CODE_/java/Elite-codo-Backend-main
+      dockerfile: Dockerfile
+    container_name: elitecodo-core-backend
+    restart: unless-stopped
+    environment:
+      SERVER_PORT: 8583
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/${MYSQL_DATABASE:-elitecodo_db}?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: ${MYSQL_USER:-root}
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD:-root}
+      MY_NODE_URL: http://pdf-service:4000/api/pdf
+      BEZKODER_APP_JWTSECRET: ${JWT_SECRET}
+      BEZKODER_APP_JWTEXPIRATIONMS: ${JWT_EXPIRATION_MS:-86400000}
+      RAZORPAY_KEY_ID: ${RAZORPAY_KEY_ID}
+      RAZORPAY_KEY_SECRET: ${RAZORPAY_KEY_SECRET}
+      CLOUDINARY_CLOUD_NAME: ${CLOUDINARY_CLOUD_NAME}
+      CLOUDINARY_API_KEY: ${CLOUDINARY_API_KEY}
+      CLOUDINARY_API_SECRET: ${CLOUDINARY_API_SECRET}
+      SPRING_MAIL_HOST: ${SPRING_MAIL_HOST}
+      SPRING_MAIL_PORT: ${SPRING_MAIL_PORT}
+      SPRING_MAIL_USERNAME: ${SPRING_MAIL_USERNAME}
+      SPRING_MAIL_PASSWORD: ${SPRING_MAIL_PASSWORD}
+    ports:
+      - "${CORE_BACKEND_PORT:-8583}:8583"
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+      pdf-service:
+        condition: service_started
+    networks:
+      - elitecodo-network
+
+  # ============================================================
+  # 5. Notification Microservice
+  # ============================================================
+  notification-service:
+    build:
+      context: ./CODE_/notification
+      dockerfile: Dockerfile
+    container_name: elitecodo-notification
+    restart: unless-stopped
+    environment:
+      SERVER_PORT: 8080
+      SPRING_DATA_MONGODB_URI: mongodb://mongo-db:27017/${MONGO_DATABASE:-notificationdb}
+    ports:
+      - "${NOTIFICATION_PORT:-8080}:8080"
+    depends_on:
+      mongo-db:
+        condition: service_healthy
+    networks:
+      - elitecodo-network
+
+  # ============================================================
+  # 6. Angular Multi-Role Management Frontend
+  # ============================================================
+  angular-frontend:
+    build:
+      context: ./CODE_/Angular/EliteCodo Angular
+      dockerfile: Dockerfile
+    container_name: elitecodo-angular
+    restart: unless-stopped
+    ports:
+      - "${ANGULAR_PORT:-4200}:80"
+    depends_on:
+      - core-backend
+    networks:
+      - elitecodo-network
+
+  # ============================================================
+  # 7. React Question Authoring Portal
+  # ============================================================
+  react-frontend:
+    build:
+      context: ./CODE_/react/elitecode
+      dockerfile: Dockerfile
+    container_name: elitecodo-react
+    restart: unless-stopped
+    ports:
+      - "${REACT_PORT:-3001}:80"
+    depends_on:
+      - core-backend
+    networks:
+      - elitecodo-network
+
+  # ============================================================
+  # 8. Unified Nginx Reverse Proxy Gateway
+  # ============================================================
+  reverse-proxy:
+    image: nginx:alpine
+    container_name: elitecodo-gateway
+    restart: unless-stopped
+    ports:
+      - "${GATEWAY_HTTP_PORT:-80}:80"
+    volumes:
+      - ./deploy/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - core-backend
+      - notification-service
+      - pdf-service
+      - angular-frontend
+      - react-frontend
+    networks:
+      - elitecodo-network
+
+volumes:
+  mysql_data:
+    name: elitecodo_mysql_data
+  mongo_data:
+    name: elitecodo_mongo_data
+
+networks:
+  elitecodo-network:
+    name: elitecodo_network
+    driver: bridge

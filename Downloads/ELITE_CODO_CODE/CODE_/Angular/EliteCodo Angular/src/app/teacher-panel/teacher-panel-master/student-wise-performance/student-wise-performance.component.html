@@ -1,0 +1,75 @@
+<section>
+    <!-- student-detail.component.html -->
+    <div class="student-profile-container" [ngStyle]="{ 'background-color':http.getBackgroundColor()}">
+
+        <!-- Quick Stats -->
+        <div class="quick-stats" nz-row [nzGutter]="16">
+            <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="6">
+                <nz-card>
+                    <nz-statistic [nzValue]="student?.average" [nzTitle]="'Overall Average'" [nzSuffix]="'%'"
+                        [nzValueStyle]="{ color: '#3f8600' }">
+                    </nz-statistic>
+                </nz-card>
+            </div>
+            <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="6">
+                <nz-card>
+                    <nz-statistic [nzValue]="student?.attendance" [nzTitle]="'Attendance Rate'" [nzSuffix]="'%'"
+                        [nzValueStyle]="{ color: '#cf1322' }">
+                    </nz-statistic>
+                </nz-card>
+            </div>
+            <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="6">
+                <nz-card>
+                    <nz-statistic [nzValue]="getTopSubjectScore()" [nzTitle]="'Highest Score'" [nzSuffix]="'%'"
+                        [nzValueStyle]="{ color: '#096dd9' }">
+                    </nz-statistic>
+                </nz-card>
+            </div>
+            <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="6">
+                <nz-card>
+                    <nz-statistic [nzValue]="getAverageImprovement()" [nzTitle]="'Average Improvement'" [nzSuffix]="'%'"
+                        [nzValueStyle]="{ color: '#08979c' }">
+                    </nz-statistic>
+                </nz-card>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content" nz-row [nzGutter]="16">
+            <!-- Left Column -->
+            <div nz-col [nzXs]="24" [nzMd]="16">
+                <!-- Performance Chart -->
+                <nz-card nzTitle="Academic Performance Trend" class="chart-card">
+                    <div echarts [options]="getPerformanceChartOptions()" class="performance-chart"></div>
+                </nz-card>
+            </div>
+
+            <!-- Right Column -->
+            <div nz-col [nzXs]="24" [nzMd]="8">
+
+                <!-- Subject-wise Performance -->
+                <nz-card nzTitle="Subject Performance" class="subjects-card">
+                    <div *ngFor="let result of student?.results" class="subject-row">
+                        <div class="subject-info">
+                            <i nz-icon [nzType]="getSubjectIcon(result.subject)" class="subject-icon"></i>
+                            <span class="subject-name">{{result.subject}}</span>
+                        </div>
+                        <div class="subject-stats">
+                            <nz-progress [nzPercent]="result.marks" [nzStatus]="getProgressStatus(result.marks)"
+                                [nzStrokeColor]="getGradeColor(result.grade)">
+                            </nz-progress>
+                            <div class="stats-details">
+                                <nz-tag [nzColor]="getGradeColor(result.grade)">{{result.grade}}</nz-tag>
+                                <span class="improvement" [class.positive]="result.improvement > 0">
+                                    <i nz-icon [nzType]="result.improvement >= 0 ? 'rise' : 'fall'"></i>
+                                    {{result.improvement}}%
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </nz-card>
+
+            </div>
+        </div>
+    </div>
+</section>

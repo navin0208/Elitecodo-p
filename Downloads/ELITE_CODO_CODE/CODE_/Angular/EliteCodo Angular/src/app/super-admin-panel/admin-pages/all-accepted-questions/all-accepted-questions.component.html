@@ -1,0 +1,114 @@
+<div *ngIf="loading" class="loading-state">
+  <div class="spinner">
+    <div class="bounce1"></div>
+    <div class="bounce2"></div>
+    <div class="bounce3"></div>
+  </div>
+  <p>Fetching questions...</p>
+</div>
+
+<ng-container *ngIf="!loading && !errorMsg">
+
+  <mat-card class="m-2 p-3">
+    <h3 class="text-center form-heaading" style="color: #17a2b8;">View All Accepted Questions*</h3>
+  </mat-card>
+
+  <div class="question-card" *ngFor="let question of paginatedQuestions">
+    <!-- Column 1 -->
+    <div class="column-1">
+      {{ question.questionId }}
+    </div>
+
+    <!-- Column 2 -->
+    <div class="column-2">
+      <div class="question-content" [innerHTML]="question.question"></div>
+
+      <div class="options-grid">
+        <div class="option-wrapper">
+          <span class="option-label">Option A.</span>
+          <div class="option" [innerHTML]="question.option1"
+            [class.correct-answer]="isCorrectAnswer(question.multiAnswers, 1)">
+          </div>
+        </div>
+        <div class="option-wrapper">
+          <span class="option-label">Option B.</span>
+          <div class="option" [innerHTML]="question.option2"
+            [class.correct-answer]="isCorrectAnswer(question.multiAnswers, 2)">
+          </div>
+        </div>
+        <div class="option-wrapper">
+          <span class="option-label">Option C.</span>
+          <div class="option" [innerHTML]="question.option3"
+            [class.correct-answer]="isCorrectAnswer(question.multiAnswers, 3)">
+          </div>
+        </div>
+        <div class="option-wrapper">
+          <span class="option-label">Option D.</span>
+          <div class="option" [innerHTML]="question.option4"
+            [class.correct-answer]="isCorrectAnswer(question.multiAnswers, 4)">
+          </div>
+        </div>
+      </div>
+
+      <!-- ✅ Updated Metadata Grid -->
+      <div class="metadata-grid">
+        <div class="meta-item">
+          <strong>Explanation:</strong> <span [innerHTML]="question.explanation"></span>
+        </div>
+        <div class="meta-item">
+          <strong>Chapter:</strong> {{ question.chapterName }}
+        </div>
+        <div class="meta-item">
+          <strong>Pattern:</strong> {{ question.patternName }}
+        </div>
+
+        <div class="meta-item">
+          <strong>Exam:</strong> {{ question.entranceExamName }} ({{ question.yearOfAppearance }})
+        </div>
+        <div class="meta-item">
+          <strong>Question Level:</strong> {{ question.questionLevel }}
+        </div>
+        <div class="meta-item">
+          <strong>Topic:</strong> {{ question.topicName }}
+        </div>
+
+        <div class="meta-item">
+          <strong>Subject:</strong> <span class="subject">{{ question.subjectName }}</span>
+        </div>
+        <div class="meta-item">
+          <strong>Question Type:</strong> {{ question.questionType }}
+        </div>
+        <div class="meta-item">
+          <strong>Sub Topic:</strong> {{ question.subTopicName }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Column 3 -->
+    <div class="column-3">
+      <button class="button accept-btn visually-hidden">Accept</button>
+      <button class="button delete-btn visually-hidden">Delete</button>
+    </div>
+
+    <!-- Column 5 -->
+    <div class="column-5">
+      <button class="button copy-btn visually-hidden">Copy</button>
+    </div>
+  </div>
+
+  <app-pagination [currentPage]="currentPage" [itemsPerPage]="itemsPerPage" [totalItems]="questions.length"
+    (pageChange)="onPageChange($event)" (itemsPerPageChange)="onItemsPerPageChange($event)">
+  </app-pagination>
+
+</ng-container>
+
+<!-- Display this message if there are no questions -->
+<div *ngIf="noQuestions && !loading && !errorMsg" class="no-questions-message text-dark"
+  style="display: flex; justify-content: center; font-size: calc(1em + 2vmin);">
+  <p>No questions have been created by this teacher.</p>
+</div>
+
+<div *ngIf="errorMsg" class="error-message text-danger"
+  style="display: flex;justify-content: center;font-size: calc(1em + 2vmin);">
+  <p>Error loading data. Please try again later.</p>
+</div>

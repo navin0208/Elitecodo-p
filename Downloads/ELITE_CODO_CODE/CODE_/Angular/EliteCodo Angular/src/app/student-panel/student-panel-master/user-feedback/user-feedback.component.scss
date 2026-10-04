@@ -1,0 +1,477 @@
+@media screen and (max-width: 500px) {
+    section {
+        position: absolute;
+        width: 100%;
+        transform: translateY(20px);
+    }
+}
+
+section {
+    position: absolute;
+    width: 100%;
+}
+
+// user-feedback.component.scss
+
+.feedback-container {
+    max-width: 1200px;
+    margin: 32px auto;
+    padding: 0 16px;
+
+    .feedback-header {
+        text-align: center;
+        margin-bottom: 40px;
+        position: relative;
+
+        &::after {
+            content: '';
+            position: absolute;
+            bottom: -16px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #1890ff, #52c41a);
+            border-radius: 2px;
+        }
+
+        h1 {
+            font-size: 32px;
+            margin-bottom: 12px;
+
+            color: #262626;
+
+            font-weight: 600;
+        }
+
+        p {
+            font-size: 16px;
+            color: #8c8c8c;
+        }
+    }
+
+    .feedback-content {
+        background: #fff;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+
+        form {
+            padding: 24px;
+        }
+
+        // Type Selection Cards
+        .type-selection {
+            margin: -24px -24px 32px -24px;
+            padding: 24px;
+            background: linear-gradient(135deg, #f0f5ff 0%, #e6fffb 100%);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+
+            nz-radio-group {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 12px;
+                padding: 8px;
+
+                label[nz-radio-button] {
+                    min-width: 160px;
+                    height: 48px;
+                    border-radius: 8px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transition: all 0.3s ease;
+                    border: 1px solid #d9d9d9;
+                    background: white;
+                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+                    &:hover {
+                        transform: translateY(-2px);
+                        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                    }
+
+                    i {
+                        margin-right: 8px;
+                        font-size: 18px;
+                    }
+
+                    &.ant-radio-button-wrapper-checked {
+                        background: #1890ff;
+                        border-color: #1890ff;
+                        color: white;
+                        box-shadow: 0 4px 12px rgba(24, 144, 255, 0.2);
+                    }
+                }
+            }
+        }
+
+        .form-content {
+            nz-form-item {
+                margin-bottom: 28px;
+
+                nz-form-label {
+                    font-weight: 500;
+                    color: #262626;
+                    margin-bottom: 8px;
+                }
+
+                nz-form-control {
+
+                    input,
+                    textarea,
+                    nz-select {
+                        border-radius: 8px;
+
+                        &:hover,
+                        &:focus {
+                            border-color: #40a9ff;
+                            box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.1);
+                        }
+                    }
+                }
+            }
+
+            // Attachments section styling
+            ::ng-deep .ant-upload.ant-upload-select-picture-card {
+                width: 120px;
+                height: 120px;
+                border-radius: 12px;
+                border: 2px dashed #d9d9d9;
+                background: #fafafa;
+                transition: all 0.3s ease;
+
+                &:hover {
+                    border-color: #40a9ff;
+                    background: #f0f5ff;
+                }
+
+                .ant-upload {
+                    padding: 16px;
+
+                    i {
+                        font-size: 24px;
+                        color: #1890ff;
+                    }
+
+                    .ant-upload-text {
+                        margin-top: 8px;
+                        color: #8c8c8c;
+                    }
+                }
+            }
+
+            // Priority radio buttons
+            nz-radio-group {
+                display: flex;
+                gap: 12px;
+                width: 100%;
+
+                label[nz-radio-button] {
+                    flex: 1;
+                    text-align: center;
+                    height: 40px;
+                    border-radius: 8px;
+                    transition: all 0.3s ease;
+                    position: relative;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 0 16px;
+                    line-height: 1;
+                    overflow: visible;
+                    border: 1px solid #d9d9d9;
+
+                    i {
+                        margin-right: 4px;
+                    }
+
+                    // Reset default ng-zorro radio button styles
+                    &::before {
+                        display: none;
+                    }
+
+                    &:hover {
+                        color: #40a9ff;
+                        border-color: #40a9ff;
+                    }
+
+                    // Specific priority button styles
+                    &[nzValue="high"] {
+                        &.ant-radio-button-wrapper-checked {
+                            background: #ff4d4f;
+                            border-color: #ff4d4f;
+                            color: white;
+                            box-shadow: 0 4px 12px rgba(255, 77, 79, 0.2);
+                        }
+                    }
+
+                    &[nzValue="medium"] {
+                        &.ant-radio-button-wrapper-checked {
+                            background: #faad14;
+                            border-color: #faad14;
+                            color: white;
+                            box-shadow: 0 4px 12px rgba(250, 173, 20, 0.2);
+                        }
+                    }
+
+                    &[nzValue="low"] {
+                        &.ant-radio-button-wrapper-checked {
+                            background: #52c41a;
+                            border-color: #52c41a;
+                            color: white;
+                            box-shadow: 0 4px 12px rgba(82, 196, 26, 0.2);
+                        }
+                    }
+
+                    // Override ng-zorro default styles for checked state
+                    &.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
+                        z-index: 1;
+                    }
+
+                    // Fix for focus state
+                    &:focus-within {
+                        outline: none;
+                        box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+                    }
+                }
+            }
+        }
+
+        // Submit section
+        .submit-section {
+            margin-top: 40px;
+            text-align: right;
+            padding-top: 24px;
+            border-top: 1px solid #f0f0f0;
+
+            .submit-button {
+                min-width: 180px;
+                height: 44px;
+                border-radius: 8px;
+                font-size: 16px;
+                font-weight: 500;
+                background: linear-gradient(135deg, #1890ff, #52c41a);
+                border: none;
+                box-shadow: 0 4px 12px rgba(24, 144, 255, 0.2);
+                transition: all 0.3s ease;
+
+                &:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 6px 16px rgba(24, 144, 255, 0.3);
+                }
+
+                &:active {
+                    transform: translateY(0);
+                }
+
+                i {
+                    margin-right: 8px;
+                    font-size: 18px;
+                }
+
+                &:disabled {
+                    background: #d9d9d9;
+                    box-shadow: none;
+                }
+            }
+        }
+    }
+}
+
+// Responsive styles
+@media (max-width: 768px) {
+    .feedback-container {
+        margin: 16px auto;
+
+        .feedback-header {
+            margin-bottom: 32px;
+
+            h1 {
+                font-size: 24px;
+            }
+        }
+
+        .feedback-content {
+            border-radius: 12px;
+
+            .type-selection {
+                padding: 16px;
+
+                nz-radio-group {
+                    flex-direction: column;
+
+                    label[nz-radio-button] {
+                        width: 100%;
+                        margin: 0;
+                    }
+                }
+            }
+
+            .form-content {
+                [nz-col] {
+                    margin-bottom: 16px;
+                }
+            }
+
+            .submit-section {
+                margin-top: 32px;
+                text-align: center;
+
+                .submit-button {
+                    width: 100%;
+                }
+            }
+        }
+    }
+}
+
+// Modal styles
+::ng-deep .ant-modal-content {
+    padding: 0;
+    overflow: hidden;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+
+    .ant-modal-close {
+        color: #ffffff;
+        top: 12px;
+        right: 12px;
+        background: rgba(0, 0, 0, 0.25);
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+
+        &:hover {
+            background: rgba(0, 0, 0, 0.4);
+        }
+    }
+
+    img {
+        display: block;
+        max-width: 100%;
+        height: auto;
+    }
+}
+
+
+.upload-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    max-width: 400px;
+    margin: 20px auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+
+    &:hover {
+        box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    .upload-header {
+        padding: 10px 15px;
+        background: #f5f5f5;
+        border-bottom: 1px solid #ddd;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .upload-body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        cursor: pointer;
+        background: #fafafa;
+        position: relative;
+        text-align: center;
+
+        .upload-placeholder {
+            text-align: center;
+
+            .upload-icon {
+                font-size: 36px;
+                color: #888;
+            }
+
+            .upload-text {
+                font-size: 14px;
+                color: #666;
+                margin-top: 10px;
+            }
+        }
+
+        .upload-preview {
+            display: flex;
+            align-items: center;
+
+            .preview-image {
+                max-width: 100px;
+                max-height: 100px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+            }
+
+            .file-name-preview {
+                display: flex;
+                align-items: center;
+                margin-left: 10px;
+                color: #555;
+
+                .file-icon {
+                    font-size: 20px;
+                    color: #888;
+                    margin-right: 5px;
+                }
+
+                span {
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    max-width: 150px;
+                    display: inline-block;
+                }
+            }
+        }
+    }
+
+    .upload-footer {
+        padding: 10px;
+        text-align: center;
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            transition: background 0.3s ease;
+
+            &:hover {
+                background: #0056b3;
+            }
+        }
+    }
+}
+
+.upload-loader {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .loading-icon {
+        font-size: 36px;
+        color: #007bff;
+    }
+
+    .loading-text {
+        margin-top: 10px;
+        font-size: 14px;
+        color: #555;
+    }
+}

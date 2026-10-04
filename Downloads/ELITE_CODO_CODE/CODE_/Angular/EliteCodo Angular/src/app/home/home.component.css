@@ -1,0 +1,112 @@
+@import url("https://fonts.googleapis.com/css?family=Exo:400,700");
+@import url("https://fonts.googleapis.com/css?family=Lato:300,400,700");
+@import url("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css");
+
+/* BODY */
+body {
+  font-family: "Lato", sans-serif;
+  background: #353535;
+  color: #fff;
+  margin: 0;
+}
+
+/* CONTEXT */
+.context {
+  width: 100%;
+  position: absolute;
+  top: 5vh;
+  padding: 0 15px;
+}
+
+.logo {
+  max-width: 250px;
+  width: 100%;
+  height: 200px;
+  margin-bottom: 20px;
+}
+
+.title {
+  margin-bottom: 30px;
+  font-size: 32px;
+}
+
+h1 {
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+
+/* BUTTON GRID SPACING */
+.button-row > div {
+  margin-bottom: 40px;
+}
+
+/* BUTTON */
+a.animated-button {
+  position: relative;
+  display: block;
+  width: 100%;
+  min-height: 55px;
+  padding: 12px 10px;
+  color: #fff;
+  font-size: 15px;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  border: 2px solid #f7ca18;
+  overflow: hidden;
+  transition: color 0.4s ease;
+
+  /* IMPORTANT FOR ZOOM */
+  white-space: normal;
+  word-wrap: break-word;
+  line-height: 1.4;
+}
+
+/* Hover background animation */
+a.animated-button::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #f7ca18;
+  z-index: -1;
+  transition: all 0.4s ease;
+}
+
+a.animated-button.thar-four::before {
+  top: 0;
+  left: 0;
+  width: 0;
+}
+
+a.animated-button.thar-four:hover::before {
+  width: 100%;
+}
+
+a.animated-button:hover {
+  color: #000;
+}
+
+/* RESPONSIVE TEXT */
+@media (max-width: 768px) {
+  .title {
+    font-size: 24px;
+  }
+
+  a.animated-button {
+    font-size: 14px;
+    padding: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 20px;
+  }
+
+  a.animated-button {
+    font-size: 13px;
+    padding: 8px;
+  }
+}

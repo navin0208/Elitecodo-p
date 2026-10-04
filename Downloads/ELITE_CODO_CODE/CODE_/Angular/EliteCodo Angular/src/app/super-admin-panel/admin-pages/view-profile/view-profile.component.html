@@ -1,0 +1,149 @@
+<div *ngIf="loading" class="loading-state">
+    <div class="spinner">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+    </div>
+    <p>Fetching Profile...</p>
+</div>
+
+<div *ngIf="!loading && !errorMsg" class="dashboard-container">
+    <!-- Header Section -->
+    <div class="header-section" [ngStyle]="{'background-image': 'url(' + teacherData.profilePicture + ')'}">
+        <div class="header-overlay">
+            <div class="container">
+                <div class="profile-header">
+                    <div class="profile-avatar">
+                        <img [src]="teacherData.profilePicture" alt="Profile Picture" />
+                        <!-- <div class="avatar-overlay"> -->
+                        <!-- <i class="fa fa-camera"></i> -->
+                        <!-- <input type="file" /> -->
+                        <!-- </div> -->
+                    </div>
+                    <div class="profile-info">
+                        <h1>{{getFullName()}}</h1>
+                        <div class="badges">
+                            <span class="role-badge">{{getRoleName()}}</span>
+                            <span class="status-badge" [class.active]="teacherData.status === 'Active'">
+                                {{teacherData.status}}
+                            </span>
+                        </div>
+                        <div class="quick-stats">
+                            <div class="stat-item">
+                                <i class="fa fa-users"></i>
+                                <span>{{teacherData.studentKeys}}</span>
+                                <label>Students</label>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fa fa-book"></i>
+                                <span>{{getTotalSubjects()}}</span>
+                                <label>Subjects</label>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fa fa-graduation-cap"></i>
+                                <span>{{teacherData.teacherAssessmentEntranceExams.length}}</span>
+                                <label>Exams</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content-section">
+        <div class="container">
+            <div class="profile-nav">
+                <div class="nav-tabs">
+                    <button *ngFor="let tab of tabs" [class.active]="activeTab === tab.id"
+                        (click)="setActiveTab(tab.id)" class="tab-button">
+                        <i [class]="tab.icon"></i>
+                        {{tab.name}}
+                    </button>
+                </div>
+                <!-- <button class="edit-profile-btn">
+                    <i class="fa fa-edit"></i>
+                    Edit Profile
+                </button> -->
+            </div>
+
+            <!-- Tab Contents -->
+            <div class="tab-content" [@fadeAnimation]>
+                <!-- About Tab -->
+                <div *ngIf="activeTab === 'about'" class="about-section">
+                    <div class="info-grid">
+                        <div class="info-card">
+                            <div class="info-icon">
+                                <i class="fa fa-user"></i>
+                            </div>
+                            <div class="info-content">
+                                <label>User ID</label>
+                                <p>{{teacherData.id}}</p>
+                            </div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-icon">
+                                <i class="fa fa-envelope"></i>
+                            </div>
+                            <div class="info-content">
+                                <label>Email</label>
+                                <p>{{teacherData.email}}</p>
+                            </div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-icon">
+                                <i class="fa fa-phone"></i>
+                            </div>
+                            <div class="info-content">
+                                <label>Mobile</label>
+                                <p>{{teacherData.mobile}}</p>
+                            </div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-icon">
+                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                            </div>
+                            <div class="info-content">
+                                <label>Joined Date</label>
+                                <p>{{teacherData.date | date}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Exams Tab -->
+                <div *ngIf="activeTab === 'exams'" class="exams-section">
+                    <div class="exams-grid">
+                        <div *ngFor="let exam of teacherData.teacherAssessmentEntranceExams" class="exam-card">
+                            <div class="exam-header">
+                                <h3>{{exam.entranceExamName}}</h3>
+                                <span class="exam-status" [class.active]="exam.entranceStatus === 'Active'">
+                                    {{exam.entranceStatus}}
+                                </span>
+                            </div>
+                            <div class="standards-list">
+                                <div *ngFor="let standard of exam.teacherAssessmentStandards" class="standard-item">
+                                    <div class="standard-header">
+                                        <span class="standard-name">{{standard.standardName}}</span>
+                                        <div class="subjects-count">
+                                            {{standard.teacherAssessmentSubjects.length}} Subjects
+                                        </div>
+                                    </div>
+                                    <div class="subjects-list">
+                                        <div *ngFor="let subject of standard.teacherAssessmentSubjects"
+                                            class="subject-chip" [class.active]="subject.subStatus === 'Active'">
+                                            <i class="fa fa-book"></i>
+                                            <span class="subject-name">{{subject.subjectName}}</span>
+                                            <span class="subject-status">{{subject.subStatus}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

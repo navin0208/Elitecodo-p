@@ -1,0 +1,125 @@
+<div *ngIf="loading" class="loading-state">
+  <div class="spinner">
+    <div class="bounce1"></div>
+    <div class="bounce2"></div>
+    <div class="bounce3"></div>
+  </div>
+  <p>Fetching questions...</p>
+</div>
+
+<ng-container *ngIf="!loading && !errorMsg">
+  <mat-card class="m-2 p-3">
+    <h3 class="text-center form-heaading" style="color: #17a2b8">
+      View Questions*
+    </h3>
+  </mat-card>
+
+  <div class="question-card" *ngFor="let question of paginatedQuestions">
+    <!-- Column 1 -->
+    <div class="column-1">
+      {{ question.questionId }}
+    </div>
+
+    <!-- Column 2 -->
+    <div class="column-2">
+      <div class="question-content" [innerHTML]="question.question"></div>
+
+      <div class="options-grid">
+        <div class="option-wrapper">
+          <span class="option-label">Option A.</span>
+          <div class="option" [innerHTML]="question.option1"
+            [class.correct-answer]="isCorrectAnswer(question.multiAnswers, 1)"></div>
+        </div>
+        <div class="option-wrapper">
+          <span class="option-label">Option B.</span>
+          <div class="option" [innerHTML]="question.option2"
+            [class.correct-answer]="isCorrectAnswer(question.multiAnswers, 2)"></div>
+        </div>
+        <div class="option-wrapper">
+          <span class="option-label">Option C.</span>
+          <div class="option" [innerHTML]="question.option3"
+            [class.correct-answer]="isCorrectAnswer(question.multiAnswers, 3)"></div>
+        </div>
+        <div class="option-wrapper">
+          <span class="option-label">Option D.</span>
+          <div class="option" [innerHTML]="question.option4"
+            [class.correct-answer]="isCorrectAnswer(question.multiAnswers, 4)"></div>
+        </div>
+      </div>
+
+      <div class="metadata">
+        <div>Explanation: <span [innerHTML]="question.explanation"></span></div>
+        <div class="text-capitalize">
+          Exam: {{ question.entranceExamName }}
+          <span>
+            ({{ question?.yearOfAppearance ? question.yearOfAppearance : 'NA' }})
+          </span>
+        </div>
+        <div class="text-capitalize">
+          Subject: <span class="subject">{{ question.subjectName }}</span>
+        </div>
+        <div class="text-capitalize">
+          Chapter Name: <span class="subject">{{ question.chapterName }}</span>
+        </div>
+        <div class="text-capitalize">
+          Question Level: <span class="subject">{{ question.questionLevel }}</span>
+        </div>
+        <div class="text-capitalize">
+          Question Type: <span class="subject">{{ question.questionType }}</span>
+        </div>
+        <div class="text-capitalize">
+          Pattern Name: <span class="subject">{{ question.patternName }}</span>
+        </div>
+        <div class="text-capitalize">
+          Topic Name: <span class="subject">{{ question.topicName }}</span>
+        </div>
+        <div class="text-capitalize">
+          SubTopic Name: <span class="subject">{{ question.subTopicName }}</span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Column 3 -->
+    <div class="column-3">
+      <button class="button accept-btn visually-hidden">Accept</button>
+      <button class="button delete-btn visually-hidden">Delete</button>
+    </div>
+
+    <!-- Column 4 -->
+    <div class="column-4">
+      <button class="button accept-btn" title="Accept Question" (click)="acceptQuestion(question.questionId)">
+        <i class="fa fa-check" aria-hidden="true"></i>
+      </button>
+      <button class="button view-btn" title="Reject Question" (click)="rejecteQuestion(question.questionId)">
+        <i class="fa fa-times" aria-hidden="true"></i>
+      </button>
+      <button class="button delete-btn" title="Delete Question" (click)="deleteQuestion(question.questionId)">
+        <i class="fa fa-trash" aria-hidden="true"></i>
+      </button>
+      <button class="button edit-btn" title="Edit Question" (click)="editQuestion(question.questionId)">
+        <i class="fa fa-edit" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <!-- Column 5 -->
+    <div class="column-5">
+      <button class="button copy-btn visually-hidden">Copy</button>
+    </div>
+  </div>
+
+  <app-pagination [currentPage]="currentPage" [itemsPerPage]="itemsPerPage" [totalItems]="questions.length"
+    (pageChange)="onPageChange($event)" (itemsPerPageChange)="onItemsPerPageChange($event)">
+  </app-pagination>
+</ng-container>
+
+<!-- Display message if no questions -->
+<div *ngIf="noQuestions && !loading && !errorMsg" class="no-questions-message text-dark"
+  style="display: flex; justify-content: center; font-size: calc(1em + 2vmin)">
+  <p>No questions have been created by this teacher.</p>
+</div>
+
+<div *ngIf="errorMsg" class="error-message text-danger"
+  style="display: flex; justify-content: center; font-size: calc(1em + 2vmin)">
+  <p>Error loading data. Please try again later.</p>
+</div>

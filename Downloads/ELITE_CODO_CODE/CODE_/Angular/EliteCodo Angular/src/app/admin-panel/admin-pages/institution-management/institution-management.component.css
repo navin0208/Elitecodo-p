@@ -1,0 +1,47 @@
+/* Form Group Wrapper */
+/* .form-group-wrapper {
+    margin-bottom: 20px;
+} */
+
+.form-group {
+    position: relative;
+}
+
+/* Input Group Styles */
+.input-group {
+    position: relative;
+}
+
+.input-group .form-control {
+    padding-right: 40px;
+    /* Space for toggle button */
+}
+
+.input-group .toggle-password {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+/* Invalid Feedback Container */
+.invalid-feedback-container {
+    min-height: 20px;
+    margin-top: 5px;
+}
+
+/* Error State */
+.is-invalid .form-control {
+    border-color: red;
+}
+
+/* Additional Styles */
+.profile_picture {
+    border-radius: 50%;
+    height: 100px;
+    padding: 10px;
+}

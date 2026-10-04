@@ -1,0 +1,156 @@
+<section
+  [ngStyle]="{ 'background-color': http.getBackgroundColor() }"
+  *ngIf="type !== 'chapter-wise' && type !== 'topic-wise'"
+>
+  <div class="container-fluid">
+    <div class="header-container">
+      <h1 class="title">Subjects & Chapters</h1>
+      <div class="button-group">
+        <button (click)="selectAllChapters()" class="btn-action">
+          Select All
+        </button>
+        <button (click)="deselectAllChapters()" class="btn-action">
+          Deselect All
+        </button>
+        <button
+          (click)="opentestcreationMultiple()"
+          *ngIf="selectedChapterIds.length > 0"
+          class="btn-primary"
+        >
+          Proceed with Selected ({{ selectedChapterIds.length }})
+        </button>
+      </div>
+    </div>
+
+    <div class="subjects-container">
+      <div
+        class="subject-card"
+        *ngFor="let subject of chapterlist; let i = index"
+      >
+        <!-- Subject Header -->
+        <div class="subject-header" [ngClass]="'subject-header-' + (i % 3)">
+          <div class="subject-info">
+            <h2 class="subject-title">{{ subject.subjectName }}</h2>
+            <div class="subject-meta">
+              <span class="material-icons-outlined">menu_book</span>
+              <span class="chapter-count"
+                >{{ subject.chapters.length }} Chapters</span
+              >
+              <span class="progress-info" *ngIf="subject.completedChapters">
+                <span class="material-icons-outlined">task_alt</span>
+                {{ subject.completedChapters }}/{{ subject.chapters.length }}
+                completed
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chapters Grid -->
+        <div class="chapters-grid">
+          <div
+            class="chapter-card"
+            *ngFor="let chapter of subject.chapters"
+            [ngClass]="{ 'chapter-completed': chapter.isCompleted }"
+          >
+            <div class="chapter-card-content">
+              <div class="chapter-checkbox-wrapper">
+                <input
+                  type="checkbox"
+                  [id]="'chap-' + chapter.chapterId"
+                  [checked]="isChapterSelected(chapter.chapterId)"
+                  (change)="toggleChapterSelection(chapter.chapterId, $event)"
+                  class="chapter-checkbox"
+                />
+                <label [for]="'chap-' + chapter.chapterId"></label>
+              </div>
+              <div class="chapter-details">
+                <h3 class="chapter-name">{{ chapter.chapterName }}</h3>
+                <p class="chapter-meta">
+                  <span class="chapter-id"
+                    >Chapter {{ chapter.chapterId }}</span
+                  >
+                  <span class="chapter-lessons" *ngIf="chapter.lessonCount">
+                    <span class="material-icons-outlined">class</span>
+                    {{ chapter.lessonCount }} lessons
+                  </span>
+                </p>
+              </div>
+              <div class="chapter-actions">
+                <button class="chapter-btn" title="Open chapter content">
+                  <span class="material-icons-outlined">chevron_right</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- chapter wise & topic wise -->
+<section
+  [ngStyle]="{ 'background-color': http.getBackgroundColor() }"
+  *ngIf="type === 'chapter-wise' || type === 'topic-wise'"
+>
+  <div class="container-fluid">
+    <div class="subjects-container">
+      <div
+        class="subject-card"
+        *ngFor="let subject of chapterlist; let i = index"
+      >
+        <!-- Subject Header -->
+        <div class="subject-header" [ngClass]="'subject-header-' + (i % 3)">
+          <div class="subject-info">
+            <h2 class="subject-title">{{ subject.subjectName }}</h2>
+            <div class="subject-meta">
+              <span class="material-icons-outlined">menu_book</span>
+              <span class="chapter-count"
+                >{{ subject.chapters.length }} Chapters</span
+              >
+              <span class="progress-info" *ngIf="subject.completedChapters">
+                <span class="material-icons-outlined">task_alt</span>
+                {{ subject.completedChapters }}/{{ subject.chapters.length }}
+                completed
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chapters Grid -->
+        <div class="chapters-grid">
+          <div
+            class="chapter-card"
+            *ngFor="let chapter of subject.chapters"
+            [ngClass]="{ 'chapter-completed': chapter.isCompleted }"
+            (click)="opentestcreation(chapter.chapterId)"
+          >
+            <div class="chapter-card-content">
+              <div class="chapter-details">
+                <h3 class="chapter-name">{{ chapter.chapterName }}</h3>
+                <p class="chapter-meta">
+                  <span class="chapter-id"
+                    >Chapter {{ chapter.chapterId }}</span
+                  >
+
+                  <span class="chapter-lessons" *ngIf="chapter.lessonCount">
+                    <span class="material-icons-outlined">class</span>
+                    {{ chapter.lessonCount }} lessons
+                  </span>
+                </p>
+                <p style="color: #1f2937">
+                  Question Count: {{ chapter.questionCount }}
+                </p>
+              </div>
+              <div class="chapter-actions">
+                <button class="chapter-btn" title="Open chapter content">
+                  <span class="material-icons-outlined">chevron_right</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

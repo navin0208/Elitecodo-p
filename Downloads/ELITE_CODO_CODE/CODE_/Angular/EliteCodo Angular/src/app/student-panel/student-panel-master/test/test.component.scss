@@ -1,0 +1,873 @@
+@media screen and (max-width: 500px) {
+    section {
+        position: absolute;
+        width: 100%;
+        transform: translateY(20px);
+    }
+}
+
+section {
+    position: absolute;
+    width: 100%;
+}
+
+nz-select {
+    width: 100%;
+}
+
+.loading-icon {
+    margin-right: 8px;
+}
+
+// Variables
+$primary-color: #1890ff;
+$secondary-color: #002140;
+$success-color: #52c41a;
+$warning-color: #faad14;
+$error-color: #f5222d;
+$text-color: #262626;
+$border-radius: 4px;
+$box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+// Color Variables
+$light-text: #8d99ae;
+$border-color: #e9ecef;
+$background-light: #f8f9fa;
+$card-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+$transition: all 0.3s ease;
+
+
+// Base Styles
+.test-creation-wrapper {
+    font-family: 'Inter', sans-serif;
+    color: $text-color;
+    padding: 2rem;
+    min-height: 100vh;
+}
+
+.test-creation-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.form-header {
+    margin-bottom: 2rem;
+    text-align: center;
+
+    h2 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: $primary-color;
+        margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+        color: $light-text;
+        font-size: 1rem;
+    }
+}
+
+// Form Sections
+.form-section {
+    margin-bottom: 1rem;
+    transition: $transition;
+
+    &.card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: $card-shadow;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+}
+
+.section-header {
+    margin-bottom: 1.5rem;
+
+    h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: $secondary-color;
+        margin-bottom: 0.75rem;
+    }
+
+    .divider {
+        height: 2px;
+        background: linear-gradient(90deg, $primary-color, rgba($primary-color, 0.2));
+        border-radius: 2px;
+    }
+}
+
+// Form Elements
+.form-group {
+    margin-bottom: 1rem;
+
+    .form-label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        font-size: 0.875rem;
+        color: $text-color;
+    }
+}
+
+.form-input,
+.form-select {
+    width: 100%;
+    padding: 0.625rem 1rem;
+    border: 1px solid $border-color;
+    border-radius: 8px;
+    font-size: 0.9375rem;
+    transition: $transition;
+    background-color: white;
+
+    &:hover {
+        border-color: rgba($primary-color, 0.5);
+    }
+
+    &:focus {
+        border-color: $primary-color;
+        box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
+        outline: none;
+    }
+}
+
+// Container styles
+.test-creation-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #ffffff;
+    border-radius: $border-radius;
+    box-shadow: $box-shadow;
+
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+}
+
+// Form group styles
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    label {
+        font-weight: 500;
+        color: $text-color;
+        font-size: 1rem;
+        margin-bottom: 0.25rem;
+    }
+
+    // Input styles
+    input[type="text"],
+    input[type="number"],
+    nz-input,
+    nz-select,
+    nz-date-picker {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #d9d9d9;
+        border-radius: $border-radius;
+        transition: all 0.3s;
+
+        &:hover {
+            border-color: $primary-color;
+        }
+
+        &:focus {
+            outline: none;
+            border-color: $primary-color;
+            box-shadow: 0 0 0 2px rgba($primary-color, 0.2);
+        }
+    }
+
+    // Error message styles
+    nz-alert {
+        margin-top: 0.5rem;
+    }
+}
+
+// Chapter group styles
+.chapter-group {
+    background: #fafafa;
+    padding: 1rem;
+    border-radius: $border-radius;
+    margin-bottom: 1rem;
+    border: 1px solid #f0f0f0;
+
+    p {
+        font-weight: 500;
+        color: $secondary-color;
+        margin-bottom: 0.5rem;
+    }
+
+    input {
+        max-width: 150px;
+    }
+}
+
+// Group subject styles
+.group-wise-test {
+    padding: 1rem;
+
+    >label {
+        display: block;
+        font-size: 1.1rem;
+        font-weight: 500;
+        margin-bottom: 1rem;
+    }
+
+    .subjects-grid {
+        display: grid;
+        gap: 2rem;
+    }
+
+    .group-subject {
+        background: #ffffff;
+        padding: 1.5rem;
+        border-radius: 8px;
+        border: 1px solid #f0f0f0;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+
+        &:hover {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .subject-title {
+            color: $secondary-color;
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid $primary-color;
+            font-weight: 500;
+        }
+
+        .chapters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+            padding: 0.5rem;
+        }
+
+        .chapter-group {
+            position: relative;
+            padding: 1rem;
+            border-radius: 6px;
+            background: #fafafa;
+            border: 1px solid #f0f0f0;
+            transition: all 0.3s ease;
+
+            &::before {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                width: 4px;
+                background: $primary-color;
+                border-radius: 4px 0 0 4px;
+            }
+
+            &:hover {
+                background: #f5f5f5;
+                border-color: #e0e0e0;
+            }
+
+            .chapter-content {
+                .chapter-name {
+                    font-weight: 500;
+                    color: #2c3e50;
+                    margin-bottom: 0.75rem;
+                }
+
+                .question-input {
+                    display: flex;
+                    align-items: center;
+                    gap: 1rem;
+
+                    label {
+                        min-width: 70px;
+                        color: #666;
+                    }
+
+                    input {
+                        width: 120px;
+
+                        &:focus {
+                            border-color: $primary-color;
+                            box-shadow: 0 0 0 2px rgba($primary-color, 0.1);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Add media query for smaller screens
+@media (max-width: 768px) {
+    .group-wise-test {
+        .chapters-grid {
+            grid-template-columns: 1fr !important; // Force single column on mobile
+        }
+
+        .chapter-group {
+            .question-input {
+                flex-direction: column;
+                align-items: flex-start;
+
+                label {
+                    margin-bottom: 0.5rem;
+                }
+
+                input {
+                    width: 100% !important;
+                }
+            }
+        }
+    }
+}
+
+// Form actions styles
+.form-actions {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+
+    button {
+        min-width: 120px;
+        height: 40px;
+        font-weight: 500;
+
+        &[nzType="primary"] {
+            background: $primary-color;
+            border-color: $primary-color;
+
+            &:hover {
+                background: darken($primary-color, 10%);
+                border-color: darken($primary-color, 10%);
+            }
+
+            &:disabled {
+                background: #d9d9d9;
+                border-color: #d9d9d9;
+            }
+        }
+    }
+}
+
+// Responsive styles
+@media (max-width: 768px) {
+    .test-creation-container {
+        padding: 1rem;
+        margin: 1rem;
+    }
+
+    .group-subject {
+        padding: 1rem;
+
+        .chapter-group {
+            margin-left: 0.5rem;
+        }
+    }
+
+    .form-actions {
+        flex-direction: column;
+
+        button {
+            width: 100%;
+        }
+    }
+}
+
+// Animation styles
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.chapter-group,
+.group-subject {
+    animation: fadeIn 0.3s ease-out;
+}
+
+// Custom scroll styles for long lists
+.test-creation-container {
+    max-height: 90vh;
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 4px;
+
+        &:hover {
+            background: #555;
+        }
+    }
+}
+
+// Hover effects
+.chapter-group,
+.group-subject {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+}
+
+.topic-wise-test {
+    .remaining-questions {
+        margin: 1rem 0;
+    }
+
+    .topics-section {
+        margin-top: 1.5rem;
+
+        >label {
+            display: block;
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .topics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .topic-group {
+            background: #fafafa;
+            padding: 1.25rem;
+            border-radius: 8px;
+            border: 1px solid #f0f0f0;
+            transition: all 0.3s ease;
+
+            &:hover {
+                border-color: #d9d9d9;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            }
+
+            .topic-info {
+                .topic-header {
+                    margin-bottom: 1rem;
+
+                    .topic-name {
+                        display: block;
+                        font-weight: 500;
+                        color: #2c3e50;
+                        font-size: 1rem;
+                    }
+                }
+
+                .question-count {
+                    display: flex;
+                    align-items: center;
+                    gap: 1rem;
+                    flex-wrap: wrap;
+
+                    label {
+                        min-width: 70px;
+                        color: #666;
+                    }
+
+                    input {
+                        width: 120px;
+
+                        &:focus {
+                            border-color: $primary-color;
+                            box-shadow: 0 0 0 2px rgba($primary-color, 0.1);
+                        }
+                    }
+
+                    .error-message {
+                        width: 100%;
+                        color: #ff4d4f;
+                        font-size: 0.85rem;
+                        margin-top: 0.5rem;
+                        padding-left: calc(70px + 1rem);
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Add media query for smaller screens
+@media (max-width: 768px) {
+    .topics-section {
+        .topics-grid {
+            grid-template-columns: 1fr; // Single column on mobile
+        }
+
+        .topic-group {
+            .question-count {
+                flex-direction: column;
+                align-items: flex-start;
+
+                label {
+                    margin-bottom: 0.5rem;
+                }
+
+                input {
+                    width: 100%;
+                }
+
+                .error-message {
+                    padding-left: 0;
+                }
+            }
+        }
+    }
+}
+
+// Add these styles to your test.component.scss
+.weightage-wise-test {
+    .chapters-weightage {
+        margin-top: 2rem;
+
+        .chapter-weightage-group {
+            background: #fafafa;
+            padding: 1rem;
+            border-radius: $border-radius;
+            margin-bottom: 1rem;
+            border: 1px solid #f0f0f0;
+
+            .chapter-info {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+
+                .chapter-name {
+                    font-weight: 500;
+                    color: $secondary-color;
+                }
+
+                .question-distribution {
+                    display: flex;
+                    gap: 0.5rem;
+
+                    .question-count {
+                        font-weight: 500;
+                    }
+
+                    .weightage-percent {
+                        color: $primary-color;
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Add to your test.component.scss
+.question-type-test {
+    .chapters-section {
+        margin-top: 2rem;
+
+        .chapters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .chapter-group {
+            background: #fafafa;
+            padding: 1rem;
+            border-radius: $border-radius;
+            border: 1px solid #f0f0f0;
+            height: fit-content;
+
+            .chapter-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 1rem;
+
+                .chapter-name {
+                    font-weight: 500;
+                    color: $secondary-color;
+                }
+            }
+
+            .question-count {
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+
+                input {
+                    width: 120px;
+                }
+            }
+
+            .error-message {
+                color: #ff4d4f;
+                font-size: 0.85rem;
+                margin-top: 0.5rem;
+            }
+        }
+    }
+}
+
+.pyq-wise-test {
+    .form-group {
+        margin-bottom: 1.5rem;
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        nz-select {
+            width: 100%;
+        }
+    }
+
+    .remaining-questions {
+        margin: 1.5rem 0;
+    }
+
+    .chapters-section {
+        margin-top: 1.5rem;
+
+        >label {
+            display: block;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .chapters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .chapter-group {
+            background: #fafafa;
+            padding: 1.25rem;
+            border-radius: 8px;
+            border: 1px solid #f0f0f0;
+            transition: all 0.3s ease;
+
+            &:hover {
+                border-color: #d9d9d9;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            }
+
+            .chapter-info {
+                .chapter-header {
+                    margin-bottom: 1rem;
+
+                    .chapter-name {
+                        font-weight: 500;
+                        color: #2c3e50;
+                        font-size: 1rem;
+                    }
+                }
+
+                .question-input {
+                    display: flex;
+                    align-items: center;
+                    gap: 1rem;
+
+                    label {
+                        min-width: 70px;
+                        color: #666;
+                    }
+
+                    input {
+                        width: 120px;
+                    }
+                }
+            }
+
+            .error-message {
+                color: #ff4d4f;
+                font-size: 0.85rem;
+                margin-top: 0.5rem;
+                padding-left: calc(70px + 1rem); // Aligns with input
+            }
+        }
+    }
+}
+
+:host ::ng-deep {
+    .chapters-section {
+        .ant-table-small .ant-table-thead>tr>th {
+            padding: 8px 4px;
+        }
+
+        .ant-table-small .ant-table-tbody>tr>td {
+            padding: 6px 4px;
+        }
+
+        .ant-input-number {
+            width: 65px !important;
+        }
+
+        .ant-alert {
+            padding: 4px 8px;
+        }
+
+        .ant-table-thead>tr>th {
+            background: #f5f5f5;
+            font-weight: 600;
+        }
+
+        // Make sure input numbers are consistently sized
+        .ant-input-number-sm {
+            width: 65px !important;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+    }
+}
+
+.subjects-table {
+    margin-top: 20px;
+}
+
+.subject-cell {
+    background-color: #fafafa;
+    vertical-align: middle;
+}
+
+:host ::ng-deep .ant-table-tbody>tr>td {
+    vertical-align: middle;
+}
+
+:host ::ng-deep .ant-table-thead>tr>th {
+    background-color: #f0f2f5;
+    font-weight: bold;
+}
+
+.chapter-row input {
+    width: 120px;
+}
+
+.text-red-500 {
+    color: #ef4444;
+}
+
+.text-sm {
+    font-size: 0.875rem;
+}
+
+.mt-2 {
+    margin-top: 0.5rem;
+}
+
+.random-test {
+    .form-group {
+        margin-bottom: 1.5rem;
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        nz-select {
+            width: 100%;
+        }
+    }
+
+    .remaining-questions {
+        margin: 1.5rem 0;
+    }
+
+    .chapters-section {
+        margin-top: 1.5rem;
+
+        >label {
+            display: block;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .chapters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .chapter-group {
+            background: #fafafa;
+            padding: 1.25rem;
+            border-radius: 8px;
+            border: 1px solid #f0f0f0;
+            transition: all 0.3s ease;
+
+            &:hover {
+                border-color: #d9d9d9;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            }
+
+            .chapter-info {
+                .chapter-header {
+                    margin-bottom: 1rem;
+
+                    .chapter-name {
+                        display: block;
+                        font-weight: 500;
+                        color: #2c3e50;
+                        font-size: 1rem;
+                        margin-bottom: 1rem;
+                    }
+                }
+
+                .question-count {
+                    display: flex;
+                    align-items: center;
+                    gap: 1rem;
+                    flex-wrap: wrap;
+
+                    label {
+                        min-width: 70px;
+                        color: #666;
+                    }
+
+                    input {
+                        width: 120px;
+                    }
+
+                    .error-message {
+                        width: 100%;
+                        color: #ff4d4f;
+                        font-size: 0.85rem;
+                        margin-top: 0.5rem;
+                        padding-left: calc(70px + 1rem);
+                    }
+                }
+            }
+        }
+    }
+}

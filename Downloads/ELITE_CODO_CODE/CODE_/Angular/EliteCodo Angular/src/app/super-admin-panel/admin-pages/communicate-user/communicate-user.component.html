@@ -1,0 +1,232 @@
+<div class="dashboard-container">
+    <!-- Sidebar -->
+    <div class="sidebar" [class.collapsed]="isSidebarCollapsed">
+        <div class="logo-container">
+            <img src="../../../../assets/images/elitecodo.png" alt="School Logo" class="school-logo">
+            <span *ngIf="!isSidebarCollapsed">Message Center</span>
+        </div>
+
+        <div class="user-profile">
+            <!-- Dynamic profile image - API image if exists, otherwise default logo -->
+            <img 
+                [src]="getProfileImageSource()" 
+                width="64" 
+                style="border-radius: 50%;"
+                (error)="profileImage = defaultImagePath">
+            <div class="user-info" *ngIf="!isSidebarCollapsed">
+                <h3>Super Admin</h3>
+                <span class="status-badge online">Online</span>
+            </div>
+        </div>
+
+        <ul class="nav-menu">
+            <li [class.active]="activeTab === 'broadcast'" (click)="activeTab = 'broadcast'">
+                <i nz-icon nzType="notification"></i>
+                <span *ngIf="!isSidebarCollapsed">Broadcast</span>
+            </li>
+            <li [class.active]="activeTab === 'individual'" (click)="activeTab = 'individual'">
+                <i nz-icon nzType="message"></i>
+                <span *ngIf="!isSidebarCollapsed">Individual</span>
+            </li>
+            <li [class.active]="activeTab === 'drafts'" (click)="activeTab = 'drafts'">
+                <i nz-icon nzType="file-text"></i>
+                <span *ngIf="!isSidebarCollapsed">Drafts</span>
+            </li>
+        </ul>
+
+        <div class="sidebar-toggle" (click)="toggleSidebar()">
+            <i nz-icon [nzType]="isSidebarCollapsed ? 'right' : 'left'"></i>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <nz-card class="content-card" [@slideInAnimation]>
+            <!-- Broadcast Message Section -->
+            <div *ngIf="activeTab === 'broadcast'" class="message-section">
+                <div class="section-header">
+                    <h2><i nz-icon nzType="notification"></i> Broadcast Message</h2>
+                    <p>Send messages to multiple user groups</p>
+                </div>
+
+                <form [formGroup]="broadcastForm" (ngSubmit)="sendBroadcast()" class="message-form">
+                    <div class="recipients-section">
+                        <h3>Select Recipients</h3>
+                        <div class="recipient-chips">
+                            <nz-select formControlName="userType" nzMode="multiple" nzPlaceHolder="Select user types"
+                                class="recipient-select">
+                                <nz-option *ngFor="let type of userTypes" [nzValue]="type.value" [nzLabel]="type.label">
+                                    <span class="user-type-option">
+                                        <i nz-icon [nzType]="type.icon"></i>
+                                        {{ type.label }}
+                                        <span class="user-count">({{ type.count }})</span>
+                                    </span>
+                                </nz-option>
+                            </nz-select>
+                        </div>
+                    </div>
+
+                    <div class="message-content">
+                        <nz-form-item>
+                            <nz-form-control>
+                                <nz-input-group [nzPrefix]="subjectPrefix" class="subject-input">
+                                    <input nz-input formControlName="subject" placeholder="Enter message subject" />
+                                </nz-input-group>
+                                <ng-template #subjectPrefix>
+                                    <i nz-icon nzType="mail" class="input-icon"></i>
+                                </ng-template>
+                            </nz-form-control>
+                        </nz-form-item>
+
+                        <nz-form-item>
+                            <nz-form-control>
+                                <div class="rich-editor">
+                                    <textarea nz-input formControlName="message"
+                                        [nzAutosize]="{ minRows: 6, maxRows: 12 }" placeholder="Compose your message..."
+                                        class="message-textarea"></textarea>
+                                </div>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button nz-button nzType="default" (click)="saveDraft()">
+                            <i nz-icon nzType="save"></i>
+                            Save Draft
+                        </button>
+                        <button nz-button nzType="primary" [disabled]="!broadcastForm.valid" class="send-button">
+                            <i nz-icon nzType="send"></i>
+                            Send Message
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Individual Message Section -->
+            <div *ngIf="activeTab === 'individual'" class="message-section">
+                <div class="section-header">
+                    <h2><i nz-icon nzType="message"></i> Individual Message</h2>
+                    <p>Send personalized messages to specific users</p>
+                </div>
+
+                <div class="individual-message-container">
+                    <div class="users-panel">
+                        <nz-input-group [nzPrefix]="searchPrefix" class="search-box">
+                            <input nz-input placeholder="Search users..." (input)="onSearch($event)" />
+                        </nz-input-group>
+                        <ng-template #searchPrefix>
+                            <i nz-icon nzType="search"></i>
+                        </ng-template>
+
+                        <div class="users-list">
+                            <div *ngFor="let user of filteredUsers" class="user-card"
+                                [class.selected]="isSelected(user)" (click)="toggleUserSelection(user)">
+                                <div class="user-avatar">
+                                    <nz-avatar [nzSize]="48" [nzText]="user.name[0]"></nz-avatar>
+                                    <span class="status-indicator" [class]="user.status"></span>
+                                </div>
+                                <div class="user-details">
+                                    <h4>{{user.name}}</h4>
+                                    <span class="user-role">{{user.role}}</span>
+                                    <span class="last-active">Last active: {{user.lastActive}}</span>
+                                </div>
+                                <div class="selection-indicator">
+                                    <i nz-icon nzType="check-circle" *ngIf="isSelected(user)"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="message-panel">
+                        <form [formGroup]="individualForm" (ngSubmit)="sendIndividual()" class="message-form">
+                            <div class="selected-users-preview" *ngIf="selectedUsers.length">
+                                <h4>Selected Recipients ({{selectedUsers.length}})</h4>
+                                <div class="selected-avatars">
+                                    <nz-avatar-group>
+                                        <nz-avatar *ngFor="let user of selectedUsers"
+                                            [nzText]="user.name[0]"></nz-avatar>
+                                    </nz-avatar-group>
+                                </div>
+                            </div>
+
+                            <div class="message-content">
+                                <nz-form-item>
+                                    <nz-form-control>
+                                        <nz-input-group [nzPrefix]="subjectPrefix" class="subject-input">
+                                            <input nz-input formControlName="subject"
+                                                placeholder="Enter message subject" />
+                                        </nz-input-group>
+                                    </nz-form-control>
+                                </nz-form-item>
+
+                                <div class="rich-editor">
+                                    <textarea nz-input formControlName="message"
+                                        [nzAutosize]="{ minRows: 6, maxRows: 12 }" placeholder="Compose your message..."
+                                        class="message-textarea"></textarea>
+                                </div>
+
+                                <div class="action-buttons">
+                                    <button nz-button nzType="default" (click)="saveDraft()">
+                                        <i nz-icon nzType="save"></i>
+                                        Save Draft
+                                    </button>
+                                    <button nz-button nzType="primary"
+                                        [disabled]="!individualForm.valid || selectedUsers.length === 0"
+                                        class="send-button">
+                                        <i nz-icon nzType="send"></i>
+                                        Send Message
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Drafts Section -->
+            <div *ngIf="activeTab === 'drafts'" class="message-section">
+                <div class="section-header">
+                    <h2><i nz-icon nzType="file-text"></i> Drafts</h2>
+                    <p>View and manage your saved drafts</p>
+                </div>
+
+                <div class="drafts-container">
+                    <nz-empty *ngIf="getDraftsList().length === 0" nzDescription="No drafts found"
+                        [nzNotFoundContent]="'Start composing messages and save them as drafts'">
+                    </nz-empty>
+
+                    <div class="draft-list" *ngIf="getDraftsList().length > 0">
+                        <nz-card *ngFor="let draft of getDraftsList()" class="draft-card" [nzHoverable]="true"
+                            (click)="loadDraft(draft)">
+                            <div class="draft-header">
+                                <div class="draft-type">
+                                    <i nz-icon [nzType]="draft.type === 'broadcast' ? 'notification' : 'message'"></i>
+                                    <span>{{ draft.type | titlecase }}</span>
+                                </div>
+                                <div class="draft-actions">
+                                    <button nz-button nzType="text" (click)="deleteDraft(draft.id, $event)"
+                                        nz-tooltip="Delete Draft">
+                                        <i nz-icon nzType="delete"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <h4 class="draft-subject">{{ draft.subject || 'No subject' }}</h4>
+                            <p class="draft-preview">{{ (draft.message || 'No content') | slice:0:100 }}{{
+                                (draft.message || '').length > 100 ? '...' : '' }}</p>
+
+                            <div class="draft-footer">
+                                <span class="draft-date">
+                                    Last modified: {{ (draft.lastModified | date:'short') || 'Unknown' }}
+                                </span>
+                                <span class="draft-recipients" *ngIf="draft.recipients?.length">
+                                    Recipients: {{ draft.recipients?.length }}
+                                </span>
+                            </div>
+                        </nz-card>
+                    </div>
+                </div>
+            </div>
+        </nz-card>
+    </div>
+</div>

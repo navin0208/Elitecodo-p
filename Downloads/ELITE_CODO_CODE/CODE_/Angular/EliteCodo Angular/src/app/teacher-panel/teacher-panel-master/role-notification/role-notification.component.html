@@ -1,0 +1,62 @@
+<!-- Component Template (notification.component.html) -->
+<div class="notification-container">
+  <div class="notification-header">
+    <div class="icon-wrapper">
+      <mat-icon class="success-icon">check_circle</mat-icon>
+    </div>
+    <h2 class="notification-title">{{ data.roleName }} Role Created Successfully</h2>
+    <button mat-icon-button class="close-button" (click)="close()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div class="notification-content">
+    <p class="status-message">
+      <mat-icon class="status-icon">access_time</mat-icon>
+      {{ data.roleName }} role will be activated when a Superadmin accepts it.
+    </p>
+    <div class="activation-steps">
+      <h3>Role activation process:</h3>
+      <div class="steps-container">
+        <div class="step">
+          <div class="step-icon-wrapper">
+            <mat-icon>person_add</mat-icon>
+          </div>
+          <div class="step-content">
+            <span>Your <strong>{{ data.roleName }}</strong> role has been created</span>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-icon-wrapper">
+            <mat-icon>hourglass_empty</mat-icon>
+          </div>
+          <div class="step-content">
+            <span>Role is currently in <strong>Pending status</strong></span>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-icon-wrapper">
+            <mat-icon>admin_panel_settings</mat-icon>
+          </div>
+          <div class="step-content">
+            <span>A <strong>Superadmin</strong> will review and accept the role</span>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-icon-wrapper">
+            <mat-icon>check_circle_outline</mat-icon>
+          </div>
+          <div class="step-content">
+            <span>Once accepted, the role will be <strong>active in your system</strong></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="notification-actions">
+    <button mat-button class="secondary-button" (click)="close()">Dismiss</button>
+    <!-- <button mat-raised-button color="primary" (click)="goBackToRoles()">
+      <mat-icon>format_list_bulleted</mat-icon>
+      View Role Status
+    </button> -->
+  </div>
+</div>

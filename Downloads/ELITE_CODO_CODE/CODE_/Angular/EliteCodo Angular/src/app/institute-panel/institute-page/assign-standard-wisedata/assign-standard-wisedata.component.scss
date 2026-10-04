@@ -1,0 +1,264 @@
+/* styles (assign-standard-wisedata.component.css) */
+.page-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f0f7ff 0%, #e6f0ff 100%);
+  padding: 2rem;
+}
+
+.form-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.main-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #8f94fb 0%, #4e54c8 100%);
+  /* background: -webkit-linear-gradient(to left, #8f94fb, #4e54c8); */
+
+  border-radius: 12px 12px 0 0;
+  margin: -24px -24px 24px -24px;
+}
+
+.header-icon {
+  font-size: 28px;
+  color: white;
+  margin-right: 16px;
+}
+
+.header-content {
+  color: white;
+}
+
+.header-title {
+  font-size: 24px;
+  margin: 0;
+  font-weight: 600;
+}
+
+.header-subtitle {
+  margin: 4px 0 0;
+  opacity: 0.9;
+}
+
+.card-content {
+  padding: 1rem 0;
+}
+
+.section-container {
+  margin-bottom: 2rem;
+}
+
+.form-section {
+  margin-bottom: 1.5rem;
+}
+
+.section-label {
+  display: flex;
+  align-items: center;
+  color: #1f1f1f;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.section-icon {
+  margin-right: 8px;
+  color: #1890ff;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.standards-container {
+  margin-top: 2rem;
+}
+
+.standard-item {
+  margin-bottom: 1.5rem;
+}
+
+.standard-card {
+  background: #fafafa;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.standard-card:hover {
+  background: #f0f7ff;
+}
+
+.standard-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.remove-button {
+  position: absolute;
+  top: 0px;
+  right: 15px;
+}
+
+.remove-button:hover {
+  background: #fff1f0;
+}
+
+.checkButton {
+  position: absolute;
+  left: 15px;
+  top: 11px;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  margin: 2rem 0;
+}
+
+.add-button {
+  padding: 0 2rem;
+}
+
+.submit-section {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid #f0f0f0;
+}
+
+.submit-button {
+  padding: 0 2rem;
+  height: 40px;
+  background: #4e54c8;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .standard-content {
+    grid-template-columns: 1fr;
+  }
+
+  .page-container {
+    padding: 1rem;
+  }
+}
+
+/* Animation for new standards */
+.standard-item {
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Enhanced select styles */
+::ng-deep .ant-select-lg {
+  font-size: 14px;
+}
+
+::ng-deep .ant-select-selection-item {
+  font-weight: 500;
+}
+
+::ng-deep .ant-select-multiple .ant-select-selection-item {
+  background: #e6f7ff;
+  border-color: #91d5ff;
+}
+
+.submit-button[disabled] {
+  opacity: 1;
+  /* Keep the same opacity as the enabled state */
+  color: #fff;
+  /* Ensure text and icon color remain visible */
+}
+
+.submit-button[disabled] span[nz-icon] {
+  color: #fff;
+  /* Keep the icon visible */
+}
+
+
+.example {
+  text-align: center;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+  margin-bottom: 20px;
+  padding: 30px 50px;
+  margin: 20px 0;
+}
+
+
+
+.container {
+  .mat-table {
+    width: 100%;
+    background: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .mat-header-cell {
+    font-weight: bold;
+    text-transform: uppercase;
+    background: #f5f5f5;
+  }
+
+  .mat-cell {
+    vertical-align: top;
+  }
+
+  .standard-block {
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 0.5rem;
+    display: block;
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  .standard-header {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+  }
+
+  .subjects-list {
+    margin-left: 1.5rem;
+    list-style: none;
+    padding: 0;
+
+    li {
+      font-size: 13px;
+      color: #555;
+    }
+  }
+
+  .active-status {
+    color: green;
+    font-weight: bold;
+  }
+
+  .inactive-status {
+    color: red;
+    font-weight: bold;
+  }
+}

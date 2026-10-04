@@ -1,0 +1,85 @@
+/* // Loading status */
+.delete-btn {
+    background-color: #f44336;
+    color: white;
+}
+
+.delete-btn:hover {
+    background-color: #da190b;
+}
+
+.edit-btn {
+    background-color: #2196f3;
+    color: white;
+}
+
+.edit-btn:hover {
+    background-color: #1976d2;
+}
+
+.loading-state {
+    text-align: center;
+    padding: 4rem;
+}
+
+.loading-state .spinner {
+    margin-bottom: 1rem;
+}
+
+.loading-state .spinner>div {
+    width: 12px;
+    height: 12px;
+    background-color: #5850ec;
+    border-radius: 100%;
+    display: inline-block;
+    margin: 0 3px;
+    animation: bounce 1.4s infinite ease-in-out both;
+}
+
+.loading-state .spinner .bounce1 {
+    animation-delay: -0.32s;
+}
+
+.loading-state .spinner .bounce2 {
+    animation-delay: -0.16s;
+}
+
+.empty-state,
+.error-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: white;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.empty-state i,
+.error-state i {
+    color: #6b7280;
+    margin-bottom: 1rem;
+}
+
+.empty-state h3,
+.error-state h3 {
+    color: #374151;
+    margin: 0 0 0.5rem;
+}
+
+.empty-state p,
+.error-state p {
+    color: #6b7280;
+    margin: 0;
+}
+
+@keyframes bounce {
+
+    0%,
+    80%,
+    100% {
+        transform: scale(0);
+    }
+
+    40% {
+        transform: scale(1);
+    }
+}

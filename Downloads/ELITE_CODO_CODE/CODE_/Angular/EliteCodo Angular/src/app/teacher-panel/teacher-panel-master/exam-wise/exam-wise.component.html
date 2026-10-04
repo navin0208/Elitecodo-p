@@ -1,0 +1,95 @@
+<section [ngStyle]="{ 'background-color':http.getBackgroundColor()}">
+    <!-- exam-results.component.html -->
+    <nz-card nzTitle="Exam-wise Results" [nzExtra]="extraTemplate">
+        <nz-table #examTable [nzData]="examResults" nzTableLayout="fixed" [nzPageSize]="10" [nzScroll]="{ x: '800px' }">
+            <thead>
+                <tr>
+                    <th nzWidth="80px">S.No</th> <!-- Added index column header -->
+                    <th *ngFor="let column of examListColumns" [nzSortFn]="column.compare"
+                        [nzWidth]="column.title === 'Exam Name' ? '300px' : '150px'">
+                        {{ column.title }}
+                    </th>
+                    <th nzWidth="100px">Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let exam of examTable.data; let i = index">
+                    <td>{{1 + i }}</td>
+                    <!-- Added proper pagination-aware index -->
+                    <td>{{ exam.examName }}</td>
+                    <td>{{ exam.date | date }}</td>
+                    <td>{{ exam.totalStudents }}</td>
+                    <td>
+                        <nz-progress [nzPercent]="exam.passPercentage" [nzStatus]="getStatusColor(exam.passPercentage)"
+                            nzSize="small"></nz-progress>
+                    </td>
+                    <td>
+                        <button nz-button nzType="primary" nzShape="circle" (click)="showSubjectResults(exam)">
+                            <i nz-icon nzType="bar-chart"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </nz-table>
+    </nz-card>
+
+    <!-- Subject-wise Results Modal -->
+    <nz-modal [(nzVisible)]="isSubjectModalVisible" [nzTitle]="selectedExam?.examName + ' - Subject-wise Results'"
+        (nzOnCancel)="handleModalCancel()" [nzFooter]="null" nzWidth="800px">
+        <ng-container *nzModalContent>
+            <nz-table #subjectTable [nzData]="selectedExam?.subjects || []" nzTableLayout="fixed">
+                <thead>
+                    <tr>
+                        <th>Subject</th>
+                        <th>Pass %</th>
+                        <th>Avg Score</th>
+                        <th>Highest</th>
+                        <th>Lowest</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let subject of subjectTable.data">
+                        <td>{{ subject.subjectName }}</td>
+                        <td>
+                            <nz-progress [nzPercent]="subject.passPercentage"
+                                [nzStatus]="getStatusColor(subject.passPercentage)" nzSize="small"></nz-progress>
+                        </td>
+                        <td>{{ subject.avgScore.toFixed(1) }}</td>
+                        <td>
+                            <nz-tag [nzColor]="'green'">{{ subject.highestScore }}</nz-tag>
+                        </td>
+                        <td>
+                            <nz-tag [nzColor]="'red'">{{ subject.lowestScore }}</nz-tag>
+                        </td>
+                    </tr>
+                </tbody>
+            </nz-table>
+
+            <!-- Summary Cards -->
+            <!-- Summary Cards -->
+            <div class="statistics-container" style="margin-top: 20px; display: flex; gap: 16px;">
+                <nz-card style="width: 33%;">
+                    <nz-statistic [nzValue]="(selectedExam?.passPercentage || 0).toFixed(1)"
+                        [nzTitle]="'Overall Pass Rate'" [nzSuffix]="'%'"></nz-statistic>
+                </nz-card>
+                <nz-card style="width: 33%;">
+                    <nz-statistic [nzValue]="selectedExam?.totalStudents || 0"
+                        [nzTitle]="'Total Students'"></nz-statistic>
+                </nz-card>
+                <nz-card style="width: 33%;">
+                    <nz-statistic [nzValue]="selectedExam?.subjects?.length || 0"
+                        [nzTitle]="'Total Subjects'"></nz-statistic>
+                </nz-card>
+            </div>
+        </ng-container>
+    </nz-modal>
+
+    <ng-template #extraTemplate>
+        <nz-space>
+            <button *nzSpaceItem nz-button nzType="primary">
+                <i nz-icon nzType="download"></i>
+                Export Results
+            </button>
+        </nz-space>
+    </ng-template>
+</section>

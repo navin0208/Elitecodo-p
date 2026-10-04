@@ -1,0 +1,200 @@
+<!-- Template (assign-standard-wisedata.component.html) -->
+<div *ngIf="loading" class="loading-state" #courseSection>
+    <div class="spinner">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+    </div>
+    <p>Fetching Entrance Exam Assignment...</p>
+</div>
+
+<div *ngIf="!loading && !errorMsg" class="page-container">
+    <form [formGroup]="assignmentForm" class="form-container">
+        <nz-card [nzBordered]="false" class="main-card">
+            <!-- Header Section -->
+            <div class="card-header">
+                <span nz-icon nzType="book" nzTheme="outline" class="header-icon"></span>
+                <div class="header-content">
+                    <h2 class="header-title"><u>Student</u> Entrance Exam Assignment</h2>
+                    <p class="header-subtitle">Select an entrance exam and assign standards</p>
+                </div>
+            </div>
+
+            <!-- Form Content -->
+            <div class="card-content">
+                <!-- Entrance Exam Dropdown -->
+                <div class="section-container">
+                    <div class="form-section">
+                        <label class="section-label">
+                            <span nz-icon nzType="audit" nzTheme="outline" class="section-icon"></span>
+                            Entrance Exam Name
+                        </label>
+                        <nz-select class="full-width" formControlName="entranceExamId"
+                            nzPlaceHolder="Select Entrance Exam" (ngModelChange)="onEntranceExamChange($event)"
+                            nzSize="large">
+                            <nz-option *ngFor="let exam of entranceExams" [nzLabel]="exam.entranceExamName"
+                                [nzValue]="exam.entranceExamId">
+                            </nz-option>
+                        </nz-select>
+                    </div>
+                </div>
+
+                <!-- Standards Section -->
+                <div formArrayName="standards" *ngIf="assignmentForm.get('entranceExamId')?.value"
+                    class="standards-container">
+                    <nz-divider nzText="Standards & Subjects" nzOrientation="left"></nz-divider>
+
+                    <div *ngFor="let standard of standards.controls; let i = index" [formGroupName]="i"
+                        class="standard-item">
+                        <nz-card class="standard-card" [nzBordered]="false">
+                            <div class="standard-content">
+                                <!-- Standard Selection -->
+                                <div class="form-section">
+                                    <label class="section-label">
+                                        <span nz-icon nzType="flag" nzTheme="outline" class="section-icon"></span>
+                                        Standard Name
+                                    </label>
+                                    <nz-select class="full-width" formControlName="standardId"
+                                        nzPlaceHolder="Select Standard" (ngModelChange)="onStandardChange(i, $event)"
+                                        nzSize="large">
+                                        <nz-option *ngFor="let standard of filteredStandards"
+                                            [nzLabel]="standard.standardName" [nzValue]="standard.standardId">
+                                        </nz-option>
+                                    </nz-select>
+                                </div>
+
+                                <!-- Subject Selection -->
+                                <div class="form-section">
+                                    <label class="section-label">
+                                        <span nz-icon nzType="read" nzTheme="outline" class="section-icon"></span>
+                                        Subject Name
+                                    </label>
+                                    <nz-select class="full-width" formControlName="subjectIds" nzMode="multiple"
+                                        (ngModelChange)="onSelectionChange($event)" nzPlaceHolder="Select Subjects"
+                                        nzSize="large">
+                                        <nz-option *ngFor="let subject of filteredSubjects[i] || []"
+                                            [nzLabel]="subject.subjectName" [nzValue]="subject.subjectId">
+                                        </nz-option>
+                                        <nz-option *ngIf="!filteredSubjects[i] || filteredSubjects[i].length === 0"
+                                            [nzLabel]="'Loading...'" [nzValue]="null" [nzDisabled]="true">
+                                        </nz-option>
+                                    </nz-select>
+                                </div>
+                            </div>
+
+                            <!-- Remove Standard Button -->
+                            <button nz-button nzType="text" nzDanger class="remove-button"
+                                (click)="removeStandard(standard,i)">
+                                <span nz-icon nzType="delete" class="deleteButton" nzTheme="outline"
+                                    style="font-size: 20px;"></span>
+                            </button>
+                        </nz-card>
+                    </div>
+                </div>
+
+                <!-- Add Standard Button -->
+                <div class="action-buttons" *ngIf="assignmentForm.get('entranceExamId')?.value">
+                    <button nz-button nzType="dashed" (click)="addStandard()" class="add-button">
+                        <span nz-icon nzType="plus" nzTheme="outline"></span>
+                        Add More Standards
+                    </button>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="submit-section">
+                    <button nz-button nzType="primary" (click)="onSubmit()"
+                        [style.pointer-events]="isSubmitting ? 'none' : 'auto'" class="submit-button">
+                        <span nz-icon [nzType]="iconType" style="position: absolute;left: 15px;top: 11px;"
+                            nzTheme="outline"></span>
+                        {{buttonText}}
+                    </button>
+                </div>
+            </div>
+        </nz-card>
+    </form>
+
+    <div class="container my-5">
+        <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+            <!-- Entrance Exam Column -->
+            <ng-container matColumnDef="entranceExamName">
+                <mat-header-cell *matHeaderCellDef> Entrance Exam </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                    <strong>{{ element.entranceExamName }} </strong>
+                    <span
+                        [ngClass]="{'active-status': element.entranceStatus === 'Active', 'inactive-status': element.entranceStatus !== 'Active'}">
+                        ({{ element.entranceStatus }})
+                    </span>
+                </mat-cell>
+            </ng-container>
+
+            <!-- Entrance Exam Status Column -->
+            <ng-container matColumnDef="entranceStatus">
+                <mat-header-cell *matHeaderCellDef> Standard Status </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                    <div *ngFor="let standard of element.teacherAssessmentStandards" class="standard-block">
+                        <div class="standard-header">
+                            <strong>{{ standard.standardName }}</strong>
+                            <span
+                                [ngClass]="{'active-status': standard.standardStatus === 'Active', 'inactive-status': standard.standardStatus !== 'Active'}">
+                                ({{ standard.standardStatus }})
+                            </span>
+                        </div><br>
+                    </div>
+                </mat-cell>
+            </ng-container>
+
+            <!-- Standards and Subjects Column -->
+            <ng-container matColumnDef="standardsAndSubjects">
+                <mat-header-cell *matHeaderCellDef> Standards & Subjects </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                    <div *ngFor="let standard of element.teacherAssessmentStandards" class="standard-block">
+                        <div class="standard-header">
+                            <strong>{{ standard.standardName }}</strong>
+                            <span
+                                [ngClass]="{'active-status': standard.standardStatus === 'Active', 'inactive-status': standard.standardStatus !== 'Active'}">
+                                ({{ standard.standardStatus }})
+                            </span>
+                        </div>
+                        <ul class="subjects-list">
+                            <li *ngFor="let subject of standard.teacherAssessmentSubjects">
+                                {{ subject.subjectName }}
+                                <span
+                                    [ngClass]="{'active-status': subject.subStatus === 'Active', 'inactive-status': subject.subStatus !== 'Active'}">
+                                    ({{ subject.subStatus }})
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                </mat-cell>
+            </ng-container>
+
+            <!-- Edit Column -->
+            <ng-container matColumnDef="edit">
+                <mat-header-cell *matHeaderCellDef> Action </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                    <button mat-button color="primary" title="Edit teacher"
+                        (click)="loadExistingData(element.entranceExamId)">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+        </mat-table>
+
+        <nz-card *ngIf="forErrorMSG.teacherAssessmentEntranceExams.length === 0">
+            <p class="text-danger text-center header-title">Not assigned any data</p>
+        </nz-card>
+
+
+    </div>
+
+</div>
+
+<!-- Error Message -->
+<div *ngIf="errorMsg" class="error-message text-danger">
+    <p>Error loading data. Please try again later.</p>
+</div>

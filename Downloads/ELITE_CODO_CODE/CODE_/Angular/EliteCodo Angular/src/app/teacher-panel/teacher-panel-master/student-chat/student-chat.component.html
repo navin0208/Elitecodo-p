@@ -1,0 +1,78 @@
+<div class="messenger-container">
+    <nz-layout class="chat-layout">
+      <!-- User List Sidebar -->
+      <nz-sider nzWidth="300px" class="user-sidebar">
+        <div class="user-search">
+          <input 
+            nz-input 
+            placeholder="Search users" 
+            [(ngModel)]="searchTerm"
+          />
+        </div>
+        <nz-list 
+          [nzDataSource]="users" 
+          [nzRenderItem]="userItem"
+          [nzItemLayout]="'horizontal'"
+        >
+          <ng-template #userItem let-user>
+            <nz-list-item 
+              (click)="selectConversation(user)"
+              [class.active]="selectedUser === user"
+            >
+              <nz-list-item-meta
+                [nzTitle]="user.username"
+                [nzAvatar]="user.profileImage"
+              />
+              <nz-badge 
+                *ngIf="getUnreadCount(user) > 0"
+                [nzCount]="getUnreadCount(user)"
+              />
+            </nz-list-item>
+          </ng-template>
+        </nz-list>
+      </nz-sider>
+
+      <!-- Chat Window -->
+      <nz-content class="chat-window" *ngIf="selectedUser">
+        <div class="chat-header">
+          <img [src]="selectedUser.profileImage" class="user-avatar"/>
+          <h2>{{ selectedUser.username }}</h2>
+        </div>
+        
+        <div class="message-list" #messageContainer>
+          <div 
+            *ngFor="let message of selectedConversation?.messages"
+            class="message"
+            [class.sent]="message.sender.id === currentUser.id"
+            [class.received]="message.sender.id !== currentUser.id"
+          >
+            <img [src]="message.sender.profileImage" class="message-avatar"/>
+            <div class="message-content">
+              {{ message.content }}
+              <small class="timestamp">
+                {{ message.timestamp | date:'shortTime' }}
+              </small>
+            </div>
+          </div>
+        </div>
+
+        <div class="message-input">
+          <form [formGroup]="messageForm" (ngSubmit)="sendMessage()">
+            <input 
+              nz-input 
+              formControlName="messageContent"
+              placeholder="Type a message..."
+            />
+            <button 
+              nz-button 
+              nzType="primary" 
+              type="submit"
+              [disabled]="!messageForm.valid"
+            >
+              Send
+            </button>
+          </form>
+        </div>
+      </nz-content>
+    </nz-layout>
+  </div>

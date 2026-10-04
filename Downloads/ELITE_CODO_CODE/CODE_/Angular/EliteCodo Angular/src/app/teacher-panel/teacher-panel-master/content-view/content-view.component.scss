@@ -1,0 +1,191 @@
+/* General Section Styling */
+section {
+    position: relative;
+    width: 100%;
+    background-color: #f5f7fa;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
+    @media screen and (max-width: 500px) {
+        transform: translateY(20px);
+        background-color: #4e54c8;
+        padding: 15px;
+        border-radius: 0;
+    }
+}
+
+/* Container Styling */
+.content-view-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Header Styling */
+h2 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #333333;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Filter Section Styling */
+.filter-section {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 20px;
+
+    nz-select {
+        width: 250px;
+        font-size: 14px;
+    }
+}
+
+/* Table Styling */
+nz-table {
+    width: 100%;
+    border: 1px solid #e6e9f0;
+    border-radius: 10px;
+    // overflow: hidden;
+
+    thead {
+        background-color: #f0f2f5;
+
+        th {
+            font-size: 14px;
+            font-weight: 600;
+            color: #555555;
+            text-align: center;
+            padding: 10px;
+        }
+    }
+
+    tbody {
+        tr {
+            transition: background-color 0.3s;
+
+            &:hover {
+                background-color: #f9f9f9;
+            }
+
+            td {
+                font-size: 14px;
+                text-align: center;
+                padding: 10px;
+                color: #666666;
+
+                button {
+                    font-size: 12px;
+                    font-weight: 500;
+                    color: #1d72b8;
+                    text-decoration: underline;
+                    background: none;
+                    border: none;
+                    cursor: pointer;
+
+                    &:hover {
+                        color: #1056a5;
+                    }
+                }
+            }
+        }
+    }
+}
+
+/* Modal Styling */
+.nz-modal {
+    .ant-modal-header {
+        background-color: #4e54c8;
+        color: #ffffff;
+        font-size: 1.2rem;
+        font-weight: 600;
+        text-align: center;
+    }
+
+    .ant-modal-body {
+        font-size: 14px;
+        color: #555555;
+
+        p {
+            margin-bottom: 10px;
+
+            strong {
+                font-weight: 600;
+                color: #333333;
+            }
+
+            a {
+                color: #4e54c8;
+                text-decoration: underline;
+
+                &:hover {
+                    color: #3a41a3;
+                }
+            }
+        }
+    }
+
+    .ant-modal-footer {
+        display: none;
+    }
+}
+
+/* Responsive Table */
+@media screen and (max-width: 768px) {
+    nz-table {
+        font-size: 12px;
+
+        thead {
+            th {
+                padding: 8px;
+            }
+        }
+
+        tbody {
+            td {
+                padding: 8px;
+            }
+        }
+    }
+}
+
+/* Add smooth transitions for hover and actions */
+button,
+a {
+    transition: color 0.3s, background-color 0.3s, transform 0.3s;
+}
+
+.actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+
+    .action-icon {
+        font-size: 18px;
+        cursor: pointer;
+        transition: color 0.3s, transform 0.2s;
+
+        &.view-icon {
+            color: #4caf50;
+
+            &:hover {
+                color: #388e3c;
+                transform: scale(1.2);
+            }
+        }
+
+        &.delete-icon {
+            color: #f44336;
+
+            &:hover {
+                color: #d32f2f;
+                transform: scale(1.2);
+            }
+        }
+    }
+}

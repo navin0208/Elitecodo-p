@@ -1,0 +1,86 @@
+<nz-layout class="app-layout">
+    <nz-sider class="menu-sidebar" nzCollapsible nzWidth="250px" nzBreakpoint="md" [(nzCollapsed)]="isCollapsed"
+        [nzTrigger]="null">
+        <div class="sidebar-logo">
+            <a>
+                <img src="../../../assets/images/elitecodo.png" alt="logo" />
+                <h1>EliteCodo</h1>
+            </a>
+        </div>
+        <ul nz-menu nzTheme="dark" nzMode="inline" [nzInlineCollapsed]="isCollapsed">
+            <!-- Dashboard Page -->
+            <li nz-menu-item routerLink="/institute/layout-institute/dashboard">
+                <i nz-icon nzType="dashboard"></i>
+                <span>Dashboard</span>
+            </li>
+
+            <!-- Teacher Section -->
+            <li nz-submenu nzTitle="Manage Teacher" nzOpen nzIcon="home">
+                <ul>
+                    <li nz-menu-item routerLink="teacher-management">
+                        <i nz-icon nzType="info-circle"></i>
+                        <span>Teacher Registration</span>
+                    </li>
+                </ul>
+            </li>
+
+            <!-- Manage Student -->
+            <li nz-submenu nzOpen nzTitle="Manage Student" nzIcon="home">
+                <ul>
+                    <li nz-menu-item routerLink="student-management">
+                        <i nz-icon nzType="info-circle"></i>
+                        <span style="text-transform: capitalize">Student Registration</span>
+                    </li>
+                </ul>
+            </li>
+
+            <!-- Report Page -->
+            <li nz-menu-item routerLink="reports">
+                <i nz-icon nzType="info-circle"></i>
+                <span>Report</span>
+            </li>
+        </ul>
+    </nz-sider>
+
+    <nz-layout>
+        <nz-header>
+            <div class="app-header" nzTheme="dark" nzMode="inline">
+                <span class="header-trigger" (click)="isCollapsed = !isCollapsed">
+                    <span class="trigger" nz-icon [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"></span>
+                </span>
+                <button class="btn btn-outline-primary mx-3 btn-claaa" type="button" title="Go back" (click)="goBack()">
+                    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="1em"
+                        width="1em" xmlns="http://www.w3.org/2000/svg">
+                        <path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="48"
+                            d="M244 400L100 256l144-144M120 256h292"></path>
+                    </svg>
+                </button>
+                <span class="account my_accout">
+                    <div class="action">
+                        <div class="profile">
+                            <!-- Dynamic profile image - API image if exists, otherwise default logo -->
+                            <img 
+                                [src]="instituteProfilePicture || '../../../assets/images/elitecodo.png'" 
+                                alt="profile-img"
+                                (error)="instituteProfilePicture = '../../../assets/images/elitecodo.png'">
+                        </div>
+                        <div class="menu">
+                            <p>{{ instituteDisplayName }}</p>
+                            <ul>
+                                <li (click)="Logout()">
+                                    <i class="far fa-user-circle"></i>
+                                    <a>Log Out</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </span>
+            </div>
+        </nz-header>
+        <nz-content>
+            <div class="inner-content">
+                <router-outlet></router-outlet>
+            </div>
+        </nz-content>
+    </nz-layout>
+</nz-layout>

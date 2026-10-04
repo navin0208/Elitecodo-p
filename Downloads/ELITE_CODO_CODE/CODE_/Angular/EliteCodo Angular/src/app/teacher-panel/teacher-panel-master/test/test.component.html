@@ -1,0 +1,81 @@
+<section *ngIf="type === 'chapter-wise'">
+  <div
+    class="main_content"
+    [ngStyle]="{ 'background-color': http.getBackgroundColor() }"
+  >
+    <!-- Standard Cards with Subjects -->
+    <div class="standards-container">
+      <div class="standard-card" *ngFor="let standard of subjectList">
+        <h2 class="standard-title">{{ standard.standardName }}</h2>
+        <div class="subjects-container">
+          <div
+            (click)="
+              OpenTestChapterForSingleSub(
+                subject.subjectId,
+                subject.subjectName
+              )
+            "
+            class="subject-button"
+            [ngClass]="{
+              physics: subject.subjectName.toLowerCase() === 'physics',
+              mathematics: subject.subjectName.toLowerCase() === 'mathematics',
+              chemistry: subject.subjectName.toLowerCase() === 'chemistry',
+              biology: subject.subjectName.toLowerCase() === 'biology'
+            }"
+            *ngFor="let subject of standard.subjects"
+          >
+            <label [for]="'sub-' + subject.subjectId">{{
+              subject.subjectName
+            }}</label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section *ngIf="type !== 'chapter-wise'">
+  <div
+    class="main_content"
+    [ngStyle]="{ 'background-color': http.getBackgroundColor() }"
+  >
+    <!-- Standard Cards with Subjects -->
+    <div class="standards-container">
+      <div class="standard-card" *ngFor="let standard of subjectList">
+        <h2 class="standard-title">{{ standard.standardName }}</h2>
+        <div class="subjects-container">
+          <div
+            class="subject-button"
+            [ngClass]="{
+              physics: subject.subjectName.toLowerCase() === 'physics',
+              mathematics: subject.subjectName.toLowerCase() === 'mathematics',
+              chemistry: subject.subjectName.toLowerCase() === 'chemistry',
+              biology: subject.subjectName.toLowerCase() === 'biology'
+            }"
+            *ngFor="let subject of standard.subjects"
+          >
+            <input
+              type="checkbox"
+              [id]="'sub-' + subject.subjectId"
+              class="subject-checkbox"
+              [checked]="isSubjectSelected(subject.subjectId)"
+              (change)="toggleSubjectSelection(subject.subjectId, $event)"
+            />
+            <label [for]="'sub-' + subject.subjectId">
+              {{ subject.subjectName }}
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add this inside your container, after the cards grid -->
+    <div class="text-center mt-5" *ngIf="selectedSubjectIds.length > 0">
+      <button class="btn-assessment" (click)="OpenTestChapter()">
+        <span>Proceed with Selected Subjects</span>
+        <span class="badge-count">{{ selectedSubjectIds.length }}</span>
+        <i class="fa-solid fa-arrow-right"></i>
+      </button>
+    </div>
+  </div>
+</section>

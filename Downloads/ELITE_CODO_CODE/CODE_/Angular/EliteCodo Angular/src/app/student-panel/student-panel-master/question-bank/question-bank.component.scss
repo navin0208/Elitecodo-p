@@ -1,0 +1,521 @@
+/* Question Bank Container Styles */
+.question-bank-container {
+    min-height: 100vh;
+    font-family: 'Poppins', sans-serif;
+    padding: 20px 0;
+  }
+  
+  .question-bank-wrapper {
+    background-color: #fff;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  /* Header Styles */
+  .bank-header {
+    background: linear-gradient(135deg, #4776E6 0%, #8E54E9 100%);
+    padding: 30px 40px;
+    color: white;
+    border-radius: 16px 16px 0 0;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .bank-header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 100%;
+    height: 200%;
+    background: rgba(255, 255, 255, 0.1);
+    transform: rotate(45deg);
+    pointer-events: none;
+  }
+  
+  .bank-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .bank-description p {
+    font-size: 1rem;
+    opacity: 0.9;
+    max-width: 600px;
+    margin-bottom: 0;
+    position: relative;
+    z-index: 1;
+  }
+  
+  /* Section Title Styles */
+  .section-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #333;
+    position: relative;
+    display: inline-block;
+  }
+  
+  .section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 40px;
+    height: 4px;
+    background: linear-gradient(90deg, #4776E6, #8E54E9);
+    border-radius: 2px;
+  }
+  
+  /* Years Selection Styles */
+  .years-container {
+    padding: 30px 40px;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .years-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: flex-start;
+  }
+  
+  .year-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px 20px;
+    border-radius: 50px;
+    border: none;
+    font-weight: 500;
+    font-size: 1rem;
+    color: #444;
+    background-color: #f5f5f5;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .year-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255,0.5));
+    transform: translateY(-100%);
+    transition: transform 0.3s ease;
+  }
+  
+  .year-btn:hover::before {
+    transform: translateY(0);
+  }
+  
+  .year-btn.active {
+    background: linear-gradient(135deg, #4776E6 0%, #8E54E9 100%);
+    color: white;
+    box-shadow: 0 5px 15px rgba(71, 118, 230, 0.3);
+    transform: translateY(-3px);
+  }
+  
+  .pdf-badge {
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #4776E6;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 600;
+  }
+  
+  .year-btn.active .pdf-badge {
+    background-color: #fff;
+    color: #4776E6;
+  }
+  
+  /* Color Classes for Year Buttons */
+  .year-btn.a { background-color: #e3f2fd; color: #1565c0; }
+  .year-btn.b { background-color: #e8f5e9; color: #2e7d32; }
+  .year-btn.c { background-color: #fff3e0; color: #e65100; }
+  .year-btn.d { background-color: #f3e5f5; color: #6a1b9a; }
+  .year-btn.e { background-color: #e0f7fa; color: #00838f; }
+  .year-btn.f { background-color: #fbe9e7; color: #bf360c; }
+  .year-btn.g { background-color: #f9fbe7; color: #827717; }
+  .year-btn.h { background-color: #e8eaf6; color: #303f9f; }
+  .year-btn.i { background-color: #ffebee; color: #b71c1c; }
+  .year-btn.j { background-color: #e0f2f1; color: #004d40; }
+  .year-btn.k { background-color: #f1f8e9; color: #33691e; }
+  
+  .year-btn.active.a, .year-btn.active.b, .year-btn.active.c, 
+  .year-btn.active.d, .year-btn.active.e, .year-btn.active.f, 
+  .year-btn.active.g, .year-btn.active.h, .year-btn.active.i,
+  .year-btn.active.j, .year-btn.active.k {
+    background: linear-gradient(135deg, #4776E6 0%, #8E54E9 100%);
+    color: white;
+  }
+  
+  /* PDF List Container Styles */
+  .pdf-list-container {
+    padding: 30px 40px;
+  }
+  
+  .pdf-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+  }
+  
+  .pdf-count {
+    background-color: #f5f5f5;
+    color: #666;
+    padding: 8px 16px;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+  
+  .pdf-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+  }
+  
+  .pdf-card {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    gap: 15px;
+    border: 1px solid #eee;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  
+  .pdf-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 5px;
+    height: 100%;
+    background: linear-gradient(to bottom, #4776E6, #8E54E9);
+    transition: all 0.3s ease;
+  }
+  
+  .pdf-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  }
+  
+  .pdf-icon {
+    width: 45px;
+    height: 45px;
+    background: linear-gradient(135deg, #4776E6 0%, #8E54E9 100%);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    flex-shrink: 0;
+  }
+  
+  .pdf-icon svg {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .pdf-info {
+    flex-grow: 1;
+    min-width: 0;
+  }
+  
+  .pdf-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .subjects-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+  
+  .subject {
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 500;
+  }
+  
+  .physics {
+    background-color: rgba(33, 150, 243, 0.1);
+    color: #2196f3;
+  }
+  
+  .chemistry {
+    background-color: rgba(233, 30, 99, 0.1);
+    color: #e91e63;
+  }
+  
+  .biology {
+    background-color: rgba(76, 175, 80, 0.1);
+    color: #4caf50;
+  }
+  
+  .view-btn {
+    background: transparent;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #666;
+    transition: all 0.3s ease;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  
+  .view-btn:hover {
+    background: linear-gradient(135deg, #4776E6 0%, #8E54E9 100%);
+    color: white;
+    border-color: transparent;
+  }
+  
+  .view-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+  
+  /* No PDF Found Styles */
+  .no-pdf-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 50px 20px;
+    text-align: center;
+    background-color: #f9f9f9;
+    border-radius: 12px;
+    border: 1px dashed #ddd;
+  }
+  
+  .no-pdf-icon {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f5f5f5;
+    border-radius: 50%;
+    margin-bottom: 20px;
+    color: #aaa;
+  }
+  
+  .no-pdf-icon svg {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .no-pdf-container h5 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #555;
+  }
+  
+  .no-pdf-container p {
+    color: #888;
+    max-width: 300px;
+  }
+  
+  /* Initial Instruction Styles */
+  .initial-instruction {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 50px 20px;
+    text-align: center;
+  }
+  
+  .instruction-icon {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #4776E6 0%, #8E54E9 100%);
+    border-radius: 50%;
+    margin-bottom: 20px;
+    color: white;
+    animation: pulse 2s infinite;
+  }
+  
+  @keyframes pulse {
+    0% {
+      box-shadow: 0 0 0 0 rgba(71, 118, 230, 0.4);
+    }
+    70% {
+      box-shadow: 0 0 0 15px rgba(71, 118, 230, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(71, 118, 230, 0);
+    }
+  }
+  
+  .instruction-icon svg {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .initial-instruction h5 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #333;
+  }
+  
+  .initial-instruction p {
+    color: #777;
+    max-width: 350px;
+  }
+  
+  /* PDF Viewer Styles */
+  .pdf-viewer-container {
+    margin-top: 30px;
+    border-top: 1px solid #eee;
+    padding: 30px 40px;
+  }
+  
+  .viewer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .viewer-header h4 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+  }
+  
+  .close-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background-color: #f5f5f5;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #666;
+  }
+  
+  .close-btn:hover {
+    background-color: #ff3d71;
+    color: white;
+  }
+  
+  .close-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .pdf-frame-container {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 65%;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  }
+  
+  .pdf-iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+  
+  /* Responsive Styles */
+  @media (max-width: 992px) {
+    .pdf-grid {
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
+    
+    .bank-title {
+      font-size: 1.8rem;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .bank-header, .years-container, .pdf-list-container, .pdf-viewer-container {
+      padding: 20px;
+    }
+    
+    .bank-title {
+      font-size: 1.5rem;
+    }
+    
+    .section-title {
+      font-size: 1.3rem;
+    }
+    
+    .pdf-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    
+    .pdf-frame-container {
+      padding-bottom: 80%;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .pdf-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .years-grid {
+      gap: 10px;
+    }
+    
+    .year-btn {
+      padding: 8px 16px;
+      font-size: 0.9rem;
+    }
+    
+    .pdf-frame-container {
+      padding-bottom: 100%;
+    }
+  }

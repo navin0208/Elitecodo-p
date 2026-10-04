@@ -1,0 +1,423 @@
+<!-- reports.component.html -->
+<div class="reports-container">
+    <div class="header">
+        <h2>Examination Analytics</h2>
+        <p>Interactive visualization of questions across exams, subjects, and chapters</p>
+    </div>
+
+    <div class="filters-card">
+        <div class="navigation-breadcrumbs">
+            <div class="breadcrumb-item" 
+                 (click)="setActiveTab('exam')" 
+                 [ngClass]="{'active': activeTab === 'exam'}">
+                <span class="icon">
+                    <i class="fas fa-book-open"></i>
+                </span>
+                <span class="text">Exams</span>
+            </div>
+            
+            <div *ngIf="selectedExam" class="breadcrumb-separator">
+                <i class="fas fa-chevron-right"></i>
+            </div>
+            
+            <div *ngIf="selectedExam" 
+                 class="breadcrumb-item" 
+                 (click)="setActiveTab('subject')" 
+                 [ngClass]="{'active': activeTab === 'subject'}">
+                <span class="icon">
+                    <i class="fas fa-bookmark"></i>
+                </span>
+                <span class="text">
+                    Subjects
+                    <span *ngIf="selectedExamName" class="context">({{ selectedExamName }})</span>
+                </span>
+            </div>
+            
+            <div *ngIf="selectedSubject" class="breadcrumb-separator">
+                <i class="fas fa-chevron-right"></i>
+            </div>
+            
+            <div *ngIf="selectedSubject" 
+                 class="breadcrumb-item" 
+                 (click)="setActiveTab('chapter')" 
+                 [ngClass]="{'active': activeTab === 'chapter'}">
+                <span class="icon">
+                    <i class="fas fa-list-alt"></i>
+                </span>
+                <span class="text">
+                    Chapters
+                    <span *ngIf="selectedSubjectName" class="context">({{ selectedSubjectName }})</span>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="tabs-container">
+        <!-- Exam Tab Content -->
+        <div class="tab-content" *ngIf="activeTab === 'exam'" [@fadeAnimation]>
+            <div class="summary-cards">
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <div class="metric-details">
+                        <div class="metric-value">{{examData.length}}</div>
+                        <div class="metric-label">Total Exams</div>
+                    </div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-question-circle"></i>
+                    </div>
+                    <div class="metric-details">
+                        <div class="metric-value">{{getTotalQuestions(examData)}}</div>
+                        <div class="metric-label">Total Questions</div>
+                    </div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <div class="metric-details">
+                        <div class="metric-value">{{getAverageQuestions(examData)}}</div>
+                        <div class="metric-label">Avg. Questions per Exam</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <div class="card-header">
+                        <h3>Questions by Exam</h3>
+                        <div class="card-actions">
+                            <button class="action-btn" (click)="toggleChartType('exam')">
+                                <i [class]="examChartType === 'bar' ? 'fas fa-chart-pie' : 'fas fa-chart-bar'"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div *ngIf="!loading.exam && examData.length > 0" class="chart-container">
+                        <div echarts [options]="examChartOption" [initOpts]="chartInitOpts" class="chart"></div>
+                    </div>
+                    
+                    <div class="loading-container" *ngIf="loading.exam">
+                        <div class="spinner"></div>
+                        <p>Loading exam data...</p>
+                    </div>
+                    
+                    <div class="no-data" *ngIf="!loading.exam && examData.length === 0">
+                        <i class="fas fa-database"></i>
+                        <p>No exam data available</p>
+                    </div>
+                </div>
+
+                <div class="table-card">
+                    <div class="card-header">
+                        <h3>Exam Question Distribution</h3>
+                        <div class="card-actions">
+                            <div class="search-box">
+                                <i class="fas fa-search"></i>
+                                <input type="text" placeholder="Search exams..." [(ngModel)]="examSearchTerm">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="table-wrapper" *ngIf="!loading.exam && examData.length > 0">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Exam Name</th>
+                                    <th>Questions</th>
+                                    <th>Percentage</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let exam of filteredExamData">
+                                    <td>
+                                        <div class="exam-name">
+                                            <span class="badge" [style.background-color]="getColorForIndex(examData.indexOf(exam))"></span>
+                                            {{exam.name}}
+                                        </div>
+                                    </td>
+                                    <td>{{exam.questionCount}}</td>
+                                    <td>
+                                        <div class="percentage-bar">
+                                            <div class="percentage-fill" 
+                                                [style.width]="getPercentage(exam.questionCount, getTotalQuestions(examData)) + '%'"
+                                                [style.background-color]="getColorForIndex(examData.indexOf(exam))">
+                                            </div>
+                                            <span>{{getPercentage(exam.questionCount, getTotalQuestions(examData))}}%</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <button class="view-btn" (click)="onExamSelect(exam.id, exam.name)">
+                                            <i class="fas fa-arrow-right"></i> View Subjects
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="loading-container" *ngIf="loading.exam">
+                        <div class="spinner"></div>
+                        <p>Loading data...</p>
+                    </div>
+                    
+                    <div class="no-data" *ngIf="!loading.exam && (examData.length === 0 || filteredExamData.length === 0)">
+                        <i class="fas fa-database"></i>
+                        <p>No exam data available</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Subject Tab Content -->
+        <div class="tab-content" *ngIf="activeTab === 'subject'" [@fadeAnimation]>
+            <div class="summary-cards">
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-bookmark"></i>
+                    </div>
+                    <div class="metric-details">
+                        <div class="metric-value">{{subjectData.length}}</div>
+                        <div class="metric-label">Total Subjects</div>
+                    </div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-question-circle"></i>
+                    </div>
+                    <div class="metric-details">
+                        <div class="metric-value">{{getTotalQuestions(subjectData)}}</div>
+                        <div class="metric-label">Total Questions</div>
+                    </div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <div class="metric-details">
+                        <div class="metric-value">{{getAverageQuestions(subjectData)}}</div>
+                        <div class="metric-label">Avg. Questions per Subject</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <div class="card-header">
+                        <h3>Questions by Subject <span *ngIf="selectedExamName">({{ selectedExamName }})</span></h3>
+                        <div class="card-actions">
+                            <button class="action-btn" (click)="toggleChartType('subject')">
+                                <i [class]="subjectChartType === 'pie' ? 'fas fa-chart-bar' : 'fas fa-chart-pie'"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div *ngIf="!loading.subject && subjectData.length > 0" class="chart-container">
+                        <div echarts [options]="subjectChartOption" [initOpts]="chartInitOpts" class="chart"></div>
+                    </div>
+                    
+                    <div class="loading-container" *ngIf="loading.subject">
+                        <div class="spinner"></div>
+                        <p>Loading subject data...</p>
+                    </div>
+                    
+                    <div class="no-data" *ngIf="!loading.subject && subjectData.length === 0">
+                        <i class="fas fa-database"></i>
+                        <p>No subject data available</p>
+                    </div>
+                </div>
+
+                <div class="table-card">
+                    <div class="card-header">
+                        <h3>Subject Question Distribution</h3>
+                        <div class="card-actions">
+                            <div class="search-box">
+                                <i class="fas fa-search"></i>
+                                <input type="text" placeholder="Search subjects..." [(ngModel)]="subjectSearchTerm">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="table-wrapper" *ngIf="!loading.subject && subjectData.length > 0">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Subject Name</th>
+                                    <th>Questions</th>
+                                    <th>Percentage</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let subject of filteredSubjectData; let i = index">
+                                    <td>
+                                        <div class="subject-name">
+                                            <span class="badge" [style.background-color]="getColorForIndex(i)"></span>
+                                            {{subject.name}}
+                                        </div>
+                                    </td>
+                                    <td>{{subject.questionCount}}</td>
+                                    <td>
+                                        <div class="percentage-bar">
+                                            <div class="percentage-fill" 
+                                                [style.width]="getPercentage(subject.questionCount, getTotalQuestions(subjectData)) + '%'"
+                                                [style.background-color]="getColorForIndex(i)">
+                                            </div>
+                                            <span>{{getPercentage(subject.questionCount, getTotalQuestions(subjectData))}}%</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <button class="view-btn" (click)="onSubjectSelect(subject.id, subject.name)">
+                                            <i class="fas fa-arrow-right"></i> View Chapters
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="loading-container" *ngIf="loading.subject">
+                        <div class="spinner"></div>
+                        <p>Loading data...</p>
+                    </div>
+                    
+                    <div class="no-data" *ngIf="!loading.subject && (subjectData.length === 0 || filteredSubjectData.length === 0)">
+                        <i class="fas fa-database"></i>
+                        <p>No subject data available</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chapter Tab Content -->
+        <div class="tab-content" *ngIf="activeTab === 'chapter'" [@fadeAnimation]>
+            <div class="summary-cards">
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-list-alt"></i>
+                    </div>
+                    <div class="metric-details">
+                        <div class="metric-value">{{chapterData.length}}</div>
+                        <div class="metric-label">Total Chapters</div>
+                    </div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-question-circle"></i>
+                    </div>
+                    <div class="metric-details">
+                        <div class="metric-value">{{getTotalQuestions(chapterData)}}</div>
+                        <div class="metric-label">Total Questions</div>
+                    </div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                    <div class="metric-details">
+                        <div class="metric-value">{{getTotalTopics(chapterData)}}</div>
+                        <div class="metric-label">Total Topics</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <div class="card-header">
+                        <h3>Questions by Chapter <span *ngIf="selectedSubjectName">({{ selectedSubjectName }})</span></h3>
+                        <div class="card-actions">
+                            <button class="action-btn" (click)="toggleChartType('chapter')">
+                                <i [class]="chapterChartType === 'bar' ? 'fas fa-chart-pie' : 'fas fa-chart-bar'"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div *ngIf="!loading.chapter && chapterData.length > 0" class="chart-container">
+                        <div echarts [options]="chapterChartOption" [initOpts]="chartInitOpts" class="chart"></div>
+                    </div>
+                    
+                    <div class="loading-container" *ngIf="loading.chapter">
+                        <div class="spinner"></div>
+                        <p>Loading chapter data...</p>
+                    </div>
+                    
+                    <div class="no-data" *ngIf="!loading.chapter && chapterData.length === 0">
+                        <i class="fas fa-database"></i>
+                        <p>No chapter data available</p>
+                    </div>
+                </div>
+
+                <div class="table-card">
+                    <div class="card-header">
+                        <h3>Chapter Question Distribution</h3>
+                        <div class="card-actions">
+                            <div class="search-box">
+                                <i class="fas fa-search"></i>
+                                <input type="text" placeholder="Search chapters..." [(ngModel)]="chapterSearchTerm">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="table-wrapper" *ngIf="!loading.chapter && chapterData.length > 0">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Chapter Name</th>
+                                    <th>Questions</th>
+                                    <th>Percentage</th>
+                                    <th>Topics</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let chapter of filteredChapterData; let i = index">
+                                    <td>
+                                        <div class="chapter-name">
+                                            <span class="badge" [style.background-color]="getColorForIndex(i)"></span>
+                                            {{chapter.name}}
+                                        </div>
+                                    </td>
+                                    <td>{{chapter.questionCount}}</td>
+                                    <td>
+                                        <div class="percentage-bar">
+                                            <div class="percentage-fill" 
+                                                [style.width]="getPercentage(chapter.questionCount, getTotalQuestions(chapterData)) + '%'"
+                                                [style.background-color]="getColorForIndex(i)">
+                                            </div>
+                                            <span>{{getPercentage(chapter.questionCount, getTotalQuestions(chapterData))}}%</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="topic-count">
+                                            <i class="fas fa-layer-group"></i>
+                                            {{chapter.topicCount}}
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="loading-container" *ngIf="loading.chapter">
+                        <div class="spinner"></div>
+                        <p>Loading data...</p>
+                    </div>
+                    
+                    <div class="no-data" *ngIf="!loading.chapter && (chapterData.length === 0 || filteredChapterData.length === 0)">
+                        <i class="fas fa-database"></i>
+                        <p>No chapter data available</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

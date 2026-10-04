@@ -1,0 +1,340 @@
+<section [ngStyle]="{ 'background-color': http.getBackgroundColor() }">
+  <div class="g-0 min-vh-100">
+    <div class="p-4">
+      <p class="title_test">Tests</p>
+      <div class="row justify-content-center">
+        <div class="col-md-5" id="search_section"></div>
+        <div class="col-md-12">
+          <div class="row my-3 g-4">
+            <div class="col-12">
+              <div
+                class="row row-cols-1 row-cols-md-3 row-cols-lg-5 g-4 justify-content-center"
+                id="card_border"
+              >
+                <div class="col" *ngFor="let testType of testTypes">
+                  <div
+                    class="card p-4 test-type-card h-100 shadow-sm border-0"
+                    [style.borderLeft]="'4px solid ' + testType.color"
+                    (click)="openTestCreationModal(testType)"
+                  >
+                    <div class="card-body d-flex flex-column">
+                      <div class="d-flex align-items-center mb-3">
+                        <i
+                          nz-icon
+                          [nzType]="testType.icon"
+                          nzTheme="outline"
+                          class="me-3 test-icon"
+                          [style.color]="testType.color"
+                        ></i>
+                        <h5 class="card-title mb-0">{{ testType.title }}</h5>
+                      </div>
+                      <p class="card-text text-muted flex-grow-1">
+                        {{ testType.description }}
+                      </p>
+                      <div class="mt-auto">
+                        <button
+                          nz-button
+                          nzType="primary"
+                          nzBlock
+                          [ngStyle]="{
+                            backgroundColor: testType.color,
+                            borderColor: testType.color
+                          }"
+                        >
+                          Create Test
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- <div class="p-4">
+            <p class="title_test">Upcoming tests</p>
+            <div class="row justify-content-center" id="Upcoming_tests">
+                <div class="boxes row">
+                    <div class="col-md-3 justify-content-center" id="Finished_tests">
+                        <div class="card shadow p-4 bg-success text-white mb-3">
+                            <div class="card-body">
+                                <a class="box_finished_test">
+                                    <div class="d-flex flex-column flex-sm-row justify-content-between mb-3">
+                                        <div class="group_option">
+                                            <h5 class="card-title font-weight-bold">Test12345</h5>
+                                            <p class="card-text">Type: <b>Random</b></p>
+                                            <p class="card-text">Start time: <b>13/06/2024 12:45 PM</b></p>
+                                            <p class="card-text">End time: <b>13/06/2024 01:45 PM</b></p>
+                                            <p class="card-text">Subjects: <b>Physics</b></p>
+                                        </div>
+                                    </div>
+                                </a>
+                                <button class="btn btn-primary w-100">
+                                    <svg stroke="currentColor" fill="currentColor" stroke-width="0"
+                                        viewBox="0 0 512 512" aria-hidden="true" focusable="false" tabindex="-1"
+                                        height="1em" width="1em" xmlns="http://www.w3.org/2000/svg" class="me-2">
+                                        <path fill="none" stroke-linejoin="round" stroke-width="32"
+                                            d="M384 368h24a40.12 40.12 0 0040-40V168a40.12 40.12 0 00-40-40H104a40.12 40.12 0 00-40 40v160a40.12 40.12 0 0040 40h24">
+                                        </path>
+                                        <rect width="256" height="208" x="128" y="240" fill="none"
+                                            stroke-linejoin="round" stroke-width="32" rx="24.32" ry="24.32">
+                                        </rect>
+                                        <path fill="none" stroke-linejoin="round" stroke-width="32"
+                                            d="M384 128v-24a40.12 40.12 0 00-40-40H168a40.12 40.12 0 00-40 40v24">
+                                        </path>
+                                        <circle cx="392" cy="184" r="24"></circle>
+                                    </svg>
+                                    Print
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 justify-content-center" id="Finished_tests">
+                        <div class="card shadow p-4 bg-success text-white mb-3">
+                            <div class="card-body">
+                                <a class="box_finished_test">
+                                    <div class="d-flex flex-column flex-sm-row justify-content-between mb-3">
+                                        <div class="group_option">
+                                            <h5 class="card-title font-weight-bold">Test12345</h5>
+                                            <p class="card-text">Type: <b>Random</b></p>
+                                            <p class="card-text">Start time: <b>13/06/2024 12:45 PM</b></p>
+                                            <p class="card-text">End time: <b>13/06/2024 01:45 PM</b></p>
+                                            <p class="card-text">Subjects: <b>Physics</b></p>
+                                        </div>
+                                    </div>
+                                </a>
+                                <button class="btn btn-primary w-100">
+                                    <svg stroke="currentColor" fill="currentColor" stroke-width="0"
+                                        viewBox="0 0 512 512" aria-hidden="true" focusable="false" tabindex="-1"
+                                        height="1em" width="1em" xmlns="http://www.w3.org/2000/svg" class="me-2">
+                                        <path fill="none" stroke-linejoin="round" stroke-width="32"
+                                            d="M384 368h24a40.12 40.12 0 0040-40V168a40.12 40.12 0 00-40-40H104a40.12 40.12 0 00-40 40v160a40.12 40.12 0 0040 40h24">
+                                        </path>
+                                        <rect width="256" height="208" x="128" y="240" fill="none"
+                                            stroke-linejoin="round" stroke-width="32" rx="24.32" ry="24.32">
+                                        </rect>
+                                        <path fill="none" stroke-linejoin="round" stroke-width="32"
+                                            d="M384 128v-24a40.12 40.12 0 00-40-40H168a40.12 40.12 0 00-40 40v24">
+                                        </path>
+                                        <circle cx="392" cy="184" r="24"></circle>
+                                    </svg>
+                                    Print
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-md-3 justify-content-center" id="Finished_tests">
+                        <div class="card shadow p-4 bg-success text-white mb-3">
+                            <div class="card-body">
+                                <a class="box_finished_test">
+                                    <div class="d-flex flex-column flex-sm-row justify-content-between mb-3">
+                                        <div class="group_option">
+                                            <h5 class="card-title font-weight-bold">Test12345</h5>
+                                            <p class="card-text">Type: <b>Random</b></p>
+                                            <p class="card-text">Start time: <b>13/06/2024 12:45 PM</b></p>
+                                            <p class="card-text">End time: <b>13/06/2024 01:45 PM</b></p>
+                                            <p class="card-text">Subjects: <b>Physics</b></p>
+                                        </div>
+                                    </div>
+                                </a>
+                                <button class="btn btn-primary w-100">
+                                    <svg stroke="currentColor" fill="currentColor" stroke-width="0"
+                                        viewBox="0 0 512 512" aria-hidden="true" focusable="false" tabindex="-1"
+                                        height="1em" width="1em" xmlns="http://www.w3.org/2000/svg" class="me-2">
+                                        <path fill="none" stroke-linejoin="round" stroke-width="32"
+                                            d="M384 368h24a40.12 40.12 0 0040-40V168a40.12 40.12 0 00-40-40H104a40.12 40.12 0 00-40 40v160a40.12 40.12 0 0040 40h24">
+                                        </path>
+                                        <rect width="256" height="208" x="128" y="240" fill="none"
+                                            stroke-linejoin="round" stroke-width="32" rx="24.32" ry="24.32">
+                                        </rect>
+                                        <path fill="none" stroke-linejoin="round" stroke-width="32"
+                                            d="M384 128v-24a40.12 40.12 0 00-40-40H168a40.12 40.12 0 00-40 40v24">
+                                        </path>
+                                        <circle cx="392" cy="184" r="24"></circle>
+                                    </svg>
+                                    Print
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-md-3 justify-content-center" id="Finished_tests">
+                        <div class="card shadow p-4 bg-success text-white mb-3">
+                            <div class="card-body">
+                                <a class="box_finished_test">
+                                    <div class="d-flex flex-column flex-sm-row justify-content-between mb-3">
+                                        <div class="group_option">
+                                            <h5 class="card-title font-weight-bold">Test12345</h5>
+                                            <p class="card-text">Type: <b>Random</b></p>
+                                            <p class="card-text">Start time: <b>13/06/2024 12:45 PM</b></p>
+                                            <p class="card-text">End time: <b>13/06/2024 01:45 PM</b></p>
+                                            <p class="card-text">Subjects: <b>Physics</b></p>
+                                        </div>
+                                    </div>
+                                </a>
+                                <button class="btn btn-primary w-100">
+                                    <svg stroke="currentColor" fill="currentColor" stroke-width="0"
+                                        viewBox="0 0 512 512" aria-hidden="true" focusable="false" tabindex="-1"
+                                        height="1em" width="1em" xmlns="http://www.w3.org/2000/svg" class="me-2">
+                                        <path fill="none" stroke-linejoin="round" stroke-width="32"
+                                            d="M384 368h24a40.12 40.12 0 0040-40V168a40.12 40.12 0 00-40-40H104a40.12 40.12 0 00-40 40v160a40.12 40.12 0 0040 40h24">
+                                        </path>
+                                        <rect width="256" height="208" x="128" y="240" fill="none"
+                                            stroke-linejoin="round" stroke-width="32" rx="24.32" ry="24.32">
+                                        </rect>
+                                        <path fill="none" stroke-linejoin="round" stroke-width="32"
+                                            d="M384 128v-24a40.12 40.12 0 00-40-40H168a40.12 40.12 0 00-40 40v24">
+                                        </path>
+                                        <circle cx="392" cy="184" r="24"></circle>
+                                    </svg>
+                                    Print
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 justify-content-center" id="Finished_tests">
+                        <div class="card shadow p-4 bg-success text-white mb-3">
+                            <div class="card-body">
+                                <a class="box_finished_test">
+                                    <div class="d-flex flex-column flex-sm-row justify-content-between mb-3">
+                                        <div class="group_option">
+                                            <h5 class="card-title font-weight-bold">Test12345</h5>
+                                            <p class="card-text">Type: <b>Random</b></p>
+                                            <p class="card-text">Start time: <b>13/06/2024 12:45 PM</b></p>
+                                            <p class="card-text">End time: <b>13/06/2024 01:45 PM</b></p>
+                                            <p class="card-text">Subjects: <b>Physics</b></p>
+                                        </div>
+                                    </div>
+                                </a>
+                                <button class="btn btn-primary w-100">
+                                    <svg stroke="currentColor" fill="currentColor" stroke-width="0"
+                                        viewBox="0 0 512 512" aria-hidden="true" focusable="false" tabindex="-1"
+                                        height="1em" width="1em" xmlns="http://www.w3.org/2000/svg" class="me-2">
+                                        <path fill="none" stroke-linejoin="round" stroke-width="32"
+                                            d="M384 368h24a40.12 40.12 0 0040-40V168a40.12 40.12 0 00-40-40H104a40.12 40.12 0 00-40 40v160a40.12 40.12 0 0040 40h24">
+                                        </path>
+                                        <rect width="256" height="208" x="128" y="240" fill="none"
+                                            stroke-linejoin="round" stroke-width="32" rx="24.32" ry="24.32">
+                                        </rect>
+                                        <path fill="none" stroke-linejoin="round" stroke-width="32"
+                                            d="M384 128v-24a40.12 40.12 0 00-40-40H168a40.12 40.12 0 00-40 40v24">
+                                        </path>
+                                        <circle cx="392" cy="184" r="24"></circle>
+                                    </svg>
+                                    Print
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-md-3 justify-content-center" id="Finished_tests">
+                        <div class="card shadow p-4 bg-success text-white mb-3">
+                            <div class="card-body">
+                                <a class="box_finished_test">
+                                    <div class="d-flex flex-column flex-sm-row justify-content-between mb-3">
+                                        <div class="group_option">
+                                            <h5 class="card-title font-weight-bold">Test12345</h5>
+                                            <p class="card-text">Type: <b>Random</b></p>
+                                            <p class="card-text">Start time: <b>13/06/2024 12:45 PM</b></p>
+                                            <p class="card-text">End time: <b>13/06/2024 01:45 PM</b></p>
+                                            <p class="card-text">Subjects: <b>Physics</b></p>
+                                        </div>
+                                    </div>
+                                </a>
+                                <button class="btn btn-primary w-100">
+                                    <svg stroke="currentColor" fill="currentColor" stroke-width="0"
+                                        viewBox="0 0 512 512" aria-hidden="true" focusable="false" tabindex="-1"
+                                        height="1em" width="1em" xmlns="http://www.w3.org/2000/svg" class="me-2">
+                                        <path fill="none" stroke-linejoin="round" stroke-width="32"
+                                            d="M384 368h24a40.12 40.12 0 0040-40V168a40.12 40.12 0 00-40-40H104a40.12 40.12 0 00-40 40v160a40.12 40.12 0 0040 40h24">
+                                        </path>
+                                        <rect width="256" height="208" x="128" y="240" fill="none"
+                                            stroke-linejoin="round" stroke-width="32" rx="24.32" ry="24.32">
+                                        </rect>
+                                        <path fill="none" stroke-linejoin="round" stroke-width="32"
+                                            d="M384 128v-24a40.12 40.12 0 00-40-40H168a40.12 40.12 0 00-40 40v24">
+                                        </path>
+                                        <circle cx="392" cy="184" r="24"></circle>
+                                    </svg>
+                                    Print
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr class="hr_line">
+        </div> -->
+
+    <!-- <div class="p-4">
+            <p class="title_test">Finished tests</p>
+            <div class="row justify-content-center" id="Finished_tests">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="card shadow p-4 bg-danger text-white mb-3">
+                            <div class="card-body">
+                                <a class="box_finished_test">
+                                    <div class="d-flex flex-column flex-sm-row justify-content-between mb-3">
+                                        <div class="group_option">
+                                            <h5 class="card-title font-weight-bold">Test12345</h5>
+                                            <p class="card-text">Type: <b>Random</b></p>
+                                            <p class="card-text">Start time: <b>13/06/2024 12:45 PM</b></p>
+                                            <p class="card-text">End time: <b>13/06/2024 01:45 PM</b></p>
+                                            <p class="card-text">Subjects: <b>Physics</b></p>
+                                        </div>
+                                    </div>
+                                </a>
+                                <button class="btn btn-primary w-100">
+                                    <svg stroke="currentColor" fill="currentColor" stroke-width="0"
+                                        viewBox="0 0 512 512" aria-hidden="true" focusable="false" tabindex="-1"
+                                        height="1em" width="1em" xmlns="http://www.w3.org/2000/svg" class="me-2">
+                                        <path fill="none" stroke-linejoin="round" stroke-width="32"
+                                            d="M384 368h24a40.12 40.12 0 0040-40V168a40.12 40.12 0 00-40-40H104a40.12 40.12 0 00-40 40v160a40.12 40.12 0 0040 40h24">
+                                        </path>
+                                        <rect width="256" height="208" x="128" y="240" fill="none"
+                                            stroke-linejoin="round" stroke-width="32" rx="24.32" ry="24.32"></rect>
+                                        <path fill="none" stroke-linejoin="round" stroke-width="32"
+                                            d="M384 128v-24a40.12 40.12 0 00-40-40H168a40.12 40.12 0 00-40 40v24">
+                                        </path>
+                                        <circle cx="392" cy="184" r="24"></circle>
+                                    </svg>
+                                    Print
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+  </div>
+  <!-- <nav aria-label="pagination navigation" class="p-2 overflow-x-scroll">
+        <ul class="pagination justify-content-center m-0">
+            <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1" aria-disabled="true" aria-label="Previous">
+                    <svg fill="none" height="1em" width="1em" aria-hidden="true" role="img" viewBox="0 0 24 24">
+                        <path d="M15.5 19l-7-7 7-7" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                            stroke-width="1.5"></path>
+                    </svg>
+                </a>
+            </li>
+
+            <li class="page-item active" aria-current="page">
+                <a class="page-link" href="#">1</a>
+            </li>
+
+            <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1" aria-disabled="true" aria-label="Next">
+                    <svg fill="none" height="1em" width="1em" aria-hidden="true" role="img" viewBox="0 0 24 24">
+                        <path d="M8.5 5l7 7-7 7" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                            stroke-width="1.5"></path>
+                    </svg>
+                </a>
+            </li>
+        </ul>
+    </nav> -->
+</section>

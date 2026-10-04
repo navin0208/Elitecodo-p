@@ -1,0 +1,305 @@
+<section [ngStyle]="{ 'background-color':http.getBackgroundColor()}" *ngIf="!isMobile()">
+    <div class="advanced-navigation-container">
+        <div class="navigation-sidebar">
+            <div class="standard-selector">
+                <label for="standard">Select Standard:</label>
+                <select id="standard" [ngModel]="selectedStandardId" (ngModelChange)="onStandardChange($event)">
+                    <option *ngFor="let standard of standards()" [value]="standard.id">{{ standard.name }}</option>
+                </select>
+            </div>
+            <div class="search-container">
+                <input type="text" [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event)"
+                    placeholder="Search subjects, chapters..." class="search-input" />
+                <i class="fas fa-search search-icon"></i>
+            </div>
+
+            <div class="hierarchy-section">
+                <h6>Subjects</h6>
+
+                <!-- Loading state -->
+                <div *ngIf="isLoading()" class="loading-state">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    Loading subjects...
+                </div>
+
+                <!-- Empty state -->
+                <div *ngIf="!isLoading() && (!subjects() || subjects().length === 0)" class="empty-state">
+                    <i class="fas fa-inbox"></i>
+                    <p>No subjects available</p>
+                </div>
+
+                <!-- Subjects list -->
+                <div *ngIf="!isLoading() && subjects().length > 0" class="subjects-list">
+                    <div *ngFor="let subject of filteredSubjects()" class="hierarchy-item"
+                        [class.active]="selectedSubject()?.id === subject.id" (click)="selectSubject(subject)">
+                        <i class="fas" [class]="subject.icon || 'fa-book'"></i>
+                        <span class="item-name">{{ subject.name }}</span>
+                        <span class="item-count" *ngIf="subject.chapters?.length">
+                            {{ subject.chapters.length }} {{ subject.chapters.length === 1 ? 'chapter' : 'chapters' }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chapters section -->
+            <div class="hierarchy-section" *ngIf="selectedSubject()">
+                <h6>Chapters</h6>
+                <div *ngFor="let chapter of selectedSubject()?.chapters" class="hierarchy-item"
+                    [class.active]="selectedChapter()?.id === chapter.id" (click)="selectChapter(chapter)">
+                    <i class="fas" [class]="chapter.icon || 'fa-bookmark'"></i>
+                    <span class="item-name">{{ chapter.name }}</span>
+                    <span class="item-count" *ngIf="chapter.topics?.length">
+                        {{ chapter.topics.length }} {{ chapter.topics.length === 1 ? 'topic' : 'topics' }}
+                    </span>
+                </div>
+            </div>
+
+            <!-- Topics section -->
+            <div class="hierarchy-section" *ngIf="selectedChapter()">
+                <h6>Topics</h6>
+                <div *ngFor="let topic of selectedChapter()?.topics" class="hierarchy-item"
+                    [class.active]="selectedTopic()?.id === topic.id" (click)="selectTopic(topic)">
+                    <i class="fas fa-list-ul"></i>
+                    <span class="item-name">{{ topic.name }}</span>
+                    <span class="item-count" *ngIf="topic.content?.length">
+                        {{ topic.content.length }} {{ topic.content.length === 1 ? 'resource' : 'resources' }}
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-display" *ngIf="selectedSubject()">
+            <ng-container *ngIf="selectedChapter()">
+                <h3>
+                    Available Resources for
+                    {{ selectedTopic() ? selectedTopic()?.name : selectedChapter()?.name }}
+                </h3>
+
+                <div class="content-grid">
+                    <div *ngFor="let content of getAvailableContent()" class="content-card-container">
+                        <div class="content-card" [class.active]="selectedContent()?.id === content.id"
+                            (click)="selectContent(content)">
+                            <!-- <div class="content-icon">
+                                <i class="fas" [ngClass]="getContentIcon(content.type)"></i>
+                            </div> -->
+                            <div class="content-details">
+                                <h4>{{ content.title }}</h4>
+                                <p>{{ content.description }}</p>
+                                <span class="content-type">{{ content.type | uppercase }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Selected Content Display -->
+                <div *ngIf="selectedContent()" class="selected-content-display">
+
+                    <!-- Loading indicator for content -->
+                    <div *ngIf="contentLoading()" class="content-loading">
+                        <div class="spinner-container">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            <p>Loading content...</p>
+                        </div>
+                    </div>
+                    <!-- Content viewers (only show when not loading) -->
+                    <ng-container *ngIf="!contentLoading()">
+                        <div class="viewer-header">
+                            <h4>{{selectedContent()?.title|titlecase}}</h4>
+                        </div>
+
+
+                        <!-- PDF Viewer -->
+                        <ng-container *ngIf="getFileViewer(selectedContent()!) === 'pdf'">
+                            <iframe [src]="sanitizer.bypassSecurityTrustResourceUrl(selectedContent()?.url || '')"
+                                class="file-viewer" frameborder="0">
+                            </iframe>
+                        </ng-container>
+
+                        <!-- Video Viewer -->
+                        <!-- Video Viewer -->
+                        <ng-container *ngIf="getFileViewer(selectedContent()!) === 'video'">
+                            <video class="file-viewer" controls controlsList="nodownload">
+                                <source [src]="selectedContent()?.url"
+                                    [type]="'video/' + getVideoType(selectedContent()?.url || '')">
+                                <!-- Add multiple source fallbacks -->
+                                <source [src]="selectedContent()?.url" type="video/mp4">
+                                <source [src]="selectedContent()?.url" type="video/quicktime"> <!-- for MOV -->
+                                <source [src]="selectedContent()?.url" type="video/x-msvideo"> <!-- for AVI -->
+                                <p>Your browser does not support HTML5 video. Here's a <a
+                                        [href]="selectedContent()?.url">link to the video</a> instead.</p>
+                            </video>
+                        </ng-container>
+
+                        <!-- Docs/Other Files Viewer -->
+                        <ng-container *ngIf="getFileViewer(selectedContent()!) === 'docs'">
+                            <iframe
+                                [src]="sanitizer.bypassSecurityTrustResourceUrl(getGoogleDocsViewerUrl(selectedContent()?.url || ''))"
+                                class="file-viewer" frameborder="0">
+                            </iframe>
+                        </ng-container>
+
+                        <!-- Fallback for unsupported file types -->
+                        <ng-container *ngIf="getFileViewer(selectedContent()!) === 'other'">
+                            <div class="unsupported-file">
+                                <i class="fas fa-file"></i>
+                                <p>Unsupported file type. Please download to view.</p>
+                                <a [href]="selectedContent()?.url" target="_blank" download>Download File</a>
+                            </div>
+                        </ng-container>
+                    </ng-container>
+                </div>
+            </ng-container>
+        </div>
+
+    </div>
+</section>
+
+
+
+
+<section [ngStyle]="{ 'background-color': http.getBackgroundColor() }" *ngIf="isMobile()">
+    <!-- Mobile Header -->
+    <div class="mobile-header">
+        <button class="menu-button" (click)="toggleSidebar()">
+            <i class="fas" [ngClass]="isSidebarOpen() ? 'fa-times' : 'fa-bars'"></i>
+        </button>
+        <h2>Study Resources</h2>
+        <div class="spacer"></div>
+    </div>
+
+    <div class="advanced-navigation-container">
+        <!-- Sidebar with responsive behavior -->
+        <div class="navigation-sidebar" [class.open]="isSidebarOpen()">
+            <div class="search-container">
+                <input type="text" [(ngModel)]="searchQuery" placeholder="Search subjects, chapters..."
+                    class="search-input" />
+                <i class="fas fa-search search-icon"></i>
+            </div>
+
+            <div class="hierarchy-section">
+                <div class="hierarchy-header">
+                    <h3>Study Hierarchy</h3>
+                    <div class="hierarchy-breadcrumb">
+                        <span *ngIf="selectedSubject()">
+                            {{ selectedSubject()?.name }}
+                            <i *ngIf="selectedChapter()" class="fas fa-chevron-right"></i>
+                            {{ selectedChapter()?.name }}
+                            <i *ngIf="selectedTopic()" class="fas fa-chevron-right"></i>
+                            {{ selectedTopic()?.name }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="hierarchy-list">
+                    <!-- Subjects List -->
+                    <div class="hierarchy-section">
+                        <h4>Subjects</h4>
+                        <div *ngFor="let subject of filteredSubjects()" class="hierarchy-item"
+                            [class.active]="selectedSubject()?.id === subject.id" (click)="selectSubject(subject)">
+                            <i [class]="subject.icon"></i>
+                            <span>{{ subject.name }}</span>
+                        </div>
+                    </div>
+
+                    <!-- Chapters List -->
+                    <div *ngIf="selectedSubject()" class="hierarchy-section">
+                        <h4>Chapters</h4>
+                        <div *ngFor="let chapter of selectedSubject()?.chapters" class="hierarchy-item"
+                            [class.active]="selectedChapter()?.id === chapter.id" (click)="selectChapter(chapter)">
+                            <i [class]="chapter.icon"></i>
+                            <span>{{ chapter.name }}</span>
+                        </div>
+                    </div>
+
+                    <!-- Topics List -->
+                    <div *ngIf="selectedChapter()" class="hierarchy-section">
+                        <h4>Topics</h4>
+                        <div *ngFor="let topic of selectedChapter()?.topics" class="hierarchy-item"
+                            [class.active]="selectedTopic()?.id === topic.id" (click)="selectTopic(topic)">
+                            <!-- <i [class]="topic.icon"></i> -->
+                            <span>{{ topic.name }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="content-display" *ngIf="selectedSubject()" [class.sidebar-open]="isSidebarOpen()">
+            <ng-container *ngIf="selectedChapter()">
+                <h3>
+                    Available Resources for
+                    {{ selectedTopic() ? selectedTopic()?.name : selectedChapter()?.name }}
+                </h3>
+
+                <div class="content-grid">
+                    <div *ngFor="let content of getAvailableContent()" class="content-card-container">
+                        <div class="content-card" [class.active]="selectedContent()?.id === content.id"
+                            (click)="selectContent(content)">
+                            <!-- <div class="content-icon">
+                                <i class="fas" [ngClass]="getContentIcon(content.type)"></i>
+                            </div> -->
+                            <div class="content-details">
+                                <h4>{{ content.title }}</h4>
+                                <p>{{ content.description }}</p>
+                                <span class="content-type">{{ content.type | uppercase }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Selected Content Display -->
+                <div *ngIf="selectedContent()" class="selected-content-display">
+                    <!-- PDF Viewer -->
+                    <ng-container *ngIf="getFileViewer(selectedContent()!) === 'pdf'">
+                        <iframe [src]="sanitizer.bypassSecurityTrustResourceUrl(selectedContent()?.url || '')"
+                            class="file-viewer" frameborder="0">
+                        </iframe>
+                    </ng-container>
+
+                    <!-- Video Viewer -->
+                    <ng-container *ngIf="getFileViewer(selectedContent()!) === 'video'">
+                        <video class="file-viewer" controls>
+                            <source [src]="selectedContent()?.url"
+                                [type]="'video/' + getVideoType(selectedContent()?.url || '')">
+                            Your browser does not support the video tag.
+                        </video>
+                    </ng-container>
+
+                    <!-- Docs Viewer -->
+                    <ng-container *ngIf="getFileViewer(selectedContent()!) === 'docs'">
+                        <iframe
+                            [src]="sanitizer.bypassSecurityTrustResourceUrl(getGoogleDocsViewerUrl(selectedContent()?.url || ''))"
+                            class="file-viewer" frameborder="0">
+                        </iframe>
+                    </ng-container>
+
+                    <!-- Fallback -->
+                    <ng-container *ngIf="getFileViewer(selectedContent()!) === 'other'">
+                        <div class="unsupported-file">
+                            <i class="fas fa-file"></i>
+                            <p>Unsupported file type. Please download to view.</p>
+                            <a [href]="selectedContent()?.url" target="_blank" download>Download File</a>
+                        </div>
+                    </ng-container>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+</section>
+<!-- Able See Formules 
+Able See Chapter wise Notes 
+Able See Topic wise Notes 
+Able See Chapter Summary 
+Able See Topic Summary 
+Able See video Content
+
+and let me tell you the flow when uploading this content by teacher for student
+Entrance wise
+Standard wise
+Subject wise
+Chapter wise
+Topic wise
+and then he can upload the content
+
+make this student-panel sidebar and all and also make mock data and make it more attractive ui in angular very proffesional we can use nz-zorro and bootstrap and scss -->

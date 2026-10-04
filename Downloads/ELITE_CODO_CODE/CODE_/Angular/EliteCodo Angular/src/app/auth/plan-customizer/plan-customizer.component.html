@@ -1,0 +1,467 @@
+<div class="plan-customizer-container">
+  <div class="customizer-header">
+    <h2>Customize Your {{ getPlanName() }} Plan</h2>
+    <p class="subtitle" *ngIf="isTeacherPlan()">Select your student capacity and duration</p>
+    <p class="subtitle" *ngIf="isInstitutePlan()">Select the number of teachers and students for your institution</p>
+    <p class="subtitle" *ngIf="!isTeacherPlan() && !isInstitutePlan()">Add extra slots as needed</p>
+  </div>
+
+  <div class="customizer-content">
+    
+    <!-- ======================================== -->
+    <!-- INSTITUTE PLAN CUSTOMIZATION             -->
+    <!-- ======================================== -->
+    <div *ngIf="isInstitutePlan()" class="institute-customization">
+      <!-- Teachers Selection -->
+      <div class="slot-config institute-slot">
+        <div class="config-header">
+          <div class="config-label">
+            <i class="fas fa-chalkboard-teacher"></i>
+            <span>Number of Teachers</span>
+          </div>
+          <div class="config-price">
+            <span class="price">₹{{ teacherPrice }}</span>
+            <span class="per-unit">per teacher / month</span>
+          </div>
+        </div>
+        <div class="config-control">
+          <button 
+            type="button" 
+            class="btn-decrement"
+            (click)="decrementTeachers()"
+            [disabled]="selectedTeachers <= minTeachers">
+            <i class="fas fa-minus"></i>
+          </button>
+          <input 
+            type="number" 
+            [(ngModel)]="selectedTeachers"
+            [ngModelOptions]="{standalone: true}"
+            [min]="minTeachers"
+            class="slot-input"
+            (change)="calculateTotal()">
+          <button 
+            type="button" 
+            class="btn-increment"
+            (click)="incrementTeachers()">
+            <i class="fas fa-plus"></i>
+          </button>
+        </div>
+        <div class="config-extra-info">
+          <span class="total-slots">Minimum: {{ minTeachers }} teachers</span>
+          <span class="extra-cost">₹{{ getTeacherTotalCost() }} / month</span>
+        </div>
+      </div>
+
+      <!-- Students Selection -->
+      <div class="slot-config institute-slot">
+        <div class="config-header">
+          <div class="config-label">
+            <i class="fas fa-user-graduate"></i>
+            <span>Number of Students</span>
+          </div>
+          <div class="config-price">
+            <span class="price">₹{{ studentPrice }}</span>
+            <span class="per-unit">per student / month</span>
+          </div>
+        </div>
+        <div class="config-control">
+          <button 
+            type="button" 
+            class="btn-decrement"
+            (click)="decrementStudents()"
+            [disabled]="selectedStudents <= minStudents">
+            <i class="fas fa-minus"></i>
+          </button>
+          <input 
+            type="number" 
+            [(ngModel)]="selectedStudents"
+            [ngModelOptions]="{standalone: true}"
+            [min]="minStudents"
+            class="slot-input"
+            (change)="calculateTotal()">
+          <button 
+            type="button" 
+            class="btn-increment"
+            (click)="incrementStudents()">
+            <i class="fas fa-plus"></i>
+          </button>
+        </div>
+        <div class="config-extra-info">
+          <span class="total-slots">Minimum: {{ minStudents }} students</span>
+          <span class="extra-cost">₹{{ getStudentTotalCost() }} / month</span>
+        </div>
+      </div>
+
+      <!-- Duration Selection -->
+      <div class="slot-config duration-slot">
+        <div class="config-header">
+          <div class="config-label">
+            <i class="fas fa-calendar-alt"></i>
+            <span>Plan Duration</span>
+          </div>
+          <div class="config-price">
+            <select 
+              class="duration-select"
+              [(ngModel)]="selectedDuration"
+              (change)="onDurationChange()"
+              [ngModelOptions]="{standalone: true}">
+              <option *ngFor="let duration of availableDurations" [value]="duration">
+                {{ duration }} {{ duration === 1 ? 'Month' : 'Months' }}
+                {{ duration === 12 ? '(Annual)' : '' }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="duration-info">
+          <span class="duration-note">Selected: {{ selectedDuration }} {{ selectedDuration === 1 ? 'Month' : 'Months' }}</span>
+          <span class="duration-price">Total: ₹{{ getTotalPrice() }}</span>
+        </div>
+      </div>
+
+      <!-- Price Summary for Institute -->
+      <div class="price-summary">
+        <div class="summary-header" (click)="togglePriceBreakdown()">
+          <h3>Order Summary</h3>
+          <i class="fas" [class.fa-chevron-down]="!showPriceBreakdown" [class.fa-chevron-up]="showPriceBreakdown"></i>
+        </div>
+        
+        <div class="summary-details" *ngIf="showPriceBreakdown">
+          <div class="summary-row">
+            <span>{{ selectedTeachers }} Teachers × ₹{{ teacherPrice }}</span>
+            <span>₹{{ getTeacherTotalCost() }} / month</span>
+          </div>
+          <div class="summary-row">
+            <span>{{ selectedStudents }} Students × ₹{{ studentPrice }}</span>
+            <span>₹{{ getStudentTotalCost() }} / month</span>
+          </div>
+          <div class="summary-row highlight">
+            <span>Monthly Total</span>
+            <span class="price-highlight">₹{{ getMonthlyPrice() }}</span>
+          </div>
+          <div class="summary-row">
+            <span>Duration: {{ selectedDuration }} {{ selectedDuration === 1 ? 'Month' : 'Months' }}</span>
+            <span>× {{ selectedDuration }}</span>
+          </div>
+          <div class="summary-total">
+            <span>Total Amount</span>
+            <span class="total-price">₹{{ getTotalPrice() }}</span>
+          </div>
+          <div class="summary-note">
+            <small>* Minimum 10 teachers and 10 students required</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================== -->
+    <!-- TEACHER PLAN CUSTOMIZATION              -->
+    <!-- ======================================== -->
+    <div *ngIf="isTeacherPlan()" class="teacher-customization">
+      <!-- Default Students -->
+      <div class="slot-config teacher-slot">
+        <div class="config-header">
+          <div class="config-label">
+            <i class="fas fa-user-graduate"></i>
+            <span>Base Students Included</span>
+          </div>
+          <div class="config-price">
+            <span class="price">{{ minStudents }}</span>
+            <span class="per-unit">students included</span>
+          </div>
+        </div>
+        <div class="config-extra-info">
+          <span class="total-slots">Base price: ₹{{ getBaseStudentPrice() }} / month</span>
+          <span class="extra-cost">Includes {{ minStudents }} students</span>
+        </div>
+      </div>
+
+      <!-- Extra Students -->
+      <div class="slot-config teacher-slot">
+        <div class="config-header">
+          <div class="config-label">
+            <i class="fas fa-user-plus"></i>
+            <span>Extra Students</span>
+          </div>
+          <div class="config-price">
+            <span class="price">₹{{ extraStudentPrice }}</span>
+            <span class="per-unit">per extra student</span>
+          </div>
+        </div>
+        <div class="config-control">
+          <button 
+            type="button" 
+            class="btn-decrement"
+            (click)="decrementExtraStudents()"
+            [disabled]="extraStudents <= 0">
+            <i class="fas fa-minus"></i>
+          </button>
+          <input 
+            type="number" 
+            [(ngModel)]="extraStudents"
+            [ngModelOptions]="{standalone: true}"
+            [min]="0"
+            [max]="maxExtraStudents"
+            class="slot-input"
+            (change)="calculateTeacherTotal()">
+          <button 
+            type="button" 
+            class="btn-increment"
+            (click)="incrementExtraStudents()"
+            [disabled]="extraStudents >= maxExtraStudents">
+            <i class="fas fa-plus"></i>
+          </button>
+        </div>
+        <div class="config-extra-info">
+          <span class="total-slots">Total: {{ minStudents + extraStudents }} students</span>
+          <span class="extra-cost">+ ₹{{ extraStudents * extraStudentPrice }} / month</span>
+        </div>
+      </div>
+
+      <!-- Duration Selection -->
+      <div class="slot-config duration-slot">
+        <div class="config-header">
+          <div class="config-label">
+            <i class="fas fa-calendar-alt"></i>
+            <span>Plan Duration</span>
+          </div>
+          <div class="config-price">
+            <select 
+              class="duration-select"
+              [(ngModel)]="selectedDuration"
+              (change)="onDurationChange()"
+              [ngModelOptions]="{standalone: true}">
+              <option *ngFor="let duration of availableDurations" [value]="duration">
+                {{ duration }} {{ duration === 1 ? 'Month' : 'Months' }}
+                {{ duration === 12 ? '(Annual)' : '' }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="duration-info">
+          <span class="duration-note">Selected: {{ selectedDuration }} {{ selectedDuration === 1 ? 'Month' : 'Months' }}</span>
+          <span class="duration-price">Total: ₹{{ getTotalPrice() }}</span>
+        </div>
+      </div>
+
+      <!-- Price Summary for Teacher -->
+      <div class="price-summary">
+        <div class="summary-header" (click)="togglePriceBreakdown()">
+          <h3>Order Summary</h3>
+          <i class="fas" [class.fa-chevron-down]="!showPriceBreakdown" [class.fa-chevron-up]="showPriceBreakdown"></i>
+        </div>
+        
+        <div class="summary-details" *ngIf="showPriceBreakdown">
+          <div class="summary-row">
+            <span>Base Plan ({{ minStudents }} Students)</span>
+            <span>₹{{ getBaseStudentPrice() }} / month</span>
+          </div>
+          <div class="summary-row" *ngIf="extraStudents > 0">
+            <span>{{ extraStudents }} Extra Students × ₹{{ extraStudentPrice }}</span>
+            <span>₹{{ extraStudents * extraStudentPrice }} / month</span>
+          </div>
+          <div class="summary-row highlight">
+            <span>Monthly Total</span>
+            <span class="price-highlight">₹{{ getMonthlyPrice() }}</span>
+          </div>
+          <div class="summary-row">
+            <span>Duration: {{ selectedDuration }} {{ selectedDuration === 1 ? 'Month' : 'Months' }}</span>
+            <span>× {{ selectedDuration }}</span>
+          </div>
+          <div class="summary-total">
+            <span>Total Amount</span>
+            <span class="total-price">₹{{ getTotalPrice() }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================== -->
+    <!-- STUDENT PLAN CUSTOMIZATION              -->
+    <!-- ======================================== -->
+    <div *ngIf="!isTeacherPlan() && !isInstitutePlan()">
+      <!-- Default Slots Display -->
+      <div class="default-slots">
+        <div class="slot-card default">
+          <div class="slot-icon">
+            <i class="fas fa-user"></i>
+          </div>
+          <div class="slot-info">
+            <h4>Default Teachers</h4>
+            <span class="count">{{ getDefaultTeachers() }}</span>
+            <p class="included">Included in base plan</p>
+          </div>
+        </div>
+        <div class="slot-card default">
+          <div class="slot-icon">
+            <i class="fas fa-user-graduate"></i>
+          </div>
+          <div class="slot-info">
+            <h4>Default Students</h4>
+            <span class="count">{{ getDefaultStudents() }}</span>
+            <p class="included">Included in base plan</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Extra Slots Configuration -->
+      <div class="extra-slots">
+        <h3>Add Extra Slots</h3>
+        
+        <!-- Extra Teachers -->
+        <div class="slot-config" *ngIf="getMaxExtraTeachers() > 0">
+          <div class="config-header">
+            <div class="config-label">
+              <i class="fas fa-user"></i>
+              <span>Extra Teachers</span>
+            </div>
+            <div class="config-price">
+              <span class="price">₹{{ selectedPlan?.extraTeacherPrice || 0 }}</span>
+              <span class="per-unit">per teacher</span>
+            </div>
+          </div>
+          <div class="config-control">
+            <button 
+              type="button" 
+              class="btn-decrement"
+              (click)="decrementExtra('teachers')"
+              [disabled]="customizationForm.get('extraTeachers')?.value <= 0">
+              <i class="fas fa-minus"></i>
+            </button>
+            <input 
+              type="number" 
+              formControlName="extraTeachers"
+              min="0"
+              [max]="getMaxExtraTeachers()"
+              class="slot-input">
+            <button 
+              type="button" 
+              class="btn-increment"
+              (click)="incrementExtra('teachers')"
+              [disabled]="customizationForm.get('extraTeachers')?.value >= getMaxExtraTeachers()">
+              <i class="fas fa-plus"></i>
+            </button>
+          </div>
+          <div class="config-extra-info">
+            <span class="total-slots">Total: {{ getDefaultTeachers() + (customizationForm.get('extraTeachers')?.value || 0) }} teachers</span>
+            <span class="extra-cost">+ ₹{{ getExtraTeacherPrice() }}</span>
+          </div>
+        </div>
+
+        <!-- Extra Students -->
+        <div class="slot-config" *ngIf="getMaxExtraStudents() > 0">
+          <div class="config-header">
+            <div class="config-label">
+              <i class="fas fa-user-graduate"></i>
+              <span>Extra Students</span>
+            </div>
+            <div class="config-price">
+              <span class="price">₹{{ selectedPlan?.extraStudentPrice || 0 }}</span>
+              <span class="per-unit">per student</span>
+            </div>
+          </div>
+          <div class="config-control">
+            <button 
+              type="button" 
+              class="btn-decrement"
+              (click)="decrementExtra('students')"
+              [disabled]="customizationForm.get('extraStudents')?.value <= 0">
+              <i class="fas fa-minus"></i>
+            </button>
+            <input 
+              type="number" 
+              formControlName="extraStudents"
+              min="0"
+              [max]="getMaxExtraStudents()"
+              class="slot-input">
+            <button 
+              type="button" 
+              class="btn-increment"
+              (click)="incrementExtra('students')"
+              [disabled]="customizationForm.get('extraStudents')?.value >= getMaxExtraStudents()">
+              <i class="fas fa-plus"></i>
+            </button>
+          </div>
+          <div class="config-extra-info">
+            <span class="total-slots">Total: {{ getDefaultStudents() + (customizationForm.get('extraStudents')?.value || 0) }} students</span>
+            <span class="extra-cost">+ ₹{{ getExtraStudentPrice() }}</span>
+          </div>
+        </div>
+
+        <!-- Duration Selection -->
+        <div class="slot-config duration-slot">
+          <div class="config-header">
+            <div class="config-label">
+              <i class="fas fa-calendar-alt"></i>
+              <span>Plan Duration</span>
+            </div>
+            <div class="config-price">
+              <select 
+                class="duration-select"
+                [(ngModel)]="selectedDuration"
+                (change)="calculateCustomization()"
+                [ngModelOptions]="{standalone: true}">
+                <option *ngFor="let duration of availableDurations" [value]="duration">
+                  {{ duration }} {{ duration === 1 ? 'Month' : 'Months' }}
+                  {{ duration === 12 ? '(Annual)' : '' }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="duration-info">
+            <span class="duration-note">Selected: {{ selectedDuration }} {{ selectedDuration === 1 ? 'Month' : 'Months' }}</span>
+            <span class="duration-price">Total: ₹{{ getTotalPrice() }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Price Summary -->
+      <div class="price-summary" *ngIf="customization">
+        <div class="summary-header" (click)="togglePriceBreakdown()">
+          <h3>Order Summary</h3>
+          <i class="fas" [class.fa-chevron-down]="!showPriceBreakdown" [class.fa-chevron-up]="showPriceBreakdown"></i>
+        </div>
+        
+        <div class="summary-details" *ngIf="showPriceBreakdown">
+          <div class="summary-row">
+            <span>Base Plan ({{ getDefaultTeachers() }} Teachers, {{ getDefaultStudents() }} Students)</span>
+            <span>₹{{ getBasePrice() }} / month</span>
+          </div>
+          <div class="summary-row" *ngIf="getExtraTeacherPrice() > 0">
+            <span>Extra Teachers ({{ customizationForm.get('extraTeachers')?.value || 0 }} × ₹{{ selectedPlan?.extraTeacherPrice || 0 }})</span>
+            <span>₹{{ getExtraTeacherPrice() }} / month</span>
+          </div>
+          <div class="summary-row" *ngIf="getExtraStudentPrice() > 0">
+            <span>Extra Students ({{ customizationForm.get('extraStudents')?.value || 0 }} × ₹{{ selectedPlan?.extraStudentPrice || 0 }})</span>
+            <span>₹{{ getExtraStudentPrice() }} / month</span>
+          </div>
+          <div class="summary-row highlight">
+            <span>Monthly Total</span>
+            <span class="price-highlight">₹{{ getMonthlyPrice() }}</span>
+          </div>
+          <div class="summary-row">
+            <span>Duration: {{ selectedDuration }} {{ selectedDuration === 1 ? 'Month' : 'Months' }}</span>
+            <span>× {{ selectedDuration }}</span>
+          </div>
+          <div class="summary-total">
+            <span>Total Amount</span>
+            <span class="total-price">₹{{ getTotalPrice() }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <div class="customizer-actions">
+    <button type="button" class="btn-back" (click)="onBack()">
+      <i class="fas fa-arrow-left"></i> Back to Plans
+    </button>
+    <button 
+      type="button" 
+      class="btn-proceed" 
+      (click)="onProceed()"
+      [disabled]="!canProceed()">
+      Continue <i class="fas fa-arrow-right"></i>
+    </button>
+  </div>
+</div>

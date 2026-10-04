@@ -1,0 +1,470 @@
+/* teacher-profile.component.scss */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+:host {
+    display: block;
+    font-family: 'Poppins', sans-serif;
+    background: #f5f7fa;
+    min-height: 100vh;
+}
+
+.dashboard-container {
+    min-height: 100vh;
+}
+
+/* Header Section */
+.header-section {
+    height: 400px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+.header-overlay {
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.9));
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.profile-header {
+    padding-top: 100px;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 40px;
+}
+
+.profile-avatar {
+    position: relative;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    border: 4px solid rgba(255, 255, 255, 0.2);
+    overflow: hidden;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .avatar-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 40%;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+
+        i {
+            font-size: 24px;
+            color: white;
+        }
+
+        input {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+    }
+
+    &:hover .avatar-overlay {
+        opacity: 1;
+    }
+}
+
+.profile-info {
+    h1 {
+        font-size: 2.5rem;
+        font-weight: 600;
+        margin-bottom: 15px;
+    }
+}
+
+.badges {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+
+    span {
+        padding: 6px 15px;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+}
+
+.role-badge {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.status-badge {
+    background: #dc3545;
+    color: white;
+
+    &.active {
+        background: #28a745;
+    }
+}
+
+.quick-stats {
+    display: flex;
+    gap: 30px;
+}
+
+.stat-item {
+    text-align: center;
+
+    i {
+        font-size: 24px;
+        margin-bottom: 5px;
+        color: #007bff;
+    }
+
+    span {
+        display: block;
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
+
+    label {
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.7);
+    }
+}
+
+/* Content Section */
+.content-section {
+    margin-top: -50px;
+    position: relative;
+    padding-bottom: 50px;
+}
+
+.profile-nav {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-tabs {
+    display: flex;
+    gap: 20px;
+}
+
+.tab-button {
+    background: none;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    color: #6c757d;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    i {
+        margin-right: 8px;
+    }
+
+    &.active {
+        color: #007bff;
+        font-weight: 500;
+    }
+
+    &:hover {
+        color: #007bff;
+    }
+}
+
+.edit-profile-btn {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 25px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    i {
+        margin-right: 8px;
+    }
+
+    &:hover {
+        background: #0056b3;
+        transform: translateY(-2px);
+    }
+}
+
+/* About Section */
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.info-card {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+
+    &:hover {
+        transform: translateY(-5px);
+    }
+}
+
+.info-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    background: #e7f1ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    i {
+        font-size: 20px;
+        color: #007bff;
+    }
+}
+
+.info-content {
+    label {
+        font-size: 0.9rem;
+        color: #6c757d;
+        margin-bottom: 5px;
+        display: block;
+    }
+
+    p {
+        font-size: 1.1rem;
+        font-weight: 500;
+        color: #2d3436;
+        margin: 0;
+    }
+}
+
+/* Enhanced Subject and Exam Sections */
+
+
+.exams-section {
+    padding: 40px;
+    background: linear-gradient(to bottom, #f8faff 0%, #ffffff 100%);
+}
+
+.exams-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 30px;
+    max-width: 1440px;
+    margin: 0 auto;
+}
+
+.exam-card {
+    background: white;
+    border-radius: 24px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease;
+
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+    }
+}
+
+.exam-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #f8f9fa;
+
+    h3 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #1a1f36;
+        margin: 0;
+    }
+
+    .exam-status {
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        background: #f8f9fa;
+        color: #6c757d;
+
+        &.active {
+            background: #e8f5e9;
+            color: #28a745;
+        }
+    }
+}
+
+.standards-list {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.standard-item {
+    background: #f8faff;
+    border-radius: 16px;
+    padding: 20px;
+    transition: all 0.3s ease;
+
+    &:hover {
+        background: #f0f4ff;
+    }
+}
+
+.standard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+
+    .standard-name {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #2d3436;
+    }
+
+    .subjects-count {
+        font-size: 0.9rem;
+        color: #6c757d;
+        background: white;
+        padding: 6px 12px;
+        border-radius: 15px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+}
+
+.subjects-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.subject-chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: white;
+    border-radius: 25px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0, 0, 0, 0.04);
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    &.active {
+        border-color: rgba(40, 167, 69, 0.3);
+        background: linear-gradient(to right, #f8fff9, white);
+
+        .subject-status {
+            background: #28a745;
+            color: white;
+        }
+    }
+
+    i {
+        font-size: 1rem;
+        color: #007bff;
+    }
+
+    .subject-name {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: #2d3436;
+    }
+
+    .subject-status {
+        font-size: 0.8rem;
+        padding: 4px 8px;
+        border-radius: 12px;
+        background: #f8f9fa;
+        color: #6c757d;
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .exams-section {
+        padding: 20px;
+    }
+
+    .exams-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .exam-card {
+        padding: 20px;
+    }
+
+    .exam-header h3 {
+        font-size: 1.3rem;
+    }
+
+    .subjects-list {
+        gap: 8px;
+    }
+
+    .subject-chip {
+        padding: 6px 12px;
+        
+        .subject-name {
+            font-size: 0.85rem;
+        }
+        
+        .subject-status {
+            display: none;
+        }
+    }
+}
+
+/* Optional: Add a nice scrollbar style */
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 6px;
+    border: 3px solid #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}

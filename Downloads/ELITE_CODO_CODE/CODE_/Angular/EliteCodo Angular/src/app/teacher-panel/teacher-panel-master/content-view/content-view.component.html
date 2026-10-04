@@ -1,0 +1,81 @@
+<section [ngStyle]="{ 'background-color':http.getBackgroundColor()}">
+
+    <div class="content-view-container">
+        <h2>Uploaded Content</h2>
+
+        <div class="filter-section">
+            <nz-select [(ngModel)]="selectedContentType" nzPlaceHolder="Filter by Content Type"
+                (ngModelChange)="filterContent()">
+                <nz-option *ngFor="let type of contentTypes" [nzValue]="type" [nzLabel]="type"></nz-option>
+            </nz-select>
+        </div>
+
+        <nz-table #contentTable [nzData]="filteredContent" [nzPageSize]="10" [nzShowPagination]="true">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Exam</th>
+                    <th>Standard</th>
+                    <th>Subject</th>
+                    <th>Chapter</th>
+                    <th>Topic</th>
+                    <th>Content Type</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let content of contentTable.data">
+                    <td>{{ content.uploadContentId }}</td>
+                    <td>{{ content.entranceExamMaster?.entranceExamName || 'N/A' }}</td>
+                    <td>{{ content.standardMaster?.standardName || 'N/A' }}</td>
+                    <td>{{ content.subjectMaster?.subjectName || 'N/A' }}</td>
+                    <td>{{ content.chapterMaster?.chapterName || 'N/A' }}</td>
+
+                    <td>{{ content.topicMaster?.topicName || 'N/A' }}</td>
+                    <td>{{ content.contentType }}</td>
+                    <td>{{ content.date }}</td>
+                    <td class="actions">
+                        <!-- Eye Icon for View -->
+                        <i class="fa fa-eye action-icon view-icon" title="View Details"
+                            (click)="viewContentDetails(content)"></i>
+
+                        <!-- Trash Icon for Delete -->
+                        <i class="fa fa-trash action-icon delete-icon" title="Delete Content"
+                            (click)="deleteContent(content)"></i>
+                    </td>
+                </tr>
+            </tbody>
+        </nz-table>
+
+        <!-- Modal for Viewing Content Details -->
+        <nz-modal [(nzVisible)]="isDetailModalVisible" [nzTitle]="'Content Details'" (nzOnCancel)="closeDetailModal()"
+            (nzOnOk)="closeDetailModal()">
+            <ng-container *nzModalContent>
+                <div *ngIf="selectedContent">
+                    <p><strong>Title:</strong> {{ selectedContent.title || 'N/A' }}</p>
+                    <p><strong>Description:</strong> {{ selectedContent.description || 'N/A' }}</p>
+                    <p><strong>Content Type:</strong> {{ selectedContent.contentType }}</p>
+                    <p><strong>File Type:</strong> {{ selectedContent.type || 'N/A' }}</p>
+                    <p><strong>Entrance Exam:</strong> {{ selectedContent.entranceExamMaster?.entranceExamName || 'N/A'
+                        }}</p>
+                    <p><strong>Standard:</strong> {{ selectedContent.standardMaster?.standardName || 'N/A' }}</p>
+                    <p><strong>Subject:</strong> {{ selectedContent.subjectMaster?.subjectName || 'N/A' }}</p>
+                    <p><strong>Chapter:</strong> {{ selectedContent.chapterMaster?.chapterName || 'N/A' }}</p>
+                    <p><strong>Topic:</strong> {{ selectedContent.topicMaster?.topicName || 'N/A' }}</p>
+                    <p><strong>Status:</strong> {{ selectedContent.status || 'N/A' }}</p>
+                    <p><strong>Date:</strong> {{ selectedContent.date || 'N/A' }}</p>
+                    <p *ngIf="selectedContent.url">
+                        <strong>File:</strong>
+                        <a *ngIf="isValidUrl(selectedContent.url)" [href]="selectedContent.url" target="_blank">
+                            View File
+                        </a>
+                        <span *ngIf="!isValidUrl(selectedContent.url)">No file available</span>
+                    </p>
+                </div>
+            </ng-container>
+        </nz-modal>
+
+    </div>
+
+</section>

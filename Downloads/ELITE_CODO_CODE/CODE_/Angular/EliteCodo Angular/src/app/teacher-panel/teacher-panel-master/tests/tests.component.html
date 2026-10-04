@@ -1,0 +1,438 @@
+<section class="test-dashboard" [ngStyle]="{ 'background-color': http.getBackgroundColor() }">
+  <!-- Header with Statistics -->
+  <div class="container-fluid py-4">
+    <div class="row mb-4">
+      <div class="col-12">
+        <h1 class="dashboard-title mb-0 fw-bold">Test Dashboard</h1>
+        <p class="text-muted">
+          Manage and monitor all your educational tests in one place
+        </p>
+      </div>
+    </div>
+
+    <!-- Quick Stats Cards -->
+    <div class="row mb-4">
+      <div class="col-md-3 col-sm-6 mb-3">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body d-flex">
+            <div class="rounded-circle d-flex align-items-center justify-content-center me-3" style="
+                width: 50px;
+                height: 50px;
+                background-color: rgba(24, 144, 255, 0.1);
+              ">
+              <i nz-icon nzType="file-done" nzTheme="outline" style="color: #1890ff; font-size: 24px"></i>
+            </div>
+            <div>
+              <h6 class="mb-1 text-muted">Total Tests</h6>
+              <h3 class="mb-0 fw-bold">{{ dashboardCount.totalTestCount }}</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6 mb-3">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body d-flex">
+            <div class="rounded-circle d-flex align-items-center justify-content-center me-3" style="
+                width: 50px;
+                height: 50px;
+                background-color: rgba(82, 196, 26, 0.1);
+              ">
+              <i nz-icon nzType="check-circle" nzTheme="outline" style="color: #52c41a; font-size: 24px"></i>
+            </div>
+            <div>
+              <h6 class="mb-1 text-muted">Completed</h6>
+              <h3 class="mb-0 fw-bold">
+                {{ dashboardCount.completedTestCount }}
+              </h3>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6 mb-3">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body d-flex">
+            <div class="rounded-circle d-flex align-items-center justify-content-center me-3" style="
+                width: 50px;
+                height: 50px;
+                background-color: rgba(250, 173, 20, 0.1);
+              ">
+              <i nz-icon nzType="clock-circle" nzTheme="outline" style="color: #faad14; font-size: 24px"></i>
+            </div>
+            <div>
+              <h6 class="mb-1 text-muted">Upcoming</h6>
+              <h3 class="mb-0 fw-bold">
+                {{ dashboardCount.upcomingTestCount }}
+              </h3>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6 mb-3" #courseSection>
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body d-flex">
+            <div class="rounded-circle d-flex align-items-center justify-content-center me-3" style="
+                width: 50px;
+                height: 50px;
+                background-color: rgba(245, 34, 45, 0.1);
+              ">
+              <i nz-icon nzType="user" nzTheme="outline" style="color: #f5222d; font-size: 24px"></i>
+            </div>
+            <div>
+              <h6 class="mb-1 text-muted">Students</h6>
+              <h3 class="mb-0 fw-bold">{{ dashboardCount.studentCount }}</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Test Creation Section -->
+    <div class="card border-0 shadow-sm mb-4">
+      <div class="card-header bg-white border-0 py-3">
+        <h4 class="mb-0 fw-bold">Create New Test</h4>
+      </div>
+      <div class="card-body">
+        <div class="row row-cols-1 row-cols-md-3 row-cols-lg-5 g-4">
+          <div class="col" *ngFor="let testType of testTypes">
+            <div class="card test-type-card h-100 shadow-sm border-0 rounded-3"
+              [style.borderLeft]="'4px solid ' + testType.color" (click)="openTestCreationModal(testType)">
+              <div class="card-body d-flex flex-column p-4">
+                <div class="d-flex align-items-center mb-3">
+                  <div class="rounded-circle d-flex align-items-center justify-content-center me-3" [ngStyle]="{
+                      'background-color': testType.color + '20',
+                      'width': '40px',
+                      'height': '40px'
+                    }">
+                    <i nz-icon [nzType]="testType.icon" nzTheme="outline" class="test-icon"
+                      [style.color]="testType.color"></i>
+                  </div>
+                  <h5 class="card-title mb-0 fw-semibold">
+                    {{ testType.title }}
+                  </h5>
+                </div>
+                <p class="card-text text-muted flex-grow-1 small">
+                  {{ testType.description }}
+                </p>
+                <div class="mt-auto">
+                  <button nz-button nzType="primary" nzBlock class="rounded-pill" [ngStyle]="{
+                      backgroundColor: testType.color,
+                      borderColor: testType.color
+                    }">
+                    <i nz-icon nzType="plus" nzTheme="outline" class="me-1"></i>
+                    Create Test
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Search and Filter Section -->
+    <div class="card border-0 shadow-sm mb-4">
+      <div class="card-header bg-white border-0 py-3">
+        <div class="d-flex justify-content-between align-items-center">
+          <h4 class="mb-0 fw-bold">Find Tests</h4>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-md-3">
+            <div class="form-floating">
+              <select class="form-select" id="testTypeSelect" aria-label="Test Type" [(ngModel)]="selectedTestType"
+                (change)="onTestTypeChange($event)">
+                <option value="All Types">All Types</option>
+                <option *ngFor="let type of testTypes" [value]="type.id">
+                  {{ type.title }}
+                </option>
+              </select>
+              <label for="testTypeSelect">Test Type</label>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-floating">
+              <select class="form-select" id="testSubjectSelect" aria-label="Test Subject" [(ngModel)]="selectedSubject"
+                (change)="onSubjectChange($event)">
+                <option value="All Subjects">All Subjects</option>
+                <option *ngFor="let subject of subjectsList" [value]="subject">
+                  {{ subject }}
+                </option>
+              </select>
+              <label for="testSubjectSelect">Subject</label>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="testSearch" placeholder="Search tests"
+                [(ngModel)]="searchText" (keyup.enter)="searchTests()" />
+              <label for="testSearch">Search</label>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <button class="btn btn-primary w-100 h-100" (click)="searchTests()"
+              style="background-color: #1890ff; border-color: #1890ff">
+              <i nz-icon nzType="search" nzTheme="outline" class="me-2"></i>
+              Search
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Upcoming Tests Section -->
+    <div class="card border-0 shadow-sm mb-4">
+      <div class="card-header bg-white border-0 py-3">
+        <div class="d-flex justify-content-between align-items-center">
+          <h4 class="mb-0 fw-bold">Upcoming Tests</h4>
+          <span class="text-muted">Showing {{ (upcomingCurrentPage - 1) * upcomingPageSize + 1 }} -
+            {{ Math.min(upcomingCurrentPage * upcomingPageSize, upcomingTests.length) }} of
+            {{ upcomingTests.length }} tests</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="row g-4">
+          <div class="col-md-4 col-lg-3" *ngFor="let item of paginatedUpcomingTests">
+            <div class="card h-100 border-0 shadow-sm position-relative">
+              <div class="position-absolute top-0 end-0 p-2">
+                <span class="badge bg-success rounded-pill px-3 py-2">Upcoming</span>
+              </div>
+              <div class="card-body p-4">
+                <div class="d-flex align-items-center mb-3">
+                  <div class="rounded-circle d-flex align-items-center justify-content-center me-3" style="
+                      width: 40px;
+                      height: 40px;
+                      background-color: #52c41a20;
+                    ">
+                    <i nz-icon nzType="read" nzTheme="outline" style="color: #52c41a"></i>
+                  </div>
+                  <h5 class="card-title mb-0 text-truncate" title="{{ item.testName }}">
+                    {{ item.testName }}
+                  </h5>
+                </div>
+                <div class="mb-3">
+                  <p class="mb-1 d-flex align-items-center">
+                    <i nz-icon nzType="calendar" nzTheme="outline" class="me-2 text-muted"></i>
+                    <span class="text-muted small">{{
+                      formatDate(item.testDate)
+                      }}</span>
+                  </p>
+                  <p class="mb-1 d-flex align-items-center">
+                    <i nz-icon nzType="clock-circle" nzTheme="outline" class="me-2 text-muted"></i>
+                    <span class="text-muted small">
+                      {{ formatTime(item.startTime) }} -
+                      {{ formatTime(item.endTime) }}
+                    </span>
+                  </p>
+                  <p class="mb-1 d-flex align-items-center">
+                    <i nz-icon nzType="book" nzTheme="outline" class="me-2 text-muted"></i>
+                    <span class="text-muted small">{{ getSubjectName(item.subjectName) }}</span>
+                  </p>
+                  <p class="mb-0 d-flex align-items-center">
+                    <i nz-icon nzType="tag" nzTheme="outline" class="me-2 text-muted"></i>
+                    <span class="text-muted small">{{ item.typeOfTest }}</span>
+                  </p>
+                </div>
+                <div class="d-grid gap-2">
+                  <button class="btn btn-outline-warning d-flex align-items-center justify-content-center" type="button"
+                      (click)="openRescheduleModal(item)" style="gap: 4px;">
+                      <i nz-icon nzType="calendar" nzTheme="outline" style="font-size: 14px; line-height: 1;"></i>
+                      Reschedule
+                  </button>
+                  <!-- Edit Button -->
+                  <button class="btn btn-outline-primary d-flex align-items-center justify-content-center" type="button"
+                      (click)="editTest(item.testId)" style="gap: 4px;">
+                      <i nz-icon nzType="edit" nzTheme="outline" style="font-size: 14px; line-height: 1;"></i>
+                      Edit Test
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 text-center" *ngIf="upcomingTests.length === 0">
+            <div class="py-5">
+              <i nz-icon nzType="inbox" nzTheme="outline" style="font-size: 48px; color: #d9d9d9"></i>
+              <p class="mt-3 text-muted">No upcoming tests available</p>
+              <button nz-button nzType="primary" class="mt-2" (click)="scrollToCourseSection()">
+                <i nz-icon nzType="plus" nzTheme="outline"></i>
+                Create Your First Test
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Upcoming Tests Pagination -->
+        <div class="row mt-4" *ngIf="upcomingTests.length > 0">
+          <div class="col-12">
+            <nav aria-label="Upcoming tests pagination">
+              <ul class="pagination justify-content-center">
+                <li class="page-item" [class.disabled]="upcomingCurrentPage === 1">
+                  <a class="page-link" (click)="changeUpcomingPage(upcomingCurrentPage - 1)">
+                    <i nz-icon nzType="left" nzTheme="outline"></i>
+                  </a>
+                </li>
+                <li class="page-item" *ngFor="let page of getUpcomingDisplayedPages()"
+                  [class.active]="page === upcomingCurrentPage">
+                  <a class="page-link" (click)="changeUpcomingPage(page)">{{ page }}</a>
+                </li>
+                <li class="page-item" [class.disabled]="upcomingCurrentPage === getUpcomingTotalPages()">
+                  <a class="page-link" (click)="changeUpcomingPage(upcomingCurrentPage + 1)">
+                    <i nz-icon nzType="right" nzTheme="outline"></i>
+                  </a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Completed Tests Section -->
+    <div class="card border-0 shadow-sm mb-4">
+      <div class="card-header bg-white border-0 py-3">
+        <div class="d-flex justify-content-between align-items-center">
+          <h4 class="mb-0 fw-bold">Completed Tests</h4>
+          <span class="text-muted">Showing {{ (completedCurrentPage - 1) * completedPageSize + 1 }} -
+            {{ Math.min(completedCurrentPage * completedPageSize, completedTests.length) }} of
+            {{ completedTests.length }} tests</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="row g-4">
+          <div class="col-md-4 col-lg-3" *ngFor="let item of paginatedCompletedTests">
+            <div class="card h-100 border-0 shadow-sm position-relative">
+              <div class="position-absolute top-0 end-0 p-2">
+                <span class="badge bg-secondary rounded-pill px-3 py-2">Completed</span>
+              </div>
+              <div class="card-body p-4">
+                <div class="d-flex align-items-center mb-3">
+                  <div class="rounded-circle d-flex align-items-center justify-content-center me-3" style="
+                      width: 40px;
+                      height: 40px;
+                      background-color: #f5222d20;
+                    ">
+                    <i nz-icon nzType="file-text" nzTheme="outline" style="color: #f5222d"></i>
+                  </div>
+                  <h5 class="card-title mb-0 text-truncate" title="{{ item.testName }}">
+                    {{ item.testName }}
+                  </h5>
+                </div>
+                <div class="mb-3">
+                  <p class="mb-1 d-flex align-items-center">
+                    <i nz-icon nzType="calendar" nzTheme="outline" class="me-2 text-muted"></i>
+                    <span class="text-muted small">{{
+                      formatDate(item.testDate)
+                      }}</span>
+                  </p>
+                  <p class="mb-1 d-flex align-items-center">
+                    <i nz-icon nzType="clock-circle" nzTheme="outline" class="me-2 text-muted"></i>
+                    <span class="text-muted small">
+                      {{ formatTime(item.startTime) }} -
+                      {{ formatTime(item.endTime) }}
+                    </span>
+                  </p>
+                  <p class="mb-1 d-flex align-items-center">
+                    <i nz-icon nzType="book" nzTheme="outline" class="me-2 text-muted"></i>
+                    <span class="text-muted small">{{ getSubjectName(item.subjectName) }}</span>
+                  </p>
+                  <p class="mb-0 d-flex align-items-center">
+                    <i nz-icon nzType="tag" nzTheme="outline" class="me-2 text-muted"></i>
+                    <span class="text-muted small">{{ item.typeOfTest }}</span>
+                  </p>
+                </div>
+                <!-- Edit Button for completed tests -->
+                <div class="d-grid gap-2 mt-2">
+                  <button class="btn btn-outline-primary d-flex align-items-center justify-content-center" type="button"
+                      (click)="editTest(item.testId)" style="gap: 4px;">
+                      <i nz-icon nzType="edit" nzTheme="outline" style="font-size: 14px; line-height: 1;"></i>
+                      Edit Test
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 text-center" *ngIf="completedTests.length === 0">
+            <div class="py-5">
+              <i nz-icon nzType="inbox" nzTheme="outline" style="font-size: 48px; color: #d9d9d9"></i>
+              <p class="mt-3 text-muted">No completed tests available</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Completed Tests Pagination -->
+        <div class="row mt-4" *ngIf="completedTests.length > 0">
+          <div class="col-12">
+            <nav aria-label="Completed tests pagination">
+              <ul class="pagination justify-content-center">
+                <li class="page-item" [class.disabled]="completedCurrentPage === 1">
+                  <a class="page-link" (click)="changeCompletedPage(completedCurrentPage - 1)">
+                    <i nz-icon nzType="left" nzTheme="outline"></i>
+                  </a>
+                </li>
+                <li class="page-item" *ngFor="let page of getCompletedDisplayedPages()"
+                  [class.active]="page === completedCurrentPage">
+                  <a class="page-link" (click)="changeCompletedPage(page)">{{ page }}</a>
+                </li>
+                <li class="page-item" [class.disabled]="completedCurrentPage === getCompletedTotalPages()">
+                  <a class="page-link" (click)="changeCompletedPage(completedCurrentPage + 1)">
+                    <i nz-icon nzType="right" nzTheme="outline"></i>
+                  </a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Reschedule Modal Template -->
+<ng-template #rescheduleModal>
+  <div class="modal-body p-4">
+    <div class="mb-3" *ngIf="selectedTest">
+      <label class="form-label fw-bold">Test Name</label>
+      <p class="form-control-plaintext">{{ selectedTest.testName }}</p>
+    </div>
+    <div class="mb-3" *ngIf="selectedTest">
+      <label class="form-label fw-bold">Current Schedule</label>
+      <p class="form-control-plaintext">
+        {{ formatDate(selectedTest.testDate) }} |
+        {{ formatTime(selectedTest.startTime) }} - {{ formatTime(selectedTest.endTime) }}
+      </p>
+    </div>
+    <hr>
+    <div class="mb-3">
+      <label for="testDate" class="form-label fw-bold">New Test Date <span class="text-danger">*</span></label>
+      <input type="date" class="form-control" id="testDate" [(ngModel)]="rescheduleForm.testDate" [min]="todayDate"
+        required>
+    </div>
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label for="startTime" class="form-label fw-bold">New Start Time <span class="text-danger">*</span></label>
+        <input type="time" class="form-control" id="startTime" [(ngModel)]="rescheduleForm.startTime" required>
+      </div>
+      <div class="col-md-6">
+        <label for="endTime" class="form-label fw-bold">New End Time <span class="text-danger">*</span></label>
+        <input type="time" class="form-control" id="endTime" [(ngModel)]="rescheduleForm.endTime" required>
+      </div>
+    </div>
+    <div class="alert alert-warning" *ngIf="rescheduleForm.startTime && rescheduleForm.endTime && !isValidTimeRange()">
+      <i nz-icon nzType="warning" nzTheme="outline" class="me-2"></i>
+      End time must be after start time
+    </div>
+    <div class="alert alert-warning" *ngIf="rescheduleForm.testDate && rescheduleForm.testDate < todayDate">
+      <i nz-icon nzType="warning" nzTheme="outline" class="me-2"></i>
+      Test date cannot be in the past
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="closeRescheduleModal()">
+      Cancel
+    </button>
+    <button type="button" class="btn btn-primary" (click)="confirmReschedule()" [disabled]="!isRescheduleFormValid()">
+      <i nz-icon nzType="calendar" nzTheme="outline" class="me-1"></i>
+      Reschedule Test
+    </button>
+  </div>
+</ng-template>

@@ -1,0 +1,127 @@
+<section>
+    <div class="exam-results-container">
+        <div class="content">
+            <nz-card nzTitle="Your Exam Results" [nzLoading]="loading">
+                <ng-container *ngIf="examResults.length > 0; else noResults">
+                    <nz-table #basicTable [nzData]="examResults" [nzPageSize]="10">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Exam Name</th>
+                                <th>Semester</th>
+                                <th>Date</th>
+                                <th>Overall Marks</th>
+                                <th>Percentage</th>
+                                <th>Grade</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let result of basicTable.data; let i = index">
+                                <td>{{ i + 1 }}</td>
+                                <td>{{ result.name }}</td>
+                                <td>{{ result.semester }}</td>
+                                <td>{{ result.date | date:'mediumDate' }}</td>
+                                <td>{{ result.obtainedMarks }}/{{ result.totalMarks }}</td>
+                                <td>{{ result.percentage | number:'1.2-2' }}%</td>
+                                <td>{{ result.grade }}</td>
+                                <td>
+                                    <nz-tag [nzColor]="getStatusColor(result.status)">
+                                        {{ result.status | titlecase }}
+                                    </nz-tag>
+                                </td>
+                                <td>
+                                    <button nz-button nzType="primary" (click)="viewResult(result)" nzSize="small">
+                                        <i nz-icon nzType="eye"></i> View
+                                    </button>
+                                    <button nz-button nzType="default" (click)="routTOOverlookofExam(result)"
+                                        nzSize="small" class="ml-2">
+                                        <i nz-icon nzType="eye"></i> See Test Overlook
+                                    </button>
+                                    <button nz-button nzType="default" (click)="seeImportantQuestions(result)"
+                                        nzSize="small" class="ml-2">
+                                        <i nz-icon nzType="star"></i> Important Questions
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </ng-container>
+                <ng-template #noResults>
+                    <nz-empty nzDescription="No exam results available yet"></nz-empty>
+                </ng-template>
+            </nz-card>
+        </div>
+
+        <nz-modal [(nzVisible)]="isResultModalVisible" nzTitle="Detailed Exam Result" (nzOnCancel)="handleModalCancel()"
+            [nzFooter]="null" nzWidth="800px" *ngIf="selectedResult">
+            <ng-container *nzModalContent>
+                <div class="result-detail-header">
+                    <h2>{{ selectedResult.name }}</h2>
+                    <p>Semester: {{ selectedResult.semester }}</p>
+                    <p>Date: {{ selectedResult.date | date:'fullDate' }}</p>
+                </div>
+
+                <nz-divider></nz-divider>
+
+                <div class="result-statistics">
+                    <h3>Overall Performance</h3>
+                    <nz-descriptions nzBordered [nzColumn]="{ xxl: 3, xl: 3, lg: 3, md: 2, sm: 1, xs: 1 }">
+                        <nz-descriptions-item nzTitle="Total Marks">{{ selectedResult.totalMarks
+                            }}</nz-descriptions-item>
+                        <nz-descriptions-item nzTitle="Obtained Marks">{{ selectedResult.obtainedMarks
+                            }}</nz-descriptions-item>
+                        <nz-descriptions-item nzTitle="Percentage">{{ selectedResult.percentage | number:'1.2-2'
+                            }}%</nz-descriptions-item>
+                        <nz-descriptions-item nzTitle="Grade">{{ selectedResult.grade }}</nz-descriptions-item>
+                        <nz-descriptions-item nzTitle="Status">
+                            <nz-tag [nzColor]="getStatusColor(selectedResult.status)">
+                                {{ selectedResult.status | titlecase }}
+                            </nz-tag>
+                        </nz-descriptions-item>
+                    </nz-descriptions>
+                </div>
+
+                <nz-divider></nz-divider>
+
+                <div class="subject-results">
+                    <h3>Subject-wise Performance</h3>
+                    <nz-table #subjectTable [nzData]="selectedResult.subjectResults" [nzShowPagination]="false"
+                        nzSize="middle">
+                        <thead>
+                            <tr>
+                                <th>Subject</th>
+                                <th>Total Marks</th>
+                                <th>Obtained Marks</th>
+                                <th>Percentage</th>
+                                <th>Grade</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let subject of subjectTable.data">
+                                <td>{{ subject.subject }}</td>
+                                <td>{{ subject.totalMarks }}</td>
+                                <td>{{ subject.obtainedMarks }}</td>
+                                <td>{{ subject.percentage | number:'1.2-2' }}%</td>
+                                <td>{{ subject.grade }}</td>
+                                <td>
+                                    <nz-tag [nzColor]="getStatusColor(subject.status)">
+                                        {{ subject.status | titlecase }}
+                                    </nz-tag>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </div>
+
+                <div class="result-actions mt-4">
+                    <button nz-button nzType="default" class="ml-2" (click)="handleModalCancel()">
+                        <i nz-icon nzType="close"></i> Close
+                    </button>
+                </div>
+            </ng-container>
+        </nz-modal>
+    </div>
+</section>

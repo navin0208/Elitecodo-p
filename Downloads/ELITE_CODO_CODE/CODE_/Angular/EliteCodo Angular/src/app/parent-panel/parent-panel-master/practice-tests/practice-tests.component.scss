@@ -1,0 +1,189 @@
+section {
+    position: absolute;
+    width: 100%;
+}
+/* practice-test-report.component.scss */
+.practice-test-container {
+    min-height: 100vh;
+    // background: #f8f9fa;
+    
+    .hero-section {
+      background: linear-gradient(135deg, #1890ff 0%, #096dd9 100%);
+      padding: 40px;
+      color: white;
+      border-radius: 0 0 20px 20px;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  
+      .hero-title {
+        font-size: 32px;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: white;
+      }
+  
+      .hero-subtitle {
+        font-size: 16px;
+        opacity: 0.9;
+        margin-bottom: 24px;
+      }
+  
+      .filter-container {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 16px;
+        border-radius: 12px;
+        backdrop-filter: blur(10px);
+      }
+    }
+  
+    .content-section {
+      padding: 0 24px 24px;
+  
+      .metric-card {
+        height: 100%;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        
+        &:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+  
+        .metric-content {
+          display: flex;
+          align-items: center;
+  
+          .metric-icon {
+            font-size: 32px;
+            margin-right: 20px;
+            padding: 16px;
+            border-radius: 12px;
+            
+            i {
+              color: #1890ff;
+            }
+          }
+  
+          .metric-details {
+            flex: 1;
+  
+            h3 {
+              font-size: 16px;
+              margin-bottom: 12px;
+              color: #8c8c8c;
+            }
+  
+            .big-number {
+              font-size: 36px;
+              font-weight: 600;
+              color: #262626;
+              margin-bottom: 8px;
+            }
+  
+            .metric-trend {
+              font-size: 14px;
+              margin: 0;
+  
+              &.positive {
+                color: #52c41a;
+              }
+  
+              &.negative {
+                color: #f5222d;
+              }
+  
+              &.neutral {
+                color: #faad14;
+              }
+  
+              i {
+                margin-right: 4px;
+              }
+            }
+          }
+        }
+      }
+  
+      .chart-card {
+        border-radius: 12px;
+        
+        .chart {
+          height: 300px;
+        }
+  
+        ::ng-deep .ant-card-head {
+          padding: 16px 24px;
+          border-bottom: 1px solid #f0f0f0;
+  
+          .ant-card-head-title {
+            font-size: 16px;
+            font-weight: 600;
+          }
+        }
+      }
+  
+      .reports-card {
+        margin-top: 24px;
+        border-radius: 12px;
+  
+        .test-row {
+          td {
+            padding: 16px 24px;
+          }
+  
+          .test-name {
+            font-weight: 500;
+            color: #262626;
+          }
+  
+          .performance-cell {
+            width: 200px;
+  
+            small {
+              display: block;
+              color: #8c8c8c;
+              margin-top: 4px;
+            }
+          }
+  
+          .status-tag {
+            padding: 4px 12px;
+            border-radius: 4px;
+  
+            i {
+              margin-right: 4px;
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  // Custom styling for select and date picker in hero section
+  ::ng-deep {
+    .hero-section {
+      .ant-select {
+        min-width: 160px;
+        
+        .ant-select-selector {
+          background: rgba(255, 255, 255, 0.2) !important;
+          border: none !important;
+          color: white !important;
+        }
+      }
+  
+      .ant-picker {
+        background: rgba(255, 255, 255, 0.2);
+        border: none;
+        color: white;
+  
+        input {
+          color: white;
+        }
+  
+        .ant-picker-separator, .ant-picker-suffix {
+          color: rgba(255, 255, 255, 0.8);
+        }
+      }
+    }
+  }

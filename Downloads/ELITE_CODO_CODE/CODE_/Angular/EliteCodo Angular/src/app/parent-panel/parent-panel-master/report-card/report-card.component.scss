@@ -1,0 +1,247 @@
+// Variables
+$primary-color: #1890ff;
+$success-color: #52c41a;
+$warning-color: #faad14;
+$error-color: #ff4d4f;
+$text-primary: #262626;
+$text-secondary: #595959;
+$border-radius: 8px;
+$box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+$transition: all 0.3s ease;
+
+section {
+    position: absolute;
+    width: 100%;
+    min-height: 100vh;
+    padding: 2rem;
+
+    .report-card-container {
+        max-width: 1400px;
+        margin: 0 auto;
+
+        .main-card {
+            background: white;
+            border-radius: $border-radius;
+            box-shadow: $box-shadow;
+
+            &:hover {
+                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+                transform: translateY(-2px);
+                transition: $transition;
+            }
+        }
+    }
+
+    // Term Selector Styling
+    .term-selector {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 2rem;
+
+        ::ng-deep .ant-radio-group {
+            background: #f0f2f5;
+            padding: 0.5rem;
+            border-radius: $border-radius;
+
+            .ant-radio-button-wrapper {
+                border: none;
+                background: transparent;
+
+                &-checked {
+                    background: white;
+                    box-shadow: $box-shadow;
+                    color: $primary-color;
+                    font-weight: 600;
+                }
+            }
+        }
+    }
+
+    // Header Styling
+    .header {
+        text-align: center;
+        padding: 2rem 0;
+        background: linear-gradient(120deg, #1890ff11 0%, #52c41a11 100%);
+        border-radius: $border-radius;
+        margin-bottom: 2rem;
+
+        h1 {
+            color: $text-primary;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+
+            @media (max-width: 768px) {
+                font-size: 2rem;
+            }
+        }
+
+        h2 {
+            color: $text-secondary;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .logo {
+            margin: 1rem 0;
+
+            i {
+                color: $primary-color;
+                font-size: 3rem;
+            }
+        }
+    }
+
+    // Student Info Cards
+    .student-info {
+        margin-bottom: 2rem;
+
+        .info-card {
+            text-align: center;
+            transition: $transition;
+
+            &:hover {
+                transform: translateY(-5px);
+            }
+
+            .info-icon {
+                font-size: 2.5rem;
+                color: $primary-color;
+                margin-bottom: 1rem;
+            }
+
+            h3 {
+                color: $text-primary;
+                font-size: 1.25rem;
+                font-weight: 600;
+                margin-bottom: 0.5rem;
+            }
+
+            p {
+                color: $text-secondary;
+                margin: 0;
+            }
+        }
+    }
+
+    // Charts Section
+    .charts-section {
+        margin-bottom: 2rem;
+
+        .chart-card {
+            background: white;
+            border-radius: $border-radius;
+
+            ::ng-deep .ant-card-head {
+                border-bottom: 2px solid #f0f2f5;
+                padding: 0 1.5rem;
+            }
+
+            .chart {
+                height: 400px;
+                padding: 1rem;
+            }
+        }
+    }
+
+    // Subjects Table
+    .subjects-card {
+        margin-bottom: 2rem;
+
+        ::ng-deep {
+            .ant-table {
+                border-radius: $border-radius;
+                overflow: hidden;
+
+                th {
+                    background: #fafafa;
+                    font-weight: 600;
+                }
+
+                .subject-row {
+                    transition: $transition;
+
+                    &:hover {
+                        background: #e6f7ff;
+                    }
+                }
+
+                .ant-progress {
+                    margin: 0;
+
+                    &-bg {
+                        height: 12px !important;
+                        border-radius: 6px;
+                    }
+                }
+
+                .ant-tag {
+                    border: none;
+                    padding: 4px 12px;
+                    border-radius: 4px;
+                }
+            }
+        }
+    }
+
+    // Summary Section
+    .summary-section {
+        padding: 2rem;
+        background: #fafafa;
+        border-radius: $border-radius;
+        margin-top: 2rem;
+
+        .statistic-card {
+            text-align: center;
+            padding: 1.5rem;
+            background: white;
+            border-radius: $border-radius;
+            transition: $transition;
+
+            &:hover {
+                transform: translateY(-5px);
+                box-shadow: $box-shadow;
+            }
+        }
+
+        .download-col {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            button {
+                width: 100%;
+                height: 48px;
+                font-size: 1.1rem;
+                border-radius: $border-radius;
+
+                i {
+                    margin-right: 8px;
+                }
+            }
+        }
+    }
+}
+
+// Responsive Adjustments
+@media (max-width: 768px) {
+    section {
+        padding: 1rem;
+
+        .info-col {
+            margin-bottom: 1rem;
+        }
+
+        .charts-section .chart {
+            height: 300px;
+        }
+
+        .summary-section {
+            padding: 1rem;
+
+            .ant-col {
+                margin-bottom: 1rem;
+            }
+        }
+    }
+}

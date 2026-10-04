@@ -1,0 +1,434 @@
+<section [ngStyle]="{ 'background-color':http.getBackgroundColor()}">
+    <div class="container mt-4">
+        <!-- Header Stats Cards -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <nz-card class="stats-card" [nzBordered]="false">
+                    <div class="d-flex align-items-center">
+                        <div class="stats-icon" style="background: #e6f7ff;">
+                            <i nz-icon nzType="team" nzTheme="outline" style="color: #1890ff;"></i>
+                        </div>
+                        <div class="ms-3">
+                            <p class="mb-0 text-muted">Total Students</p>
+                            <h2 class="mb-0">{{dashboardCount.studentCount}}</h2>
+                        </div>
+                    </div>
+                </nz-card>
+            </div>
+            <div class="col-md-3">
+                <nz-card class="stats-card" [nzBordered]="false">
+                    <div class="d-flex align-items-center">
+                        <div class="stats-icon" style="background: #f6ffed;">
+                            <i nz-icon nzType="user" nzTheme="outline" style="color: #52c41a;"></i>
+                        </div>
+                        <div class="ms-3">
+                            <p class="mb-0 text-muted">Total Parents</p>
+                            <h2 class="mb-0">{{dashboardCount.parentCount}}</h2>
+                        </div>
+                    </div>
+                </nz-card>
+            </div>
+            <div class="col-md-3">
+                <nz-card class="stats-card" [nzBordered]="false">
+                    <div class="d-flex align-items-center">
+                        <div class="stats-icon" style="background: #fff7e6;">
+                            <i nz-icon nzType="book" nzTheme="outline" style="color: #fa8c16;"></i>
+                        </div>
+                        <div class="ms-3">
+                            <p class="mb-0 text-muted">Total Questions</p>
+                            <h2 class="mb-0">{{dashboardCount.questionCount}}</h2>
+                        </div>
+                    </div>
+                </nz-card>
+            </div>
+            <div class="col-md-3">
+                <nz-card class="stats-card" [nzBordered]="false">
+                    <div class="d-flex align-items-center">
+                        <div class="stats-icon" style="background: #f9f0ff;">
+                            <i nz-icon nzType="calendar" nzTheme="outline" style="color: #722ed1;"></i>
+                        </div>
+                        <div class="ms-3">
+                            <p class="mb-0 text-muted">Test</p>
+                            <h2 class="mb-0">{{dashboardCount.testCount}}</h2>
+                        </div>
+                    </div>
+                </nz-card>
+            </div>
+        </div>
+
+        <nz-card class="shadow-lg main-card">
+            <nz-tabset class="custom-tabs">
+                <!-- student Tab -->
+                <nz-tab nzTitle="Students Management">
+                    <div class="tab-content p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h3 class="mb-0">Student List</h3>
+                            <input class="w-25" nz-input placeholder="Search students..." [(ngModel)]="searchQuery"
+                                (input)="applyFilter()" />
+
+                            <button nz-button nzType="primary" (click)="openDialogWithTemplateRef(myDialog)">
+                                <i nz-icon nzType="user-add"></i>Add New Student
+                            </button>
+                            <!-- <button nz-button nzType="primary" (click)="openDialogWithTemplateRef(myDialog)">
+                                <i nz-icon nzType="user-add"></i>Add New Student
+                            </button> -->
+                        </div>
+
+                        <!-- student Table -->
+                        <nz-table #studentTable [nzData]="filteredStudentData" [nzBordered]="false"
+                            [nzOuterBordered]="false" [nzPageSize]="5" [nzPageIndex]="1"
+                            [nzTotal]="filteredStudentData.length" [nzFrontPagination]="true" [nzShowPagination]="true"
+                            [nzPaginationPosition]="'bottom'">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Parent Status</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <!-- <th>Join Date</th> -->
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let data of studentTable.data">
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <nz-avatar nzIcon="user" [nzSize]="5"></nz-avatar>
+                                            <span class="ms-2">{{ data.firstName +" "+data.lastName }}</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <p [ngClass]="{'status': true, 'activeStatus': data.parentStatus === 'Completed', 'inactiveStatus': data.parentStatus === 'Pending'}"
+                                            class="status text-center py-2" style="position: relative;top: 8px;">
+                                            <strong>{{
+                                                data.parentStatus
+                                                ===
+                                                'Completed' ? 'Completed' : 'In-Complete' }}</strong>
+                                        </p>
+                                    </td>
+                                    <td>{{ data.email }}</td>
+                                    <td>{{ data.mobile }}</td>
+                                    <td>
+                                        <nz-tag [nzColor]="data.status === 'Active' ? 'success' : 'error'">
+                                            {{ data.status }}
+                                        </nz-tag>
+                                    </td>
+                                    <td>
+
+                                        <button style="color: #1976d2;" type="button" class="btn " title="Edit student"
+                                            (click)="edit('student',data.id,myDialog)">
+                                            <i class="fa fa-pencil-square"></i>
+                                        </button>
+                                        <button style="color: #17a2b8;" type="button" class="btn mx-1"
+                                            title="Access Management" (click)="seeStandard(data.id)">
+                                            <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                        </button>
+                                        <button style="color: #3bd643;" type="button" class="btn " title="Manage Parent"
+                                            (click)="seeParent(data.id,data.firstName,data.lastName,data.parentStatus)">
+                                            <i class="fa fa-address-card" aria-hidden="true"></i>
+                                        </button>
+                                        <button *ngIf="data.status === 'inactive'"
+                                            style="background: #28a745;color: white;" type="button" class="btn mx-1"
+                                            title="Activate Teacher" (click)="updateStatus(data.id, true)">
+                                            <i class="fa fa-check-circle" aria-hidden="true"></i> Activate
+                                        </button>
+
+                                        <button *ngIf="data.status === 'Active'"
+                                            style="background: #dc3545;color: white;" type="button" class="btn mx-1"
+                                            title="Deactivate Teacher" (click)="updateStatus(data.id, false)">
+                                            <i class="fa fa-times-circle" aria-hidden="true"></i> Deactivate
+                                        </button>
+                                        <button style="color: #ce0707;" type="button" class="btn mx-1"
+                                            title="Delete student" (click)="deleteStudent(data.id)">
+                                            <i class="fa fa-trash" aria-hidden="true"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </nz-table>
+                    </div>
+                </nz-tab>
+
+            </nz-tabset>
+
+            <ng-template #myDialog>
+                <div class="">
+                    <span>
+                        <h1 matDialogTitle>Student Registration </h1>
+
+                    </span>
+                    <button type="button" class="btn-close float-end mr-4" aria-label="Close"
+                        (click)="close()"></button>
+                </div>
+                <span></span>
+                <mat-dialog-content style="max-height: 100vh; overflow: auto;">
+
+                    <div class="container-fluid">
+
+
+                        <form [formGroup]="regiStrationForm">
+                            <div class="row m-2">
+
+                                <!-- first Name -->
+                                <div class="col-md-6 form-group">
+                                    <label for=""><strong>first Name</strong></label>
+                                    <input formControlName="firstName" type="text"
+                                        [ngClass]="{ 'is-invalid': regiStrationForm.get('firstName')?.touched && regiStrationForm.get('firstName')?.invalid }"
+                                        class="form-control" name="" id="">
+                                    <span class="invalid-feedback">
+                                        <span *ngIf="regiStrationForm.get('firstName')?.hasError('pattern');">First Name
+                                            is
+                                            not
+                                            valid</span>
+                                        <span *ngIf="regiStrationForm.get('firstName')?.hasError('required')">First Name
+                                            is required
+                                        </span>
+                                    </span>
+                                </div>
+
+                                <!-- last Name -->
+                                <div class="col-md-6 form-group">
+                                    <label for=""><strong>last Name</strong></label>
+                                    <input formControlName="lastName" type="text"
+                                        [ngClass]="{ 'is-invalid': regiStrationForm.get('lastName')?.touched && regiStrationForm.get('lastName')?.invalid }"
+                                        class="form-control" name="" id="">
+                                    <span class="invalid-feedback">
+                                        <span *ngIf="regiStrationForm.get('lastName')?.hasError('pattern');">Last Name
+                                            is
+                                            not
+                                            valid</span>
+                                        <span *ngIf="regiStrationForm.get('lastName')?.hasError('required')">Last Name
+                                            is required
+                                        </span>
+                                    </span>
+                                </div>
+
+                                <!-- phone -->
+                                <div class="col-md-6 form-group">
+                                    <label for=""><strong>phone</strong></label>
+                                    <input formControlName="mobile" type="text" inputmode="numeric"
+                                        onkeypress='return event.charCode>=48 && event.charCode <=57' minlength="10"
+                                        maxlength="10"
+                                        [ngClass]="{ 'is-invalid': regiStrationForm.get('mobile')?.touched && regiStrationForm.get('mobile')?.invalid }"
+                                        class="form-control" name="" id="">
+
+                                    <span class="invalid-feedback">
+                                        <span *ngIf="regiStrationForm.get('mobile')?.hasError('pattern');">Please enter
+                                            a valid
+                                            mobile
+                                            number consisting of numeric digits only. </span>
+                                        <span *ngIf="regiStrationForm.get('mobile')?.hasError('required');">mobile
+                                            number is
+                                            required</span>
+                                        <span
+                                            *ngIf="regiStrationForm.get('mobile')?.hasError('minlength') && !regiStrationForm.get('mobile')?.hasError('pattern');">
+                                            Please enter a valid mobile number with at least {{
+                                            regiStrationForm.get('mobile')?.getError('minlength').requiredLength }}
+                                            digits.
+                                        </span>
+                                        <span
+                                            *ngIf="regiStrationForm.get('mobile')?.hasError('maxlength') && !regiStrationForm.get('mobile')?.hasError('pattern');">
+                                            Please enter a valid phone number with at most {{
+                                            regiStrationForm.get('phone')?.getError('maxlength').requiredLength }}
+                                            digits.
+                                        </span>
+                                    </span>
+                                </div>
+
+                                <!-- address -->
+                                <div class="col-md-6 form-group">
+                                    <label for=""><strong>Address</strong></label>
+                                    <textarea class="form-control" formControlName="address" placeholder="Enter Address"
+                                        cols="15" rows="2"
+                                        [ngClass]="{ 'is-invalid': regiStrationForm.get('address')?.touched && regiStrationForm.get('address')?.invalid }"></textarea>
+
+                                    <span class="invalid-feedback">
+                                        <span *ngIf="regiStrationForm.get('address')?.hasError('required')">Address is
+                                            required
+                                        </span>
+                                    </span>
+                                </div>
+
+                                <!-- Profile Photo -->
+                                <div class="col-md-6 form-group">
+                                    <div class="row">
+                                        <label for=""><strong>Profile Photo</strong></label>
+                                        <div class="col-9">
+                                            <input formControlName="profilePicture" type="file"
+                                                (change)="handleFileInput($event, 'profilePicture')"
+                                                [ngClass]="{ 'is-invalid': regiStrationForm.get('profilePicture')?.touched && regiStrationForm.get('profilePicture')?.invalid }"
+                                                class="form-control" id="">
+                                            <span class="invalid-feedback">
+                                                <span
+                                                    *ngIf="regiStrationForm.get('profilePicture')?.hasError('required')"
+                                                    class="text-danger">
+                                                    Profile Picture is required
+                                                </span>
+                                            </span>
+                                        </div>
+                                        <div class="col-3">
+                                            <img *ngIf="regiStrationForm.get('profilePicture')?.value"
+                                                [src]="regiStrationForm.get('profilePicture')?.value" height="40"
+                                                width="40">
+                                            <img *ngIf="!regiStrationForm.get('profilePicture')?.value"
+                                                src="../../../../assets/images/image-not-found.png"
+                                                style="height: 50px; width: 70px;" alt="Image not found">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Password -->
+
+                                <label class="d-block" style="color: rgb(161, 154, 154); "
+                                    *ngIf="passwordStatus">Password should be
+                                    atleast 8 characters
+                                    with atleast one number and one special character.</label>
+
+                                <div class="col-md-6 form-group-wrapper" *ngIf="passwordStatus">
+                                    <div class="form-group">
+                                        <label for="password"><strong>Password</strong></label>
+                                        <div class="input-group">
+                                            <input [type]="showPassword ? 'text' : 'password'"
+                                                formControlName="password"
+                                                [ngClass]="{ 'is-invalid': regiStrationForm.get('password')?.touched && regiStrationForm.get('password')?.invalid }"
+                                                class="form-control" id="password">
+                                            <span class="input-group-text toggle-password"
+                                                (click)="togglePasswordVisibility('password')">
+                                                <i class="material-symbols-outlined">{{ showPassword ? 'visibility_off'
+                                                    :
+                                                    'visibility'
+                                                    }}</i>
+                                            </span>
+                                        </div>
+                                        <div class="invalid-feedback-container">
+                                            <small class="text-danger"
+                                                *ngIf="regiStrationForm.get('password')?.touched">
+                                                <span *ngIf="regiStrationForm.get('password')?.hasError('required')">
+                                                    Password is required
+                                                </span>
+                                                <span *ngIf="regiStrationForm.get('password')?.hasError('pattern')">
+                                                    Password must be at least 8 characters long and contain at least one
+                                                    number and
+                                                    one
+                                                    special character.
+                                                </span>
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 form-group-wrapper" *ngIf="passwordStatus">
+                                    <div class="form-group">
+                                        <label for="confirmPassword"><strong>Confirm Password</strong></label>
+                                        <div class="input-group">
+                                            <input [type]="showConfirmPassword ? 'text' : 'password'"
+                                                formControlName="confirmPassword"
+                                                [ngClass]="{ 'is-invalid': regiStrationForm.get('confirmPassword')?.touched && regiStrationForm.get('confirmPassword')?.invalid }"
+                                                class="form-control" id="confirmPassword">
+                                            <span class="input-group-text toggle-password"
+                                                (click)="togglePasswordVisibility('confirmPassword')">
+                                                <i class="material-symbols-outlined">{{ showConfirmPassword ?
+                                                    'visibility_off' :
+                                                    'visibility' }}</i>
+                                            </span>
+                                        </div>
+                                        <div class="invalid-feedback-container">
+                                            <small class="text-danger"
+                                                *ngIf="regiStrationForm.get('confirmPassword')?.touched">
+                                                <span
+                                                    *ngIf="regiStrationForm.get('confirmPassword')?.hasError('required')">
+                                                    Confirm Password is required
+                                                </span>
+                                                <span
+                                                    *ngIf="regiStrationForm.get('confirmPassword')?.hasError('mustMatch')">
+                                                    Password and Confirm Password must match.
+                                                </span>
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Password -->
+
+                                <!-- email -->
+                                <div class="col-md-6 form-group">
+                                    <label for=""><strong>email</strong></label>
+                                    <input formControlName="email" type="text"
+                                        [ngClass]="{ 'is-invalid': regiStrationForm.get('email')?.touched && regiStrationForm.get('email')?.invalid }"
+                                        class="form-control" name="" id="">
+                                    <span class="invalid-feedback">
+                                        <span *ngIf="regiStrationForm.get('email')?.hasError('pattern')">
+                                            Please enter a valid email ending with .com or .in (e.g., example@domain.com
+                                            or
+                                            example@domain.in)
+                                        </span>
+                                        <span *ngIf="regiStrationForm.get('email')?.hasError('required')">Email is
+                                            required
+                                        </span>
+                                    </span>
+                                </div>
+
+                                <!-- Color THeme -->
+                                <div class="col-md-6 form-group">
+                                    <label for=""><strong>Color Theme Name</strong></label>
+                                    <input formControlName="colorTheme" type="color" [ngModel]="colorTheme"
+                                        (input)="onColorChange($event)" class="form-control" name="" id="">
+                                    <span class="invalid-feedback">
+                                        <span *ngIf="regiStrationForm.get('colorTheme')?.hasError('pattern')">Color
+                                            Theme is not
+                                            valid</span>
+                                        <span *ngIf="regiStrationForm.get('colorTheme')?.hasError('required')">Color
+                                            Theme is
+                                            required</span>
+                                    </span>
+                                </div>
+
+
+                                <!-- status -->
+                                <!-- <div class="col-md-6 form-group">
+                                    <div class="">
+                                        <label for=""><strong>status</strong></label>
+                                    </div>
+                                    <nz-select class="w-100" formControlName="status"
+                                        [ngClass]="{ 'is-invalid': regiStrationForm.get('status')?.touched && regiStrationForm.get('status')?.invalid }"
+                                        nzAllowClear>
+                                        <nz-option nzLabel="Active" nzValue="Active"></nz-option>
+                                        <nz-option nzLabel="In-Active" nzValue="inactive"></nz-option>
+                                    </nz-select>
+                                    <span class="invalid-feedback">
+                                        <span *ngIf="regiStrationForm.get('status')?.hasError('required')"
+                                            class="text-danger">
+                                            Status is required
+                                        </span>
+                                    </span>
+                                </div> -->
+
+                                <!-- submit--update btn -->
+                                <div class="col-md-12 my-3">
+                                    <button *ngIf="isSubmit" class="btn btn-outline-primary"
+                                        [disabled]="isLoading || regiStrationForm.invalid " (click)="submit('student')">
+                                        <i class="fa" [ngClass]="{ 'fa-spin fa-spinner': isLoading }"></i>
+                                        {{ button }}
+                                    </button>
+
+                                    <button *ngIf="isUpdate" class="btn btn-success"
+                                        [disabled]="isLoading  && regiStrationForm.invalid" (click)="update()">
+                                        <i class="fa" [ngClass]="{ 'fa-spin fa-spinner': isLoading }"></i>
+                                        {{ button }}
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                </mat-dialog-content>
+                <mat-dialog-actions align="end">
+                    <button mat-button (click)="close()" color="primary">Dismiss</button>
+                </mat-dialog-actions>
+            </ng-template>
+
+
+        </nz-card>
+    </div>
+</section>

@@ -1,0 +1,456 @@
+Warning: Running a server with --disable-host-check is a security risk. See https://medium.com/webpack/webpack-dev-server-middleware-security-issues-1489d950874a for more information.
+- Generating browser application bundles (phase: setup)...
+✔ Browser application bundle generation complete.
+
+Initial Chunk Files                                                                                     | Names                                                          |   Raw Size
+vendor.js                                                                                               | vendor                                                         |    5.58 MB |
+styles.css, styles.js                                                                                   | styles                                                         |    1.32 MB |
+polyfills.js                                                                                            | polyfills                                                      |  332.11 kB |
+main.js                                                                                                 | main                                                           |   77.21 kB |
+runtime.js                                                                                              | runtime                                                        |   14.13 kB |
+
+| Initial Total                                                  |    7.31 MB
+
+Lazy Chunk Files                                                                                        | Names                                                          |   Raw Size
+default-node_modules_echarts_index_js.js                                                                | admin-pages-admin-pages-module                                 |    4.50 MB |
+src_app_teacher-panel_teacher-panel-master_teacher-panel-master_module_ts.js                            | teacher-panel-teacher-panel-master-teacher-panel-master-module |    3.64 MB |
+src_app_super-admin-panel_admin-pages_admin-pages_module_ts.js                                          | admin-pages-admin-pages-module                                 |    3.56 MB |
+src_app_student-panel_student-panel-master_student-panel-master_module_ts.js                            | student-panel-student-panel-master-student-panel-master-module |    1.35 MB |
+src_app_admin-panel_admin-pages_admin-pages_module_ts.js                                                | admin-pages-admin-pages-module                                 |    1.25 MB |
+src_app_parent-panel_parent-panel-master_parent-panel-master_module_ts.js                               | parent-panel-parent-panel-master-parent-panel-master-module    |    1.06 MB |
+src_app_auth_auth_module_ts.js                                                                          | auth-auth-module                                               | 1013.69 kB |
+default-node_modules_angular_material_fesm2022_card_mjs-node_modules_ng-zorro-antd_fesm2022_n-8738d5.js | admin-pages-admin-pages-module                                 |  935.74 kB |
+src_app_institute-panel_institute-page_institute-page_module_ts.js                                      | institute-page-institute-page-module                           |  740.60 kB |
+default-node_modules_angular_material_fesm2022_checkbox_mjs-node_modules_angular_material_fes-cc8ee7.js | admin-pages-admin-pages-module                                 |  594.48 kB |
+default-node_modules_ng-zorro-antd_fesm2022_ng-zorro-antd-table_mjs-node_modules_ng-zorro-ant-fdee02.js | student-panel-student-panel-module                             |  559.41 kB |
+default-node_modules_chartjs-plugin-datalabels_dist_chartjs-plugin-datalabels_esm_js.js                 | admin-pages-admin-pages-module                                 |  548.91 kB |
+node_modules_canvg_lib_index_es_js.js                                                                   | canvg                                                          |  426.79 kB |
+default-node_modules_primeng_fesm2022_primeng-dropdown_mjs.js                                           | admin-pages-admin-pages-module                                 |  406.93 kB |
+default-node_modules_angular_material_fesm2022_table_mjs-node_modules_ng-zorro-antd_fesm2022_-c036a3.js | admin-pages-admin-pages-module                                 |  338.01 kB |
+default-node_modules_angular_material_fesm2022_button_mjs-node_modules_angular_material_fesm2-c3f6e4.js | teacher-panel-teacher-panel-module                             |  231.39 kB |
+default-node_modules_rxjs_dist_esm_internal_operators_withLatestFrom_js-node_modules_ng-zorro-00a118.js | student-panel-student-panel-module                             |  197.11 kB |
+default-src_app_shared_AllModel_ts-node_modules_sweetalert2_dist_sweetalert2_all_js.js                  | admin-panel-admin-panel-module                                 |  171.62 kB |
+default-node_modules_ng-zorro-antd_fesm2022_ng-zorro-antd-segmented_mjs-node_modules_ng-zorro-e010b8.js | student-panel-student-panel-master-student-panel-master-module |  166.47 kB |
+default-src_app_share-services_NotificationService_notification_service_ts-node_modules_rxjs_-1a7199.js | auth-auth-module                                               |  126.72 kB |
+default-node_modules_ng-zorro-antd_fesm2022_ng-zorro-antd-upload_mjs.js                                 | student-panel-student-panel-module                             |  103.06 kB |
+default-node_modules_angular_material_fesm2022_grid-list_mjs-node_modules_ng-zorro-antd_fesm2-9635ef.js | teacher-panel-teacher-panel-master-teacher-panel-master-module |   99.95 kB |
+src_app_student-panel_student-panel_module_ts.js                                                        | student-panel-student-panel-module                             |   84.60 kB |
+src_app_super-admin-panel_super-admin-panel_module_ts.js                                                | super-admin-panel-super-admin-panel-module                     |   74.11 kB |
+node_modules_dompurify_dist_purify_js.js                                                                | dompurify                                                      |   65.89 kB |
+src_app_teacher-panel_teacher-panel_module_ts.js                                                        | teacher-panel-teacher-panel-module                             |   65.00 kB |
+src_app_admin-panel_admin-panel_module_ts.js                                                            | admin-panel-admin-panel-module                                 |   52.21 kB |
+default-node_modules_ng-zorro-antd_fesm2022_ng-zorro-antd-avatar_mjs-node_modules_ng-zorro-an-a78627.js | admin-panel-admin-panel-module                                 |   49.23 kB |
+src_app_parent-panel_parent-panel_module_ts.js                                                          | parent-panel-parent-panel-module                               |   47.30 kB |
+default-node_modules_ng-zorro-antd_fesm2022_ng-zorro-antd-notification_mjs.js                           | admin-pages-admin-pages-module                                 |   43.83 kB |
+src_app_institute-panel_institute-panel_module_ts.js                                                    | institute-panel-institute-panel-module                         |   36.60 kB |
+default-node_modules_ng-zorro-antd_fesm2022_ng-zorro-antd-steps_mjs.js                                  | auth-auth-module                                               |   35.63 kB |
+default-src_app_share-services_RolesserviceForOthers_rolesservice-for-others_service_ts.js              | admin-pages-admin-pages-module                                 |   33.00 kB |
+default-node_modules_angular_material_fesm2022_progress-spinner_mjs.js                                  | admin-pages-admin-pages-module                                 |   31.84 kB |
+default-node_modules_ng-zorro-antd_fesm2022_ng-zorro-antd-message_mjs.js                                | teacher-panel-teacher-panel-module                             |   28.92 kB |
+default-node_modules_ngx-echarts_fesm2022_ngx-echarts_mjs.js                                            | admin-pages-admin-pages-module                                 |   24.92 kB |
+common.js                                                                                               | common                                                         |    8.94 kB |
+
+Build at: 2026-09-16T13:34:03.836Z - Hash: 25d7626f6e539cde - Time: 20615ms
+
+./src/app/student-panel/student-panel-master/feedback-management/feedback-management.component.scss?ngResource - Warning: Module Warning (from ./node_modules/postcss-loader/dist/cjs.js):
+(198:3) from "autoprefixer" plugin: end value has mixed support, consider using flex-end instead
+
+Code:
+  justify-content: end
+
+
+./src/app/super-admin-panel/admin-pages/feedback-management/feedback-management.component.scss?ngResource - Warning: Module Warning (from ./node_modules/postcss-loader/dist/cjs.js):
+(194:3) from "autoprefixer" plugin: end value has mixed support, consider using flex-end instead
+
+Code:
+  justify-content: end
+
+
+./src/app/teacher-panel/teacher-panel-master/feedback-managemnt-teacher/feedback-managemnt-teacher.component.scss?ngResource - Warning: Module Warning (from ./node_modules/postcss-loader/dist/cjs.js):
+(207:3) from "autoprefixer" plugin: end value has mixed support, consider using flex-end instead
+
+Code:
+  justify-content: end
+
+
+Warning: src/app/teacher-panel/teacher-panel-master/content-view/content-view.component.html:30:56 - warning NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator.
+
+30                     <td>{{ content.entranceExamMaster?.entranceExamName || 'N/A' }}</td>
+                                                          ~~~~~~~~~~~~~~~~
+
+  src/app/teacher-panel/teacher-panel-master/content-view/content-view.component.ts:42:16
+    42   templateUrl: './content-view.component.html',
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Error occurs in the template of component ContentViewComponent.
+
+
+Warning: src/app/teacher-panel/teacher-panel-master/content-view/content-view.component.html:31:52 - warning NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator.
+
+31                     <td>{{ content.standardMaster?.standardName || 'N/A' }}</td>
+                                                      ~~~~~~~~~~~~
+
+  src/app/teacher-panel/teacher-panel-master/content-view/content-view.component.ts:42:16
+    42   templateUrl: './content-view.component.html',
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Error occurs in the template of component ContentViewComponent.
+
+
+Warning: src/app/teacher-panel/teacher-panel-master/content-view/content-view.component.html:32:51 - warning NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator.
+
+32                     <td>{{ content.subjectMaster?.subjectName || 'N/A' }}</td>
+                                                     ~~~~~~~~~~~
+
+  src/app/teacher-panel/teacher-panel-master/content-view/content-view.component.ts:42:16
+    42   templateUrl: './content-view.component.html',
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Error occurs in the template of component ContentViewComponent.
+
+
+Warning: src/app/teacher-panel/teacher-panel-master/content-view/content-view.component.html:33:51 - warning NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator.
+
+33                     <td>{{ content.chapterMaster?.chapterName || 'N/A' }}</td>
+                                                     ~~~~~~~~~~~
+
+  src/app/teacher-panel/teacher-panel-master/content-view/content-view.component.ts:42:16
+    42   templateUrl: './content-view.component.html',
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Error occurs in the template of component ContentViewComponent.
+
+
+Warning: src/app/teacher-panel/teacher-panel-master/content-view/content-view.component.html:60:95 - warning NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator.
+
+60                     <p><strong>Entrance Exam:</strong> {{ selectedContent.entranceExamMaster?.entranceExamName || 'N/A'
+                                                                                                 ~~~~~~~~~~~~~~~~
+
+  src/app/teacher-panel/teacher-panel-master/content-view/content-view.component.ts:42:16
+    42   templateUrl: './content-view.component.html',
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Error occurs in the template of component ContentViewComponent.
+
+
+Warning: src/app/teacher-panel/teacher-panel-master/content-view/content-view.component.html:62:86 - warning NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator.
+
+62                     <p><strong>Standard:</strong> {{ selectedContent.standardMaster?.standardName || 'N/A' }}</p>
+                                                                                        ~~~~~~~~~~~~
+
+  src/app/teacher-panel/teacher-panel-master/content-view/content-view.component.ts:42:16
+    42   templateUrl: './content-view.component.html',
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Error occurs in the template of component ContentViewComponent.
+
+
+Warning: src/app/teacher-panel/teacher-panel-master/content-view/content-view.component.html:63:84 - warning NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator.
+
+63                     <p><strong>Subject:</strong> {{ selectedContent.subjectMaster?.subjectName || 'N/A' }}</p>
+                                                                                      ~~~~~~~~~~~
+
+  src/app/teacher-panel/teacher-panel-master/content-view/content-view.component.ts:42:16
+    42   templateUrl: './content-view.component.html',
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Error occurs in the template of component ContentViewComponent.
+
+
+Warning: src/app/teacher-panel/teacher-panel-master/content-view/content-view.component.html:64:84 - warning NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator.
+
+64                     <p><strong>Chapter:</strong> {{ selectedContent.chapterMaster?.chapterName || 'N/A' }}</p>
+                                                                                      ~~~~~~~~~~~
+
+  src/app/teacher-panel/teacher-panel-master/content-view/content-view.component.ts:42:16
+    42   templateUrl: './content-view.component.html',
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Error occurs in the template of component ContentViewComponent.
+
+
+Warning: src/app/teacher-panel/teacher-panel-master/page-4/page-4.component.html:525:45 - warning NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator.
+
+525             [class.invalid]="f['testDate']?.invalid && f['testDate']?.touched" />
+                                                ~~~~~~~
+
+  src/app/teacher-panel/teacher-panel-master/page-4/page-4.component.ts:25:16
+    25   templateUrl: './page-4.component.html',
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~
+    Error occurs in the template of component Page4Component.
+
+
+Warning: src/app/teacher-panel/teacher-panel-master/page-4/page-4.component.html:525:71 - warning NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator.
+
+525             [class.invalid]="f['testDate']?.invalid && f['testDate']?.touched" />
+                                                                          ~~~~~~~
+
+  src/app/teacher-panel/teacher-panel-master/page-4/page-4.component.ts:25:16
+    25   templateUrl: './page-4.component.html',
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~
+    Error occurs in the template of component Page4Component.
+
+
+Warning: src/app/teacher-panel/teacher-panel-master/page-4/page-4.component.html:535:48 - warning NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator.
+
+535               [class.invalid]="f['startTime']?.invalid && f['startTime']?.touched" (change)="updateStartTime($event)" />
+                                                   ~~~~~~~
+
+  src/app/teacher-panel/teacher-panel-master/page-4/page-4.component.ts:25:16
+    25   templateUrl: './page-4.component.html',
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~
+    Error occurs in the template of component Page4Component.
+
+
+Warning: src/app/teacher-panel/teacher-panel-master/page-4/page-4.component.html:535:75 - warning NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator.
+
+535               [class.invalid]="f['startTime']?.invalid && f['startTime']?.touched" (change)="updateStartTime($event)" />
+                                                                              ~~~~~~~
+
+  src/app/teacher-panel/teacher-panel-master/page-4/page-4.component.ts:25:16
+    25   templateUrl: './page-4.component.html',
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~
+    Error occurs in the template of component Page4Component.
+
+
+Warning: src/app/teacher-panel/teacher-panel-master/page-4/page-4.component.html:538:46 - warning NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator.
+
+538               [class.invalid]="f['endTime']?.invalid && f['endTime']?.touched" (change)="updateEndTime($event)" />
+                                                 ~~~~~~~
+
+  src/app/teacher-panel/teacher-panel-master/page-4/page-4.component.ts:25:16
+    25   templateUrl: './page-4.component.html',
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~
+    Error occurs in the template of component Page4Component.
+
+
+Warning: src/app/teacher-panel/teacher-panel-master/page-4/page-4.component.html:538:71 - warning NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator.
+
+538               [class.invalid]="f['endTime']?.invalid && f['endTime']?.touched" (change)="updateEndTime($event)" />
+                                                                          ~~~~~~~
+
+  src/app/teacher-panel/teacher-panel-master/page-4/page-4.component.ts:25:16
+    25   templateUrl: './page-4.component.html',
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~
+    Error occurs in the template of component Page4Component.
+
+
+Warning: /Users/navin/Downloads/ELITE_CODO_CODE/CODE_/Angular/EliteCodo Angular/node_modules/canvg/lib/index.es.js depends on 'core-js/modules/es.array.index-of.js'. CommonJS or AMD dependencies can cause optimization bailouts.
+For more info see: https://angular.io/guide/build#configuring-commonjs-dependencies
+
+Warning: /Users/navin/Downloads/ELITE_CODO_CODE/CODE_/Angular/EliteCodo Angular/node_modules/canvg/lib/index.es.js depends on 'core-js/modules/es.array.iterator.js'. CommonJS or AMD dependencies can cause optimization bailouts.
+For more info see: https://angular.io/guide/build#configuring-commonjs-dependencies
+
+Warning: /Users/navin/Downloads/ELITE_CODO_CODE/CODE_/Angular/EliteCodo Angular/node_modules/canvg/lib/index.es.js depends on 'core-js/modules/es.array.reduce.js'. CommonJS or AMD dependencies can cause optimization bailouts.
+For more info see: https://angular.io/guide/build#configuring-commonjs-dependencies
+
+Warning: /Users/navin/Downloads/ELITE_CODO_CODE/CODE_/Angular/EliteCodo Angular/node_modules/canvg/lib/index.es.js depends on 'core-js/modules/es.array.reverse.js'. CommonJS or AMD dependencies can cause optimization bailouts.
+For more info see: https://angular.io/guide/build#configuring-commonjs-dependencies
+
+Warning: /Users/navin/Downloads/ELITE_CODO_CODE/CODE_/Angular/EliteCodo Angular/node_modules/canvg/lib/index.es.js depends on 'core-js/modules/es.promise.js'. CommonJS or AMD dependencies can cause optimization bailouts.
+For more info see: https://angular.io/guide/build#configuring-commonjs-dependencies
+
+Warning: /Users/navin/Downloads/ELITE_CODO_CODE/CODE_/Angular/EliteCodo Angular/node_modules/canvg/lib/index.es.js depends on 'core-js/modules/es.regexp.to-string.js'. CommonJS or AMD dependencies can cause optimization bailouts.
+For more info see: https://angular.io/guide/build#configuring-commonjs-dependencies
+
+Warning: /Users/navin/Downloads/ELITE_CODO_CODE/CODE_/Angular/EliteCodo Angular/node_modules/canvg/lib/index.es.js depends on 'core-js/modules/es.string.ends-with.js'. CommonJS or AMD dependencies can cause optimization bailouts.
+For more info see: https://angular.io/guide/build#configuring-commonjs-dependencies
+
+Warning: /Users/navin/Downloads/ELITE_CODO_CODE/CODE_/Angular/EliteCodo Angular/node_modules/canvg/lib/index.es.js depends on 'core-js/modules/es.string.includes.js'. CommonJS or AMD dependencies can cause optimization bailouts.
+For more info see: https://angular.io/guide/build#configuring-commonjs-dependencies
+
+Warning: /Users/navin/Downloads/ELITE_CODO_CODE/CODE_/Angular/EliteCodo Angular/node_modules/canvg/lib/index.es.js depends on 'core-js/modules/es.string.match.js'. CommonJS or AMD dependencies can cause optimization bailouts.
+For more info see: https://angular.io/guide/build#configuring-commonjs-dependencies
+
+Warning: /Users/navin/Downloads/ELITE_CODO_CODE/CODE_/Angular/EliteCodo Angular/node_modules/canvg/lib/index.es.js depends on 'core-js/modules/es.string.replace.js'. CommonJS or AMD dependencies can cause optimization bailouts.
+For more info see: https://angular.io/guide/build#configuring-commonjs-dependencies
+
+Warning: /Users/navin/Downloads/ELITE_CODO_CODE/CODE_/Angular/EliteCodo Angular/node_modules/canvg/lib/index.es.js depends on 'core-js/modules/es.string.split.js'. CommonJS or AMD dependencies can cause optimization bailouts.
+For more info see: https://angular.io/guide/build#configuring-commonjs-dependencies
+
+Warning: /Users/navin/Downloads/ELITE_CODO_CODE/CODE_/Angular/EliteCodo Angular/node_modules/canvg/lib/index.es.js depends on 'core-js/modules/es.string.starts-with.js'. CommonJS or AMD dependencies can cause optimization bailouts.
+For more info see: https://angular.io/guide/build#configuring-commonjs-dependencies
+
+Warning: /Users/navin/Downloads/ELITE_CODO_CODE/CODE_/Angular/EliteCodo Angular/node_modules/canvg/lib/index.es.js depends on 'core-js/modules/es.string.trim.js'. CommonJS or AMD dependencies can cause optimization bailouts.
+For more info see: https://angular.io/guide/build#configuring-commonjs-dependencies
+
+Warning: /Users/navin/Downloads/ELITE_CODO_CODE/CODE_/Angular/EliteCodo Angular/node_modules/canvg/lib/index.es.js depends on 'core-js/modules/web.dom-collections.iterator.js'. CommonJS or AMD dependencies can cause optimization bailouts.
+For more info see: https://angular.io/guide/build#configuring-commonjs-dependencies
+
+Warning: /Users/navin/Downloads/ELITE_CODO_CODE/CODE_/Angular/EliteCodo Angular/node_modules/canvg/lib/index.es.js depends on 'raf'. CommonJS or AMD dependencies can cause optimization bailouts.
+For more info see: https://angular.io/guide/build#configuring-commonjs-dependencies
+
+Warning: /Users/navin/Downloads/ELITE_CODO_CODE/CODE_/Angular/EliteCodo Angular/node_modules/canvg/lib/index.es.js depends on 'rgbcolor'. CommonJS or AMD dependencies can cause optimization bailouts.
+For more info see: https://angular.io/guide/build#configuring-commonjs-dependencies
+
+Warning: /Users/navin/Downloads/ELITE_CODO_CODE/CODE_/Angular/EliteCodo Angular/src/app/parent-panel/navbar/navbar.component.ts depends on 'sweetalert2'. CommonJS or AMD dependencies can cause optimization bailouts.
+For more info see: https://angular.io/guide/build#configuring-commonjs-dependencies
+
+Warning: /Users/navin/Downloads/ELITE_CODO_CODE/CODE_/Angular/EliteCodo Angular/src/app/teacher-panel/teacher-panel-master/page-4/page-4.component.ts depends on 'html2canvas'. CommonJS or AMD dependencies can cause optimization bailouts.
+For more info see: https://angular.io/guide/build#configuring-commonjs-dependencies
+
+
+
+** Angular Live Development Server is listening on 0.0.0.0:4200, open your browser on http://localhost:4200/ **
+
+
+✔ Compiled successfully.
+✔ Browser application bundle generation complete.
+
+Initial Chunk Files | Names   | Raw Size
+main.js             | main    | 77.21 kB |
+runtime.js          | runtime | 14.13 kB |
+
+40 unchanged chunks
+
+Build at: 2026-09-29T15:16:38.401Z - Hash: 2216f493cce746a3 - Time: 14615ms
+
+Warning: src/app/teacher-panel/teacher-panel-master/content-view/content-view.component.html:30:56 - warning NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator.
+
+30                     <td>{{ content.entranceExamMaster?.entranceExamName || 'N/A' }}</td>
+                                                          ~~~~~~~~~~~~~~~~
+
+  src/app/teacher-panel/teacher-panel-master/content-view/content-view.component.ts:42:16
+    42   templateUrl: './content-view.component.html',
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Error occurs in the template of component ContentViewComponent.
+
+
+Warning: src/app/teacher-panel/teacher-panel-master/content-view/content-view.component.html:31:52 - warning NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator.
+
+31                     <td>{{ content.standardMaster?.standardName || 'N/A' }}</td>
+                                                      ~~~~~~~~~~~~
+
+  src/app/teacher-panel/teacher-panel-master/content-view/content-view.component.ts:42:16
+    42   templateUrl: './content-view.component.html',
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Error occurs in the template of component ContentViewComponent.
+
+
+Warning: src/app/teacher-panel/teacher-panel-master/content-view/content-view.component.html:32:51 - warning NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator.
+
+32                     <td>{{ content.subjectMaster?.subjectName || 'N/A' }}</td>
+                                                     ~~~~~~~~~~~
+
+  src/app/teacher-panel/teacher-panel-master/content-view/content-view.component.ts:42:16
+    42   templateUrl: './content-view.component.html',
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Error occurs in the template of component ContentViewComponent.
+
+
+Warning: src/app/teacher-panel/teacher-panel-master/content-view/content-view.component.html:33:51 - warning NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator.
+
+33                     <td>{{ content.chapterMaster?.chapterName || 'N/A' }}</td>
+                                                     ~~~~~~~~~~~
+
+  src/app/teacher-panel/teacher-panel-master/content-view/content-view.component.ts:42:16
+    42   templateUrl: './content-view.component.html',
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Error occurs in the template of component ContentViewComponent.
+
+
+Warning: src/app/teacher-panel/teacher-panel-master/content-view/content-view.component.html:60:95 - warning NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator.
+
+60                     <p><strong>Entrance Exam:</strong> {{ selectedContent.entranceExamMaster?.entranceExamName || 'N/A'
+                                                                                                 ~~~~~~~~~~~~~~~~
+
+  src/app/teacher-panel/teacher-panel-master/content-view/content-view.component.ts:42:16
+    42   templateUrl: './content-view.component.html',
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Error occurs in the template of component ContentViewComponent.
+
+
+Warning: src/app/teacher-panel/teacher-panel-master/content-view/content-view.component.html:62:86 - warning NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator.
+
+62                     <p><strong>Standard:</strong> {{ selectedContent.standardMaster?.standardName || 'N/A' }}</p>
+                                                                                        ~~~~~~~~~~~~
+
+  src/app/teacher-panel/teacher-panel-master/content-view/content-view.component.ts:42:16
+    42   templateUrl: './content-view.component.html',
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Error occurs in the template of component ContentViewComponent.
+
+
+Warning: src/app/teacher-panel/teacher-panel-master/content-view/content-view.component.html:63:84 - warning NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator.
+
+63                     <p><strong>Subject:</strong> {{ selectedContent.subjectMaster?.subjectName || 'N/A' }}</p>
+                                                                                      ~~~~~~~~~~~
+
+  src/app/teacher-panel/teacher-panel-master/content-view/content-view.component.ts:42:16
+    42   templateUrl: './content-view.component.html',
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Error occurs in the template of component ContentViewComponent.
+
+
+Warning: src/app/teacher-panel/teacher-panel-master/content-view/content-view.component.html:64:84 - warning NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator.
+
+64                     <p><strong>Chapter:</strong> {{ selectedContent.chapterMaster?.chapterName || 'N/A' }}</p>
+                                                                                      ~~~~~~~~~~~
+
+  src/app/teacher-panel/teacher-panel-master/content-view/content-view.component.ts:42:16
+    42   templateUrl: './content-view.component.html',
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Error occurs in the template of component ContentViewComponent.
+
+
+Warning: src/app/teacher-panel/teacher-panel-master/page-4/page-4.component.html:525:45 - warning NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator.
+
+525             [class.invalid]="f['testDate']?.invalid && f['testDate']?.touched" />
+                                                ~~~~~~~
+
+  src/app/teacher-panel/teacher-panel-master/page-4/page-4.component.ts:25:16
+    25   templateUrl: './page-4.component.html',
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~
+    Error occurs in the template of component Page4Component.
+
+
+Warning: src/app/teacher-panel/teacher-panel-master/page-4/page-4.component.html:525:71 - warning NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator.
+
+525             [class.invalid]="f['testDate']?.invalid && f['testDate']?.touched" />
+                                                                          ~~~~~~~
+
+  src/app/teacher-panel/teacher-panel-master/page-4/page-4.component.ts:25:16
+    25   templateUrl: './page-4.component.html',
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~
+    Error occurs in the template of component Page4Component.
+
+
+Warning: src/app/teacher-panel/teacher-panel-master/page-4/page-4.component.html:535:48 - warning NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator.
+
+535               [class.invalid]="f['startTime']?.invalid && f['startTime']?.touched" (change)="updateStartTime($event)" />
+                                                   ~~~~~~~
+
+  src/app/teacher-panel/teacher-panel-master/page-4/page-4.component.ts:25:16
+    25   templateUrl: './page-4.component.html',
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~
+    Error occurs in the template of component Page4Component.
+
+
+Warning: src/app/teacher-panel/teacher-panel-master/page-4/page-4.component.html:535:75 - warning NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator.
+
+535               [class.invalid]="f['startTime']?.invalid && f['startTime']?.touched" (change)="updateStartTime($event)" />
+                                                                              ~~~~~~~
+
+  src/app/teacher-panel/teacher-panel-master/page-4/page-4.component.ts:25:16
+    25   templateUrl: './page-4.component.html',
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~
+    Error occurs in the template of component Page4Component.
+
+
+Warning: src/app/teacher-panel/teacher-panel-master/page-4/page-4.component.html:538:46 - warning NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator.
+
+538               [class.invalid]="f['endTime']?.invalid && f['endTime']?.touched" (change)="updateEndTime($event)" />
+                                                 ~~~~~~~
+
+  src/app/teacher-panel/teacher-panel-master/page-4/page-4.component.ts:25:16
+    25   templateUrl: './page-4.component.html',
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~
+    Error occurs in the template of component Page4Component.
+
+
+Warning: src/app/teacher-panel/teacher-panel-master/page-4/page-4.component.html:538:71 - warning NG8107: The left side of this optional chain operation does not include 'null' or 'undefined' in its type, therefore the '?.' operator can be replaced with the '.' operator.
+
+538               [class.invalid]="f['endTime']?.invalid && f['endTime']?.touched" (change)="updateEndTime($event)" />
+                                                                          ~~~~~~~
+
+  src/app/teacher-panel/teacher-panel-master/page-4/page-4.component.ts:25:16
+    25   templateUrl: './page-4.component.html',
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~
+    Error occurs in the template of component Page4Component.
+
+
+
+
+✔ Compiled successfully.

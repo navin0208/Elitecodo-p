@@ -1,0 +1,12 @@
+@media screen and (max-width: 500px) {
+  section {
+    position: absolute;
+    width: 100%;
+    transform: translateY(20px);
+  }
+}
+
+section {
+  position: absolute;
+  width: 100%;
+}

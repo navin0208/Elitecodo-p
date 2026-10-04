@@ -1,0 +1,278 @@
+<div class="signup-container">
+  <div class="signup-card">
+    <!-- Header -->
+    <div class="signup-header">
+      <h1>Create Your Account</h1>
+      <p class="subtitle">Join Elite Codo and start your learning journey</p>
+    </div>
+
+    <!-- Steps Progress -->
+    <div class="steps-progress">
+      <div class="step"
+        [class.active]="currentStep === 'plan-customization' || currentStep === 'signup-details' || currentStep === 'subscription-summary' || currentStep === 'payment' || currentStep === 'payment-success'">
+        <span class="step-number">1</span>
+        <span class="step-label">Customize</span>
+      </div>
+      <div class="step-line"
+        [class.active]="currentStep === 'signup-details' || currentStep === 'subscription-summary' || currentStep === 'payment' || currentStep === 'payment-success'">
+      </div>
+      <div class="step"
+        [class.active]="currentStep === 'signup-details' || currentStep === 'subscription-summary' || currentStep === 'payment' || currentStep === 'payment-success'">
+        <span class="step-number">2</span>
+        <span class="step-label">Account</span>
+      </div>
+      <div class="step-line"
+        [class.active]="currentStep === 'subscription-summary' || currentStep === 'payment' || currentStep === 'payment-success'">
+      </div>
+      <div class="step"
+        [class.active]="currentStep === 'subscription-summary' || currentStep === 'payment' || currentStep === 'payment-success'">
+        <span class="step-number">3</span>
+        <span class="step-label">Review</span>
+      </div>
+      <div class="step-line" [class.active]="currentStep === 'payment' || currentStep === 'payment-success'"></div>
+      <div class="step" [class.active]="currentStep === 'payment' || currentStep === 'payment-success'">
+        <span class="step-number">4</span>
+        <span class="step-label">Payment</span>
+      </div>
+      <div class="step-line" [class.active]="currentStep === 'payment-success'"></div>
+      <div class="step" [class.active]="currentStep === 'payment-success'">
+        <span class="step-number">5</span>
+        <span class="step-label">Success</span>
+      </div>
+    </div>
+
+    <!-- Step Title -->
+    <div class="step-title">
+      <h2>{{ getStepTitle() }}</h2>
+    </div>
+
+    <!-- Plan Customization Step -->
+    <div *ngIf="currentStep === 'plan-customization' && selectedPlan" class="step-content">
+      <app-plan-customizer [selectedPlan]="selectedPlan" (customizationChange)="onCustomizationChange($event)"
+        (back)="onCustomizationBack()" (proceed)="onCustomizationProceed($event)">
+      </app-plan-customizer>
+    </div>
+
+    <!-- Signup Details Step -->
+    <div *ngIf="currentStep === 'signup-details'" class="step-content">
+      <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+        <!-- First Name -->
+        <div class="form-group">
+          <label>First Name</label>
+          <input type="text" formControlName="firstName" placeholder="Enter your first name"
+            [class.error]="f.firstName?.touched && f.firstName?.invalid">
+          <div class="error-message" *ngIf="f.firstName?.touched && f.firstName?.invalid">
+            <span *ngIf="f.firstName?.errors?.['required']">First name is required</span>
+            <span *ngIf="f.firstName?.errors?.['pattern']">Only alphabets allowed</span>
+          </div>
+        </div>
+
+        <!-- Last Name -->
+        <div class="form-group">
+          <label>Last Name</label>
+          <input type="text" formControlName="lastName" placeholder="Enter your last name"
+            [class.error]="f.lastName?.touched && f.lastName?.invalid">
+          <div class="error-message" *ngIf="f.lastName?.touched && f.lastName?.invalid">
+            <span *ngIf="f.lastName?.errors?.['required']">Last name is required</span>
+            <span *ngIf="f.lastName?.errors?.['pattern']">Only alphabets allowed</span>
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" formControlName="email" placeholder="Enter your email"
+            [class.error]="f.email?.touched && f.email?.invalid">
+          <div class="error-message" *ngIf="f.email?.touched && f.email?.invalid">
+            <span *ngIf="f.email?.errors?.['required']">Email is required</span>
+            <span *ngIf="f.email?.errors?.['email']">Please enter a valid email</span>
+          </div>
+        </div>
+
+        <!-- Phone -->
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" formControlName="mobile" placeholder="Enter 10-digit phone number"
+            [class.error]="f.mobile?.touched && f.mobile?.invalid">
+          <div class="error-message" *ngIf="f.mobile?.touched && f.mobile?.invalid">
+            <span *ngIf="f.mobile?.errors?.['required']">Phone number is required</span>
+            <span *ngIf="f.mobile?.errors?.['pattern']">Please enter a valid 10-digit phone number</span>
+          </div>
+        </div>
+
+        <!-- Institute Name - Only for Institute Registration -->
+        <div class="form-group" *ngIf="currentRole === 'institute'">
+          <label>Institute Name</label>
+          <input type="text" formControlName="instituteName" placeholder="Enter your institute name"
+            [class.error]="f.instituteName?.touched && f.instituteName?.invalid">
+          <div class="error-message" *ngIf="f.instituteName?.touched && f.instituteName?.invalid">
+            <span *ngIf="f.instituteName?.errors?.['required']">Institute name is required</span>
+          </div>
+        </div>
+
+        <!-- Address - Required for Institute, Optional for Teacher -->
+        <div class="form-group" *ngIf="currentRole === 'institute'">
+          <label>Institute Address</label>
+          <input type="text" formControlName="address" placeholder="Enter your institute address"
+            [class.error]="f.address?.touched && f.address?.invalid">
+          <div class="error-message" *ngIf="f.address?.touched && f.address?.invalid">
+            <span *ngIf="f.address?.errors?.['required']">Address is required</span>
+          </div>
+        </div>
+
+        <!-- Teacher Subject - For Teacher Registration -->
+        <div class="form-group" *ngIf="currentRole === 'teacher'">
+          <label>Subject / Specialization</label>
+          <input type="text" formControlName="address" placeholder="Enter your teaching subject"
+            [class.error]="f.address?.touched && f.address?.invalid">
+        </div>
+
+        <!-- Password -->
+        <div class="form-group">
+          <label>Password</label>
+          <div class="password-input">
+            <input [type]="showPassword ? 'text' : 'password'" formControlName="password"
+              placeholder="Create a strong password" [class.error]="f.password?.touched && f.password?.invalid">
+            <button type="button" (click)="togglePassword()">
+              <i class="fas" [class.fa-eye]="showPassword" [class.fa-eye-slash]="!showPassword"></i>
+            </button>
+          </div>
+          <div class="password-hint">
+            <small>Password should be at least 8 characters with at least one number and one special character.</small>
+          </div>
+          <div class="error-message" *ngIf="f.password?.touched && f.password?.invalid">
+            <span *ngIf="f.password?.errors?.['required']">Password is required</span>
+            <span *ngIf="f.password?.errors?.['minlength']">Password must be at least 8 characters</span>
+            <span *ngIf="f.password?.errors?.['pattern']">Password must contain at least one number and one special
+              character</span>
+          </div>
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="form-group">
+          <label>Confirm Password</label>
+          <div class="password-input">
+            <input [type]="showConfirmPassword ? 'text' : 'password'" formControlName="confirmPassword"
+              placeholder="Confirm your password"
+              [class.error]="f.confirmPassword?.touched && f.confirmPassword?.invalid">
+            <button type="button" (click)="toggleConfirmPassword()">
+              <i class="fas" [class.fa-eye]="showConfirmPassword" [class.fa-eye-slash]="!showConfirmPassword"></i>
+            </button>
+          </div>
+          <div class="error-message" *ngIf="f.confirmPassword?.touched && f.confirmPassword?.invalid">
+            <span *ngIf="f.confirmPassword?.errors?.['required']">Please confirm your password</span>
+            <span *ngIf="f.confirmPassword?.errors?.['mismatch']">Passwords do not match</span>
+          </div>
+        </div>
+
+        <!-- Terms -->
+        <div class="form-group checkbox">
+          <input type="checkbox" formControlName="terms" id="terms">
+          <label for="terms">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></label>
+          <div class="error-message" *ngIf="f.terms?.touched && f.terms?.invalid">
+            <span *ngIf="f.terms?.errors?.['requiredTrue']">You must agree to the terms</span>
+          </div>
+        </div>
+
+        <!-- Error Message -->
+        <div class="error-message" *ngIf="errorMessage">
+          {{ errorMessage }}
+        </div>
+
+        <!-- Actions -->
+        <div class="form-actions">
+          <button type="button" class="btn-back" (click)="onCustomizationBack()">
+            <i class="fas fa-arrow-left"></i> Back
+          </button>
+          <button type="submit" class="btn-submit" [disabled]="isLoading || signupForm.invalid">
+            <i class="fas fa-spinner fa-spin" *ngIf="isLoading"></i>
+            <span *ngIf="!isLoading">Continue to Review</span>
+            <span *ngIf="isLoading">Processing...</span>
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Subscription Summary Step -->
+    <div *ngIf="currentStep === 'subscription-summary' && customization" class="step-content">
+      <app-subscription-summary [customization]="customization" [userDetails]="signupForm.value"
+        (back)="onSummaryBack()" (confirm)="onSummaryConfirm()">
+      </app-subscription-summary>
+    </div>
+
+    <!-- Payment Processing Step -->
+    <div *ngIf="currentStep === 'payment'" class="step-content">
+      <div class="payment-processing">
+        <div class="spinner"></div>
+        <h3>Processing Your Payment</h3>
+        <p>Please wait while we complete your registration...</p>
+        <div class="payment-details" *ngIf="customization">
+          <div class="payment-amount">
+            <span>Total Amount</span>
+            <strong>₹{{ customization.totalPrice }}</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Payment Failed Step -->
+    <div *ngIf="currentStep === 'payment-failed'" class="step-content">
+      <div class="payment-failed-container">
+        <div class="failed-icon">
+          <i class="fas fa-times-circle"></i>
+        </div>
+        <h2>Payment Failed!</h2>
+        <p class="error-message">{{ errorMessage }}</p>
+        <p class="retry-message">You will be redirected to review page to retry...</p>
+        <div class="failed-progress">
+          <div class="failed-bar"></div>
+        </div>
+        <button class="btn-retry" (click)="retryPayment()">
+          <i class="fas fa-redo"></i> Retry Now
+        </button>
+      </div>
+    </div>
+
+    <!-- Update Payment Success Step with Countdown -->
+    <div *ngIf="currentStep === 'payment-success'" class="step-content">
+      <div class="payment-success-container">
+        <div class="success-icon">
+          <i class="fas fa-check-circle"></i>
+        </div>
+        <h2>Payment Successful!</h2>
+        <p class="success-message">{{ paymentSuccessMessage }}</p>
+        <p class="redirect-message">Redirecting in <span class="countdown-number">{{ countdown }}</span> seconds...</p>
+        <div class="success-progress">
+          <div class="success-bar" [style.width.%]="((5 - countdown) / 5) * 100"></div>
+        </div>
+        <button class="btn-login" (click)="goToLogin()">
+          <i class="fas fa-sign-in-alt"></i> Go to Login Now
+        </button>
+      </div>
+    </div>
+
+    <!-- Payment Success Step -->
+    <div *ngIf="currentStep === 'payment-success'" class="step-content">
+      <div class="payment-success-container">
+        <div class="success-icon">
+          <i class="fas fa-check-circle"></i>
+        </div>
+        <h2>Payment Successful!</h2>
+        <p class="success-message">{{ paymentSuccessMessage }}</p>
+        <p class="redirect-message">Redirecting to login page...</p>
+        <div class="success-progress">
+          <div class="success-bar"></div>
+        </div>
+        <button class="btn-login" (click)="goToLogin()">
+          <i class="fas fa-sign-in-alt"></i> Go to Login
+        </button>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="signup-footer">
+      <p>Already have an account? <a (click)="goToLogin()">Login here</a></p>
+    </div>
+  </div>
+</div>

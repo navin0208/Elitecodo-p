@@ -1,0 +1,218 @@
+/* Updated CSS */
+section {
+  position: relative;
+  width: 100%;
+  padding: 20px 0;
+}
+
+.main_content {
+  margin: 0;
+  padding: 20px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+}
+
+.standards-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.standard-card {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.standard-title {
+  color: #333;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #eee;
+  font-size: 24px;
+}
+
+.subjects-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.subject-button {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 200px;
+  height: 100px;
+  padding: 15px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.subject-button input[type="checkbox"] {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  z-index: 1;
+  opacity: 0.8;
+  accent-color: white;
+}
+
+.subject-button label {
+  color: inherit;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Subject-specific colors */
+.physics {
+  background: linear-gradient(135deg, #4a6bff 0%, #2541b2 100%);
+  color: white;
+}
+
+.mathematics {
+  background: linear-gradient(135deg, #ff6b6b 0%, #c73e3e 100%);
+  color: white;
+}
+
+.chemistry {
+  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+  color: white;
+}
+
+.biology {
+  background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
+  color: white;
+}
+
+.subject-button:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+  .subjects-container {
+    justify-content: center;
+  }
+
+  .subject-button {
+    width: 150px;
+    height: 80px;
+    font-size: 16px;
+  }
+
+  .standard-card {
+    padding: 15px;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .subject-button {
+    width: 120px;
+    height: 70px;
+    font-size: 14px;
+  }
+}
+
+.subject-checkbox {
+  margin-right: 8px;
+  cursor: pointer;
+}
+
+.subject-button {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  margin: 4px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.subject-button:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+/* Subject-specific colors */
+.physics {
+  background-color: #ff6b6b;
+  color: white;
+}
+
+.mathematics {
+  background-color: #48dbfb;
+  color: white;
+}
+
+.chemistry {
+  background-color: #1dd1a1;
+  color: white;
+}
+
+.biology {
+  background-color: #f368e0;
+  color: white;
+}
+
+.btn-assessment {
+  position: relative;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #6e8efb, #a777e3);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-assessment:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  background: linear-gradient(135deg, #5d7df4, #9a6adc);
+}
+
+.btn-assessment:active {
+  transform: translateY(0);
+}
+
+.badge-count {
+  background-color: white;
+  color: #6e8efb;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.btn-assessment i {
+  transition: transform 0.3s ease;
+}
+
+.btn-assessment:hover i {
+  transform: translateX(3px);
+}

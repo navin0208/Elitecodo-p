@@ -1,0 +1,52 @@
+<section>
+    <div class="communication-wrapper">
+        <!-- Header -->
+        <div class="header-container">
+            <h1 class="main-title">Communication Hub</h1>
+            <p class="subtitle">Connect, Collaborate, Communicate</p>
+            <div class="header-decoration"></div>
+        </div>
+
+        <!-- White Card Wrapper -->
+        <div class="white-card ">
+            <!-- Cards Grid -->
+            <div class="cards-container">
+                <div *ngFor="let card of communicationCards" class="card-wrapper" (click)="routToBoardDash(card.rout)">
+                    <div class="communication-card" [style.backgroundColor]="card.backgroundColor"
+                        [ngClass]="{'card-hover': true}">
+                        <div class="card-content">
+                            <!-- Icon Container -->
+                            <div class="icon-container">
+                                <i nz-icon [nzType]="card.icon" nzTheme="outline"></i>
+                            </div>
+
+                            <!-- Text Content -->
+                            <div class="text-content">
+                                <h2 class="card-title">{{ card.title }}</h2>
+                                <p class="card-description">{{ card.description }}</p>
+                            </div>
+
+                            <!-- Stats -->
+                            <div class="stats-container">
+                                <!-- <div class="stat-item">
+                                    <i nz-icon nzType="mail" nzTheme="outline"></i>
+                                    <span>{{ card.stats.unreadMessages }} Unread</span>
+                                </div> -->
+                                <!-- <div class="stat-divider"></div> -->
+                                <div class="stat-item">
+                                    <i nz-icon nzType="user" nzTheme="outline"></i>
+                                    <span>{{ card.stats.totalContacts }} Contacts</span>
+                                </div>
+                            </div>
+
+                            <!-- Action Button -->
+                            <div class="action-button">
+                                <i nz-icon nzType="right-circle" nzTheme="outline"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,1106 @@
+<section class="test-creation-wrapper">
+  <!-- test-creation.component.html -->
+  <div class="test-creation-container">
+    <div class="form-header">
+      <h2>Create New Test</h2>
+      <p class="subtitle">
+        Configure your test parameters and question selection
+      </p>
+    </div>
+
+    <form [formGroup]="testForm">
+      <!-- Question Filter Section -->
+      <div class="form-section card">
+        <div class="section-header">
+          <h3>Question Filters</h3>
+          <div class="divider"></div>
+        </div>
+
+        <div class="row gutter">
+          <div class="col-md-3 col-sm-6">
+            <div class="form-group">
+              <label class="form-label">Level</label>
+              <nz-select
+                class="form-select"
+                formControlName="level"
+                nzAllowClear
+              >
+                <nz-option
+                  *ngFor="let level of getDataOFquestionlevelVar"
+                  [nzValue]="level.questionLevelId"
+                  [nzLabel]="level.questionLevel"
+                >
+                </nz-option>
+              </nz-select>
+            </div>
+          </div>
+
+          <div class="col-md-3 col-sm-6">
+            <div class="form-group">
+              <label class="form-label">Type</label>
+              <nz-select
+                class="form-select"
+                formControlName="type"
+                nzAllowClear
+              >
+                <nz-option
+                  *ngFor="let type of getDataOFquestiontypeVar"
+                  [nzValue]="type.questionTypeId"
+                  [nzLabel]="type.questionType"
+                >
+                </nz-option>
+              </nz-select>
+            </div>
+          </div>
+
+          <div class="col-md-3 col-sm-6">
+            <div class="form-group">
+              <label class="form-label">Used</label>
+              <nz-select
+                class="form-select"
+                formControlName="used"
+                nzAllowClear
+              >
+                <nz-option nzLabel="Used" nzValue="True"></nz-option>
+                <nz-option nzLabel="Not Used" nzValue="False"></nz-option>
+              </nz-select>
+            </div>
+          </div>
+
+          <div class="col-md-3 col-sm-6">
+            <div class="form-group">
+              <label class="form-label">Previously Asked</label>
+              <nz-select
+                class="form-select"
+                formControlName="asked"
+                nzAllowClear
+              >
+                <nz-option nzLabel="Asked" nzValue="True"></nz-option>
+                <nz-option nzLabel="Not Asked" nzValue="False"></nz-option>
+              </nz-select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group">
+          <label for="testName">Test Name:</label>
+          <input
+            id="testName"
+            nz-input
+            formControlName="testName"
+            placeholder="Enter test name"
+          />
+          <div
+            *ngIf="
+              testForm.get('testName')?.invalid &&
+              testForm.get('testName')?.touched
+            "
+          >
+            <nz-alert
+              nzType="error"
+              nzMessage="Test name is required"
+            ></nz-alert>
+          </div>
+        </div>
+
+        <div class="form-group col-sm-3 mt-3">
+          <label for="testDate">Test Date:</label>
+          <input
+            type="date"
+            [min]="minDate"
+            id="testDate"
+            class="form-control"
+            formControlName="testDate"
+          />
+        </div>
+
+        <div class="form-group col-sm-3 mt-3">
+          <label for="testType">Test Type:</label>
+          <nz-select
+            id="testType"
+            formControlName="testType"
+            (ngModelChange)="onTestTypeChange($event)"
+            placeholder="Select a test type"
+          >
+            <nz-option
+              *ngFor="let type of testTypes"
+              [nzValue]="type"
+              [nzLabel]="type"
+            ></nz-option>
+          </nz-select>
+          <div
+            *ngIf="
+              testForm.get('testType')?.invalid &&
+              testForm.get('testType')?.touched
+            "
+          >
+            <nz-alert
+              nzType="error"
+              nzMessage="Test Type is required"
+            ></nz-alert>
+          </div>
+        </div>
+
+        <div class="form-group col-sm-3 mt-3">
+          <label for="startTime">Test startTime:</label>
+          <input
+            id="startTime"
+            class="form-control"
+            type="time"
+            formControlName="startTime"
+            placeholder="Enter startTime"
+          />
+          <div
+            *ngIf="
+              testForm.get('startTime')?.invalid &&
+              testForm.get('startTime')?.touched
+            "
+          >
+            <nz-alert
+              nzType="error"
+              nzMessage="Start Time is required"
+            ></nz-alert>
+          </div>
+        </div>
+
+        <div class="form-group col-sm-3 mt-3">
+          <label for="endTime">Test endTime:</label>
+          <input
+            id="endTime"
+            class="form-control"
+            type="time"
+            formControlName="endTime"
+            placeholder="Enter endTime"
+          />
+          <div
+            *ngIf="
+              testForm.get('endTime')?.invalid &&
+              testForm.get('endTime')?.touched
+            "
+          >
+            <nz-alert
+              nzType="error"
+              nzMessage="End Time is required"
+            ></nz-alert>
+          </div>
+        </div>
+      </div>
+      <div
+        *ngIf="testForm.get('testType')?.value === 'Create Topic Wise Test'"
+        class="topic-wise-test"
+      >
+        <div class="col-sm-3 form-group">
+          <div class="">
+            <label for=""><strong>Standard</strong></label>
+          </div>
+          <nz-select
+            class="w-100"
+            formControlName="standard"
+            (ngModelChange)="onStandardChange($event)"
+            nzAllowClear
+          >
+            <nz-option
+              *ngFor="let standard of standards"
+              [nzValue]="standard.id"
+              [nzLabel]="standard.name"
+            >
+            </nz-option>
+          </nz-select>
+        </div>
+        <!-- Subject Selection -->
+        <div class="form-group">
+          <label for="subjectId">Subject:</label>
+          <nz-select
+            id="subjectId"
+            formControlName="subjectId"
+            (ngModelChange)="onSubjectChange($event)"
+            placeholder="Select a subject"
+          >
+            <nz-option
+              *ngFor="let subject of subjects"
+              [nzValue]="subject.id"
+              [nzLabel]="subject.name"
+            >
+            </nz-option>
+          </nz-select>
+        </div>
+
+        <!-- Chapter Selection -->
+        <div class="form-group" *ngIf="selectedSubject">
+          <label for="chapterId">Chapter:</label>
+          <nz-select
+            id="chapterId"
+            formControlName="chapterId"
+            (ngModelChange)="onChapterChange($event)"
+            placeholder="Select a chapter"
+          >
+            <nz-option
+              *ngFor="let chapter of selectedSubject.chapters"
+              [nzValue]="chapter.id"
+              [nzLabel]="chapter.name"
+            >
+            </nz-option>
+          </nz-select>
+        </div>
+
+        <!-- Remaining Questions Counter -->
+        <div *ngIf="showRemainingQuestions" class="remaining-questions">
+          <nz-alert
+            [nzType]="remainingQuestions >= 0 ? 'info' : 'error'"
+            [nzMessage]="'Remaining Questions: ' + remainingQuestions"
+            [nzDescription]="
+              remainingQuestions >= 0
+                ? 'You can add more questions'
+                : 'Please reduce question count'
+            "
+          >
+          </nz-alert>
+        </div>
+
+        <!-- Topics Selection -->
+        <div *ngIf="topicsArray.length > 0" class="topics-section p-2">
+          <!-- Uniform count input row -->
+          <div class="flex flex-wrap items-center gap-2 mb-2">
+            <div class="form-group flex-1 min-w-[200px]">
+              <div class="flex items-center gap-2">
+                <label for="topicUniformCount" class="text-sm whitespace-nowrap"
+                  >Questions/Topic:</label
+                >
+                <input
+                  nz-input
+                  id="topicUniformCount"
+                  type="number"
+                  [(ngModel)]="topicUniformQuestionCount"
+                  [ngModelOptions]="{ standalone: true }"
+                  placeholder="Enter count"
+                  class="w-20 h-8"
+                />
+                <button
+                  nz-button
+                  nzType="primary"
+                  nzSize="small"
+                  (click)="applyTopicUniformCount()"
+                  [disabled]="!topicUniformQuestionCount"
+                  class="ml-1"
+                >
+                  Apply All
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Compact alert -->
+          <nz-alert
+            *ngIf="showRemainingQuestions"
+            [nzType]="remainingQuestions >= 0 ? 'info' : 'error'"
+            [nzMessage]="'Remaining: ' + remainingQuestions"
+            class="mb-2"
+            [nzBanner]="true"
+          ></nz-alert>
+
+          <!-- Topics table -->
+          <div class="mt-2" [formGroup]="testForm">
+            <nz-table
+              #topicsTable
+              [nzData]="topicsArray.controls"
+              [nzBordered]="true"
+              [nzSize]="'small'"
+              [nzScroll]="{ x: '500px' }"
+              [nzPageSize]="50"
+            >
+              <thead>
+                <tr>
+                  <th class="text-sm" [nzWidth]="'40%'">Topic</th>
+                  <th class="text-sm text-center" [nzWidth]="'30%'">Count</th>
+                </tr>
+              </thead>
+              <tbody formArrayName="topics">
+                <tr
+                  *ngFor="let topic of topicsArray.controls; let i = index"
+                  class="text-sm"
+                >
+                  <td
+                    class="whitespace-nowrap overflow-hidden overflow-ellipsis"
+                    [attr.title]="topic.value.topicName"
+                  >
+                    {{ topic.value.topicName }}
+                  </td>
+                  <td [formGroupName]="i">
+                    <div class="flex items-center justify-center gap-1">
+                      <nz-input-number
+                        formControlName="questionCount"
+                        [nzMin]="0"
+                        [nzMax]="100"
+                        [nzStep]="1"
+                        [nzSize]="'small'"
+                        class="w-16"
+                        (input)="onTopicQuestionCountChange($event, i)"
+                      ></nz-input-number>
+                    </div>
+                    <div
+                      *ngIf="topic.get('questionCount')?.errors?.['exceededTotal']"
+                      class="text-red-500 text-xs mt-1"
+                    >
+                      Exceeds 100 limit
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </nz-table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add this section in your test.component.html -->
+      <div
+        *ngIf="testForm.get('testType')?.value === 'Create Weightage Wise Test'"
+        class="weightage-wise-test"
+      >
+        <div class="col-sm-3 form-group">
+          <div class="">
+            <label for=""><strong>Standard</strong></label>
+          </div>
+          <nz-select
+            class="w-100"
+            formControlName="standard"
+            (ngModelChange)="onStandardChange($event)"
+            nzAllowClear
+          >
+            <nz-option
+              *ngFor="let standard of standards"
+              [nzValue]="standard.id"
+              [nzLabel]="standard.name"
+            >
+            </nz-option>
+          </nz-select>
+        </div>
+        <!-- Subject Selection -->
+        <div class="form-group">
+          <label for="subjectId">Subject:</label>
+          <nz-select
+            id="subjectId"
+            formControlName="subjectId"
+            (ngModelChange)="onWeightageSubjectChange($event)"
+            placeholder="Select a subject"
+          >
+            <nz-option
+              *ngFor="let subject of subjects"
+              [nzValue]="subject.id"
+              [nzLabel]="subject.name"
+            >
+            </nz-option>
+          </nz-select>
+        </div>
+
+        <!-- Total Questions Input -->
+        <div class="form-group">
+          <label for="totalQuestions">Total Questions:</label>
+          <input
+            id="totalQuestions"
+            type="number"
+            nz-input
+            formControlName="totalQuestions"
+            (ngModelChange)="onTotalQuestionsChange($event)"
+            placeholder="Enter total questions"
+          />
+        </div>
+
+        <!-- Chapter Weightage Display -->
+        <div *ngIf="chaptersArray.length > 0" class="chapters-weightage">
+          <label>Chapter-wise Question Distribution:</label>
+          <div [formArrayName]="'chapters'">
+            <div
+              *ngFor="let chapter of chaptersArray.controls; let i = index"
+              [formGroupName]="i"
+              class="chapter-weightage-group"
+            >
+              <div class="chapter-info">
+                <span class="chapter-name">{{
+                  chapter.get("chapterName")?.value
+                }}</span>
+                <div class="question-distribution">
+                  <span class="question-count"
+                    >Questions: {{ chapter.get("questionCount")?.value }}</span
+                  >
+                  <span class="weightage-percent">
+                    ({{
+                      (
+                        (chapter.get("questionCount")?.value /
+                          testForm.get("totalQuestions")?.value) *
+                        100
+                      ).toFixed(1)
+                    }}%)
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- For group subjects -->
+      <!-- Template -->
+      <div
+        *ngIf="testForm.get('testType')?.value === 'Create Group Wise Test'"
+        class="group-wise-test"
+      >
+        <div class="col-sm-3 form-group">
+          <div class="">
+            <label for=""><strong>Standard</strong></label>
+          </div>
+          <nz-select
+            class="w-100"
+            formControlName="standard"
+            (ngModelChange)="onStandardChange($event)"
+            nzAllowClear
+          >
+            <nz-option
+              *ngFor="let standard of standards"
+              [nzValue]="standard.id"
+              [nzLabel]="standard.name"
+            >
+            </nz-option>
+          </nz-select>
+        </div>
+
+        <!-- Tabular format -->
+        <div [formArrayName]="'groupSubjects'" class="subjects-table">
+          <nz-table [nzData]="groupSubjectsArray.controls" nzBordered>
+            <thead>
+              <tr>
+                <th>Subject</th>
+                <th>Chapter</th>
+                <th>Questions Count</th>
+                <th>Remaining Questions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container
+                *ngFor="
+                  let group of groupSubjectsArray.controls;
+                  let gi = index
+                "
+              >
+                <ng-container [formGroupName]="gi">
+                  <!-- Add uniform count input for each subject -->
+                  <tr *ngIf="getChapters(group).length > 0">
+                    <td colspan="4" class="p-2 bg-gray-50">
+                      <div class="flex flex-wrap items-center gap-2">
+                        <div class="form-group flex-1 min-w-[200px]">
+                          <div class="flex items-center gap-2">
+                            <label class="text-sm whitespace-nowrap"
+                              >Questions/Chapter:</label
+                            >
+                            <input
+                              nz-input
+                              type="number"
+                              [(ngModel)]="uniformCountMap[gi]"
+                              [ngModelOptions]="{ standalone: true }"
+                              placeholder="Enter count"
+                              class="w-20 h-8"
+                            />
+                            <button
+                              nz-button
+                              nzType="primary"
+                              nzSize="small"
+                              (click)="applyUniformCounts(gi)"
+                              [disabled]="!uniformCountMap[gi]"
+                              class="ml-1"
+                            >
+                              Apply to All Chapters
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- Existing chapter rows -->
+                  <tr
+                    *ngFor="
+                      let chapter of getChapters(group);
+                      let ci = index;
+                      first as isFirst
+                    "
+                  >
+                    <td
+                      *ngIf="isFirst"
+                      [attr.rowspan]="getChapters(group).length"
+                      class="subject-cell"
+                    >
+                      <strong>{{ group.get("subjectName")?.value }}</strong>
+                      <div class="mt-2 text-sm">
+                        Total Questions:
+                        {{ getTotalQuestionsForSubject(gi) }}/100
+                      </div>
+                    </td>
+
+                    <ng-container formArrayName="chapters">
+                      <ng-container [formGroupName]="ci">
+                        <td>{{ chapter.get("chapterName")?.value }}</td>
+                        <td>
+                          <input
+                            type="number"
+                            nz-input
+                            formControlName="questionCount"
+                            (input)="onQuestionCountChangs(gi, ci, $event)"
+                            placeholder="Enter count"
+                            class="w-24"
+                          />
+                        </td>
+                        <td
+                          *ngIf="isFirst"
+                          [attr.rowspan]="getChapters(group).length"
+                        >
+                          {{ getRemainingQuestionsForSubject(gi) }}
+                        </td>
+                      </ng-container>
+                    </ng-container>
+                  </tr>
+                </ng-container>
+              </ng-container>
+            </tbody>
+          </nz-table>
+        </div>
+      </div>
+      <!-- Add this section in your test.component.html -->
+      <!-- Template -->
+      <div
+        *ngIf="testForm.get('testType')?.value === 'Create PYQ Wise Test'"
+        class="pyq-wise-test"
+      >
+        <div class="col-sm-3 form-group">
+          <div class="">
+            <label for=""><strong>Standard</strong></label>
+          </div>
+          <nz-select
+            class="w-100"
+            formControlName="standard"
+            (ngModelChange)="onStandardChange($event)"
+            nzAllowClear
+          >
+            <nz-option
+              *ngFor="let standard of standards"
+              [nzValue]="standard.id"
+              [nzLabel]="standard.name"
+            >
+            </nz-option>
+          </nz-select>
+        </div>
+
+        <!-- Subject Selection -->
+        <div class="form-group">
+          <label for="subjectId">Subject:</label>
+          <nz-select
+            id="subjectId"
+            formControlName="subjectId"
+            (ngModelChange)="onPYQSubjectChange($event)"
+            placeholder="Select a subject"
+          >
+            <nz-option
+              *ngFor="let subject of subjects"
+              [nzValue]="subject.id"
+              [nzLabel]="subject.name"
+            >
+            </nz-option>
+          </nz-select>
+        </div>
+
+        <!-- Remaining Questions Counter -->
+        <div *ngIf="showRemainingQuestions" class="remaining-questions">
+          <nz-alert
+            [nzType]="remainingQuestions >= 0 ? 'info' : 'error'"
+            [nzMessage]="'Remaining Questions: ' + remainingQuestions"
+            [nzDescription]="
+              remainingQuestions >= 0
+                ? 'You can add more questions'
+                : 'Please reduce question count'
+            "
+          >
+          </nz-alert>
+        </div>
+
+        <!-- Chapter Selection with Question Counts -->
+        <div *ngIf="chaptersArray.length > 0" class="chapters-section">
+          <label>Previous Year Questions by Chapter:</label>
+          <div [formArrayName]="'chapters'" class="chapters-grid">
+            <div
+              *ngFor="let chapter of chaptersArray.controls; let i = index"
+              [formGroupName]="i"
+              class="chapter-group"
+            >
+              <div class="chapter-info">
+                <div class="chapter-header">
+                  <span class="chapter-name">{{
+                    chapter.get("chapterName")?.value
+                  }}</span>
+                </div>
+                <div class="question-input">
+                  <label [for]="'pyqQuestionCount-' + i">Questions:</label>
+                  <input
+                    [id]="'pyqQuestionCount-' + i"
+                    type="number"
+                    nz-input
+                    formControlName="questionCount"
+                    (input)="onPYQQuestionCountChange($event, i)"
+                    placeholder="Enter question count"
+                  />
+                  <div
+                    *ngIf="chapter.get('questionCount')?.errors?.['exceededTotal']"
+                    class="error-message"
+                  >
+                    Cannot exceed total limit of 100 questions
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add this section in your test.component.html -->
+      <div
+        *ngIf="
+          testForm.get('testType')?.value === 'Create Numerical Wise Test' ||
+          testForm.get('testType')?.value === 'Create Theoretical Wise Test' ||
+          testForm.get('testType')?.value === 'Create Chapter Wise Test' ||
+          testForm.get('testType')?.value === 'Create Subject Wise Test'
+        "
+        class="question-type-test"
+      >
+        <div class="col-sm-3 form-group">
+          <div class="">
+            <label for=""><strong>Standard</strong></label>
+          </div>
+          <nz-select
+            class="w-100"
+            formControlName="standard"
+            (ngModelChange)="onStandardChange($event)"
+            nzAllowClear
+          >
+            <nz-option
+              *ngFor="let standard of standards"
+              [nzValue]="standard.id"
+              [nzLabel]="standard.name"
+            >
+            </nz-option>
+          </nz-select>
+        </div>
+
+        <!-- Subject Selection -->
+        <div class="form-group">
+          <label for="subjectId">Subject:</label>
+          <nz-select
+            id="subjectId"
+            formControlName="subjectId"
+            (ngModelChange)="onQuestionTypeSubjectChange($event)"
+            placeholder="Select a subject"
+          >
+            <nz-option
+              *ngFor="let subject of subjects"
+              [nzValue]="subject.id"
+              [nzLabel]="subject.name"
+            >
+            </nz-option>
+          </nz-select>
+        </div>
+
+        <!-- Remaining Questions Counter -->
+        <div *ngIf="showRemainingQuestions" class="remaining-questions">
+          <nz-alert
+            [nzType]="remainingQuestions >= 0 ? 'info' : 'error'"
+            [nzMessage]="'Remaining Questions: ' + remainingQuestions"
+            [nzDescription]="
+              remainingQuestions >= 0
+                ? 'You can add more questions'
+                : 'Please reduce question count'
+            "
+          >
+          </nz-alert>
+        </div>
+
+        <!-- Chapter Selection with Question Counts -->
+        <!-- Template -->
+        <div
+          *ngIf="testForm.get('subjectId')?.value && chaptersArray.length > 0"
+          class="chapters-section p-2"
+        >
+          <!-- Compact uniform count input row -->
+          <div class="flex flex-wrap items-center gap-2 mb-2">
+            <div class="form-group flex-1 min-w-[200px]">
+              <div class="flex items-center gap-2">
+                <label for="uniformCount" class="text-sm whitespace-nowrap"
+                  >Questions/Chapter:</label
+                >
+                <input
+                  nz-input
+                  id="uniformCount"
+                  type="number"
+                  [(ngModel)]="uniformQuestionCount"
+                  [ngModelOptions]="{ standalone: true }"
+                  placeholder="Enter count"
+                  class="w-20 h-8"
+                />
+                <button
+                  nz-button
+                  nzType="primary"
+                  nzSize="small"
+                  (click)="applyUniformCount()"
+                  [disabled]="!uniformQuestionCount"
+                  class="ml-1"
+                >
+                  Apply All
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Compact alert -->
+          <nz-alert
+            *ngIf="showRemainingQuestions"
+            [nzType]="remainingQuestions >= 0 ? 'info' : 'error'"
+            [nzMessage]="'Remaining: ' + remainingQuestions"
+            class="mb-2"
+            [nzBanner]="true"
+          ></nz-alert>
+
+          <!-- Mobile-optimized table -->
+          <div class="mt-2" [formGroup]="testForm">
+            <nz-table
+              #chaptersTable
+              [nzData]="chaptersArray.controls"
+              [nzBordered]="true"
+              [nzSize]="'small'"
+              [nzScroll]="{ x: '500px' }"
+              [nzPageSize]="50"
+            >
+              <thead>
+                <tr>
+                  <th class="text-sm" [nzWidth]="'40%'">Chapter</th>
+                  <th class="text-sm text-center" [nzWidth]="'20%'">
+                    Question Count
+                  </th>
+                  <th class="text-sm text-center" [nzWidth]="'30%'">Count</th>
+                </tr>
+              </thead>
+              <tbody formArrayName="chapters">
+                <tr
+                  *ngFor="let chapter of chaptersArray.controls; let i = index"
+                  class="text-sm"
+                >
+                  <td
+                    class="whitespace-nowrap overflow-hidden overflow-ellipsis"
+                    [attr.title]="chapter.value.chapterName"
+                  >
+                    {{ chapter.value.chapterName }}
+                  </td>
+                  <td class="text-center">
+                    {{ chapter.value.availableCount || 0 }}
+                  </td>
+                  <td [formGroupName]="i">
+                    <div class="flex items-center justify-center gap-1">
+                      <nz-input-number
+                        formControlName="questionCount"
+                        [nzMin]="0"
+                        [nzMax]="100"
+                        [nzStep]="1"
+                        [nzSize]="'small'"
+                        class="w-16"
+                        (input)="onQuestionCountChange($event, i)"
+                      ></nz-input-number>
+                    </div>
+                    <div
+                      *ngIf="chapter.get('questionCount')?.errors?.['exceededTotal']"
+                      class="text-red-500 text-xs mt-1"
+                    >
+                      Exceeds 100 limit
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </nz-table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add this section in your test.component.html -->
+      <div
+        *ngIf="testForm.get('testType')?.value === 'Create Random Test'"
+        class="random-test"
+      >
+        <div class="col-sm-3 form-group">
+          <div class="">
+            <label for=""><strong>Standard</strong></label>
+          </div>
+          <nz-select
+            class="w-100"
+            formControlName="standard"
+            (ngModelChange)="onStandardChange($event)"
+            nzAllowClear
+          >
+            <nz-option
+              *ngFor="let standard of standards"
+              [nzValue]="standard.id"
+              [nzLabel]="standard.name"
+            >
+            </nz-option>
+          </nz-select>
+        </div>
+        <!-- Subject Selection -->
+        <div class="form-group">
+          <label for="subjectId">Subject:</label>
+          <nz-select
+            id="subjectId"
+            formControlName="subjectId"
+            (ngModelChange)="onRandomTestSubjectChange($event)"
+            placeholder="Select a subject"
+          >
+            <nz-option
+              *ngFor="let subject of subjects"
+              [nzValue]="subject.id"
+              [nzLabel]="subject.name"
+            >
+            </nz-option>
+          </nz-select>
+        </div>
+
+        <!-- Remaining Questions Counter -->
+        <div *ngIf="showRemainingQuestions" class="remaining-questions">
+          <nz-alert
+            [nzType]="remainingQuestions >= 0 ? 'info' : 'error'"
+            [nzMessage]="'Remaining Questions: ' + remainingQuestions"
+            [nzDescription]="
+              remainingQuestions >= 0
+                ? 'You can add more questions'
+                : 'Please reduce question count'
+            "
+          >
+          </nz-alert>
+        </div>
+
+        <div
+          *ngIf="testForm.get('subjectId')?.value && chaptersArray.length > 0"
+          class="chapters-section p-2"
+        >
+          <!-- Compact uniform count input row -->
+          <div class="flex flex-wrap items-center gap-2 mb-2">
+            <div class="form-group flex-1 min-w-[200px]">
+              <div class="flex items-center gap-2">
+                <label for="uniformCount" class="text-sm whitespace-nowrap"
+                  >Questions/Chapter:</label
+                >
+                <input
+                  nz-input
+                  id="uniformCount"
+                  type="number"
+                  [(ngModel)]="uniformQuestionCount"
+                  [ngModelOptions]="{ standalone: true }"
+                  placeholder="Enter count"
+                  class="w-20 h-8"
+                />
+                <button
+                  nz-button
+                  nzType="primary"
+                  nzSize="small"
+                  (click)="applyUniformCount()"
+                  [disabled]="!uniformQuestionCount"
+                  class="ml-1"
+                >
+                  Apply All
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Compact alert -->
+          <nz-alert
+            *ngIf="showRemainingQuestions"
+            [nzType]="remainingQuestions >= 0 ? 'info' : 'error'"
+            [nzMessage]="'Remaining: ' + remainingQuestions"
+            class="mb-2"
+            [nzBanner]="true"
+          ></nz-alert>
+
+          <!-- Mobile-optimized table -->
+          <div class="mt-2" [formGroup]="testForm">
+            <nz-table
+              #chaptersTable
+              [nzData]="chaptersArray.controls"
+              [nzBordered]="true"
+              [nzSize]="'small'"
+              [nzScroll]="{ x: '500px' }"
+              [nzPageSize]="50"
+            >
+              <thead>
+                <tr>
+                  <th class="text-sm" [nzWidth]="'40%'">Chapter</th>
+                  <th class="text-sm text-center" [nzWidth]="'30%'">Count</th>
+                </tr>
+              </thead>
+              <tbody formArrayName="chapters">
+                <tr
+                  *ngFor="let chapter of chaptersArray.controls; let i = index"
+                  class="text-sm"
+                >
+                  <td
+                    class="whitespace-nowrap overflow-hidden overflow-ellipsis"
+                    [attr.title]="chapter.value.chapterName"
+                  >
+                    {{ chapter.value.chapterName }}
+                  </td>
+                  <td [formGroupName]="i">
+                    <div class="flex items-center justify-center gap-1">
+                      <nz-input-number
+                        formControlName="questionCount"
+                        [nzMin]="0"
+                        [nzMax]="100"
+                        [nzStep]="1"
+                        [nzSize]="'small'"
+                        class="w-16"
+                        (input)="onQuestionCountChange($event, i)"
+                      ></nz-input-number>
+                    </div>
+                    <div
+                      *ngIf="chapter.get('questionCount')?.errors?.['exceededTotal']"
+                      class="text-red-500 text-xs mt-1"
+                    >
+                      Exceeds 100 limit
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </nz-table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add this section in your test.component.html -->
+      <div
+        *ngIf="testForm.get('testType')?.value === 'Level Wise Test'"
+        class="level-wise-test"
+      >
+        <div class="col-sm-3 form-group">
+          <div class="">
+            <label for=""><strong>Standard</strong></label>
+          </div>
+          <nz-select
+            class="w-100"
+            formControlName="standard"
+            (ngModelChange)="onStandardChange($event)"
+            nzAllowClear
+          >
+            <nz-option
+              *ngFor="let standard of standards"
+              [nzValue]="standard.id"
+              [nzLabel]="standard.name"
+            >
+            </nz-option>
+          </nz-select>
+        </div>
+        <!-- Subject Selection -->
+        <div class="form-group">
+          <label for="subjectId">Subject:</label>
+          <nz-select
+            id="subjectId"
+            formControlName="subjectId"
+            (ngModelChange)="onLevelWiseSubjectChange($event)"
+            placeholder="Select a subject"
+          >
+            <nz-option
+              *ngFor="let subject of subjects"
+              [nzValue]="subject.id"
+              [nzLabel]="subject.name"
+            >
+            </nz-option>
+          </nz-select>
+        </div>
+
+        <!-- Level-wise Question Distribution -->
+        <div class="level-distribution" formGroupName="levelWise">
+          <h4>Question Distribution by Difficulty Level</h4>
+
+          <!-- Remaining Questions Counter -->
+          <div class="remaining-questions">
+            <nz-alert
+              [nzType]="remainingLevelCount >= 0 ? 'info' : 'error'"
+              [nzMessage]="'Remaining Questions: ' + remainingLevelCount"
+              [nzDescription]="
+                remainingLevelCount >= 0
+                  ? 'You can add more questions'
+                  : 'Please reduce question count'
+              "
+            >
+            </nz-alert>
+          </div>
+
+          <!-- Level Controls -->
+          <div class="level-controls">
+            <div class="level-group">
+              <label for="easyCount">Easy Questions:</label>
+              <input
+                id="easyCount"
+                type="number"
+                nz-input
+                formControlName="easy"
+                (input)="onLevelCountChange('easy', $event)"
+                placeholder="Enter count"
+              />
+            </div>
+
+            <div class="level-group">
+              <label for="mediumCount">Medium Questions:</label>
+              <input
+                id="mediumCount"
+                type="number"
+                nz-input
+                formControlName="medium"
+                (input)="onLevelCountChange('medium', $event)"
+                placeholder="Enter count"
+              />
+            </div>
+
+            <div class="level-group">
+              <label for="hardCount">Hard Questions:</label>
+              <input
+                id="hardCount"
+                type="number"
+                nz-input
+                formControlName="hard"
+                (input)="onLevelCountChange('hard', $event)"
+                placeholder="Enter count"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Chapter Selection -->
+        <div *ngIf="selectedChapters.length > 0" class="chapter-selection">
+          <h4>Select Chapters</h4>
+          <div class="chapters-list">
+            <div *ngFor="let chapter of selectedChapters" class="chapter-item">
+              <label
+                nz-checkbox
+                [(ngModel)]="chapter.selected"
+                (ngModelChange)="toggleChapterSelection(chapter.chapterId)"
+                [ngModelOptions]="{ standalone: true }"
+              >
+                {{ chapter.chapterName }}
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button
+          nz-button
+          nzType="primary"
+          (click)="saveTest()"
+          [disabled]="testForm.invalid"
+        >
+          Save Test
+        </button>
+      </div>
+    </form>
+  </div>
+</section>

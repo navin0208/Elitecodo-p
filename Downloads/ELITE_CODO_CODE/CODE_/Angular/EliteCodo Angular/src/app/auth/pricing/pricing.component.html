@@ -1,0 +1,120 @@
+<app-navbar></app-navbar>
+<section class="pricing-section">
+  <div class="pricing-container">
+    <!-- Header -->
+    <div class="pricing-header">
+      <h1>Choose Your <span>{{ getRoleTitle() }}</span> Plan</h1>
+      <p class="subtitle">{{ getRoleSubtitle() }}</p>
+    </div>
+
+    <!-- Plans Grid - Single Card -->
+    <div class="plans-grid">
+      <div 
+        class="plan-card" 
+        *ngFor="let plan of plans"
+        [class.popular]="plan.isPopular"
+        [class.selected]="selectedPlan === plan.id"
+        (click)="selectPlan(plan.id)">
+        
+        <!-- Glass Effect Background -->
+        <div class="glass-bg"></div>
+        
+        <!-- Popular Badge -->
+        <div class="popular-badge" *ngIf="plan.isPopular">
+          <i class="fas fa-star"></i> Most Popular
+        </div>
+
+        <!-- Plan Icon -->
+        <div class="plan-icon-wrapper">
+          <div class="plan-icon" [style.background]="plan.color">
+            <i class="fas" [class]="plan.icon"></i>
+          </div>
+        </div>
+
+        <!-- Plan Name -->
+        <h3 class="plan-name">{{ plan.name }}</h3>
+        <p class="plan-description">{{ plan.description }}</p>
+
+        <!-- Plan Price - Horizontal -->
+        <div class="plan-price">
+          <div class="price-row">
+            <div class="price-item">
+              <span class="price-label">Monthly</span>
+              <span class="price-amount">
+                <span class="currency">₹</span>
+                <span class="amount">{{ getMonthlyPrice(plan) }}</span>
+              </span>
+              <span class="price-period">/ month</span>
+            </div>
+            
+            <div class="price-divider"></div>
+            
+            <div class="price-item annual">
+              <span class="price-label">Annual</span>
+              <span class="price-amount">
+                <span class="currency">₹</span>
+                <span class="amount">{{ getAnnualPrice(plan) }}</span>
+              </span>
+              <span class="price-period">/ year</span>
+              <span class="save-badge">Save 17%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Plan Details -->
+        <div class="plan-details">
+          <!-- Teacher Details -->
+          <div *ngIf="plan.role === 'teacher'" class="detail-item">
+            <i class="fas fa-user-graduate"></i>
+            <span>{{ plan.defaultStudents }} Students Included</span>
+            <span class="price-tag">₹{{ plan.extraStudentPrice }}/extra</span>
+          </div>
+          <div *ngIf="plan.role === 'teacher'" class="detail-note">
+            <i class="fas fa-info-circle"></i>
+            <span>Add extra students for ₹{{ plan.extraStudentPrice }} each</span>
+          </div>
+
+          <!-- Institution Details -->
+          <div *ngIf="plan.role === 'institute'" class="detail-item">
+            <i class="fas fa-chalkboard-teacher"></i>
+            <span>{{ plan.minTeachers }} Teachers Included</span>
+            <span class="price-tag">₹{{ plan.teacherPrice }}/mo</span>
+          </div>
+          <div *ngIf="plan.role === 'institute'" class="detail-item">
+            <i class="fas fa-user-graduate"></i>
+            <span>{{ plan.minStudents }} Students Included</span>
+            <span class="price-tag">₹{{ plan.studentPrice }}/mo</span>
+          </div>
+          <div *ngIf="plan.role === 'institute'" class="detail-note">
+            <i class="fas fa-info-circle"></i>
+            <span>Minimum 10 teachers & 10 students</span>
+          </div>
+
+          <div class="detail-total">
+            <span>Total Monthly Bill</span>
+            <span class="total-amount">₹{{ getMonthlyPrice(plan) }}</span>
+          </div>
+        </div>
+
+        <!-- Features -->
+        <div class="plan-body">
+          <ul class="features">
+            <li *ngFor="let feature of plan.features">
+              <i class="fas fa-check-circle"></i> {{ feature }}
+            </li>
+          </ul>
+        </div>
+
+        <!-- CTA Button -->
+        <button class="btn-select" [style.background]="plan.color">
+          Get Started <i class="fas fa-arrow-right"></i>
+        </button>
+
+        <!-- Trial Badge -->
+        <div class="trial-badge">
+          <i class="fas fa-gem"></i> Free 14-day trial
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

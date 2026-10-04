@@ -1,0 +1,228 @@
+<!-- admin-reports.component.html -->
+<div class="reports-container">
+    <div class="reports-header">
+        <h1>Institute Reports Dashboard</h1>
+        <p>Comprehensive analytics for the UPSC Management System</p>
+    </div>
+
+    <!-- Tab Navigation -->
+    <div class="reports-tabs">
+        <div class="tab" [class.active]="activeTab === 'teacher'" (click)="changeTab('teacher')">
+            <i class="fas fa-chalkboard-teacher"></i> Teacher Reports
+        </div>
+        <div class="tab" [class.active]="activeTab === 'test'" (click)="changeTab('test')">
+            <i class="fas fa-file-alt"></i> Test Reports
+        </div>
+        <div class="tab" [class.active]="activeTab === 'student'" (click)="changeTab('student')">
+            <i class="fas fa-user-graduate"></i> Student Reports
+        </div>
+        <div class="tab" [class.active]="activeTab === 'overview'" (click)="changeTab('overview')">
+            <i class="fas fa-chart-pie"></i> Overview
+        </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div class="loading-container" *ngIf="isLoading">
+        <div class="spinner"></div>
+        <p>{{ loadingMessages['initial'] || 'Loading reports data...' }}</p>
+    </div>
+
+    <!-- Overview Dashboard -->
+    <div class="reports-section" *ngIf="activeTab === 'overview' && !isLoading">
+        <div class="section-header">
+            <h2>Institution Overview</h2>
+        </div>
+
+        <div class="report-card-container">
+            <div class="report-card summary-card">
+                <div class="summary-stat">
+                    <div class="stat-value">{{ dashboardStats.totalTeachers }}</div>
+                    <div class="stat-label">Total Teachers</div>
+                </div>
+                <div class="summary-stat">
+                    <div class="stat-value">{{ dashboardStats.totalStudents }}</div>
+                    <div class="stat-label">Total Students</div>
+                </div>
+                <div class="summary-stat">
+                    <div class="stat-value">{{ dashboardStats.totalTests }}</div>
+                    <div class="stat-label">Total Tests</div>
+                </div>
+                <div class="summary-stat">
+                    <div class="stat-value">{{ dashboardStats.avgScore }}%</div>
+                    <div class="stat-label">Avg. Score</div>
+                </div>
+            </div>
+
+            <div class="report-card chart-card">
+                <div class="chart-container">
+                    <div id="teacherOverviewChart" class="chart"></div>
+                </div>
+            </div>
+
+            <div class="report-card chart-card">
+                <div class="chart-container">
+                    <div id="testOverviewChart" class="chart"></div>
+                </div>
+            </div>
+
+            <div class="report-card chart-card">
+                <div class="chart-container">
+                    <div id="studentOverviewChart" class="chart"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Teacher Reports Section -->
+    <div class="reports-section" *ngIf="activeTab === 'teacher' && !isLoading">
+        <div class="section-header">
+            <h2>Teacher Performance Analytics</h2>
+            <div class="section-controls">
+                <div class="search-box">
+                    <input type="text" placeholder="Search teachers..." [(ngModel)]="searchTerm"
+                        (input)="onSearch($event)">
+                    <i class="fas fa-search"></i>
+                </div>
+                <label for="teacherSelect">Select Teacher:</label>
+                <select id="teacherSelect" [(ngModel)]="selectedTeacher" (change)="onTeacherChange()">
+                    <option *ngFor="let teacher of filteredTeachers" [ngValue]="teacher">{{ teacher.name }}</option>
+                </select>
+                <div class="pagination-controls" *ngIf="teachers.length > pageSize">
+                    <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <span>Page {{ currentPage }} of {{ Math.ceil(teachers.length / pageSize) }}</span>
+                    <button (click)="changePage(currentPage + 1)"
+                        [disabled]="currentPage === Math.ceil(teachers.length / pageSize)">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="report-card-container">
+            <div class="report-card summary-card">
+                <div class="summary-stat">
+                    <div class="stat-value">{{ selectedTeacher?.studentCount || 0 }}</div>
+                    <div class="stat-label">Students</div>
+                </div>
+                <div class="summary-stat">
+                    <div class="stat-value">{{ selectedTeacher?.testCount || 0 }}</div>
+                    <div class="stat-label">Tests Created</div>
+                </div>
+                <div class="summary-stat">
+                    <div class="stat-value">{{ selectedTeacher?.avgScore || 0 }}%</div>
+                    <div class="stat-label">Avg. Score</div>
+                </div>
+                <div class="summary-stat">
+                    <div class="stat-value">{{ selectedTeacher?.completionRate || 0 }}%</div>
+                    <div class="stat-label">Completion</div>
+                </div>
+            </div>
+
+            <div class="report-card chart-card">
+                <div class="chart-container">
+                    <div id="teacherPerformanceChart" class="chart"></div>
+                </div>
+            </div>
+
+            <div class="report-card chart-card">
+                <div class="chart-container">
+                    <div id="teacherTestsChart" class="chart"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Test Reports Section -->
+    <div class="reports-section" *ngIf="activeTab === 'test' && !isLoading">
+        <div class="section-header">
+            <h2>Test Performance Analytics</h2>
+            <div class="section-controls">
+                <label for="testSelect">Select Test:</label>
+                <select id="testSelect" [(ngModel)]="selectedTest" (change)="onTestChange()">
+                    <option *ngFor="let test of tests" [ngValue]="test">{{ test.title }}</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="report-card-container">
+            <div class="report-card summary-card">
+                <div class="summary-stat">
+                    <div class="stat-value">{{ selectedTest?.participantCount || 0 }}</div>
+                    <div class="stat-label">Participants</div>
+                </div>
+                <div class="summary-stat">
+                    <div class="stat-value">{{ selectedTest?.avgScore || 0 }}%</div>
+                    <div class="stat-label">Avg. Score</div>
+                </div>
+                <div class="summary-stat">
+                    <div class="stat-value">{{ selectedTest?.passRate || 0 }}%</div>
+                    <div class="stat-label">Pass Rate</div>
+                </div>
+                <div class="summary-stat">
+                    <div class="stat-value">{{ selectedTest?.avgTime || 0 }}m</div>
+                    <div class="stat-label">Avg. Time</div>
+                </div>
+            </div>
+
+            <!-- <div class="report-card chart-card">
+                <div class="chart-container">
+                    <div id="testPerformanceChart" class="chart"></div>
+                </div>
+            </div> -->
+
+            <div class="report-card chart-card">
+                <div class="chart-container">
+                    <div id="testScoreDistributionChart" class="chart"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Student Reports Section -->
+    <div class="reports-section" *ngIf="activeTab === 'student' && !isLoading">
+        <div class="section-header">
+            <h2>Student Performance Analytics</h2>
+            <div class="section-controls">
+                <label for="studentSelect">Select Student:</label>
+                <select id="studentSelect" [(ngModel)]="selectedStudent" (change)="onStudentChange()">
+                    <option *ngFor="let student of students" [ngValue]="student">{{ student.name }}</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="report-card-container">
+            <div class="report-card summary-card">
+                <div class="summary-stat">
+                    <div class="stat-value">{{ selectedStudent?.testsCompleted || 0 }}</div>
+                    <div class="stat-label">Tests Taken</div>
+                </div>
+                <div class="summary-stat">
+                    <div class="stat-value">{{ selectedStudent?.avgScore || 0 }}%</div>
+                    <div class="stat-label">Avg. Score</div>
+                </div>
+                <div class="summary-stat">
+                    <div class="stat-value">{{ selectedStudent?.highestScore || 0 }}%</div>
+                    <div class="stat-label">Highest</div>
+                </div>
+                <div class="summary-stat">
+                    <div class="stat-value">{{ selectedStudent?.rank || 'N/A' }}</div>
+                    <div class="stat-label">Rank</div>
+                </div>
+            </div>
+
+            <div class="report-card chart-card">
+                <div class="chart-container">
+                    <div id="studentProgressChart" class="chart"></div>
+                </div>
+            </div>
+
+            <div class="report-card chart-card">
+                <div class="chart-container">
+                    <div id="studentSubjectChart" class="chart"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

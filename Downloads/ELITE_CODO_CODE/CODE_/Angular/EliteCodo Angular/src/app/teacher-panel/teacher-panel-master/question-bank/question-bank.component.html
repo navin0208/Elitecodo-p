@@ -1,0 +1,22 @@
+<section>
+    <div class="container-fluid p-4">
+        <div class="d-flex flex-column position-relative overflow-hidden text-body bg-light box-border shadow rounded-lg transition-all w-90 mx-auto p-4"
+            tabindex="-1">
+            <div class="d-flex p-3 w-100 justify-content-start align-items-center rounded-top h3">
+                Question Bank for NEET
+            </div>
+            <div class="d-flex w-100 p-3 flex-column overflow-y-auto">
+                <div class="d-flex flex-wrap gap-3  py-4" style="justify-content: center;">
+                    <button *ngFor="let year of years" class="btn year_option_btn justify-content-center"
+                        [ngClass]="randomColor()" type="button">{{ year }}</button>
+                </div>
+
+                <hr class="my-4">
+                <div class="py-4">
+                    <p class="text-center font-bold">Select a year to display its question bank.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>

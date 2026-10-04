@@ -1,0 +1,236 @@
+// student-detail.component.scss
+// @import '../../styles/variables';
+// Add this at the top of your file
+$card-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+$primary-color: #1890ff; // Adjust color as needed
+$success-color: #52c41a; // Adjust color as needed
+
+section{
+  position: absolute;
+  width: 100%;
+}
+
+.student-profile-container {
+  padding: 24px;
+  min-height: 100vh;
+
+  .back-nav {
+    margin-bottom: 16px;
+  }
+
+  .profile-header {
+    background: white;
+    border-radius: 8px;
+    margin-bottom: 24px;
+    padding: 24px;
+    box-shadow: $card-shadow;
+
+    .header-content {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+
+      .student-avatar {
+        ::ng-deep .ant-avatar {
+          background: $primary-color;
+          font-size: 36px;
+        }
+      }
+
+      .student-info {
+        flex: 1;
+
+        .student-name {
+          margin: 0 0 8px;
+          font-size: 24px;
+          font-weight: 600;
+        }
+
+        .info-badges {
+          display: flex;
+          gap: 8px;
+        }
+      }
+
+      .action-buttons {
+        display: flex;
+        gap: 12px;
+      }
+    }
+  }
+
+  .quick-stats {
+    margin-bottom: 24px;
+
+    .ant-card {
+      box-shadow: $card-shadow;
+      border-radius: 8px;
+      transition: transform 0.3s;
+
+      &:hover {
+        transform: translateY(-5px);
+      }
+    }
+  }
+
+  .main-content {
+    .chart-card {
+      margin-bottom: 24px;
+      box-shadow: $card-shadow;
+      border-radius: 8px;
+
+      .performance-chart {
+        height: 400px;
+      }
+    }
+
+    .subjects-card {
+      margin-bottom: 24px;
+      box-shadow: $card-shadow;
+      border-radius: 8px;
+
+      .subject-row {
+        display: flex;
+        align-items: center;
+        padding: 16px 0;
+        border-bottom: 1px solid #f0f0f0;
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        .subject-info {
+          width: 150px;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+
+          .subject-icon {
+            font-size: 20px;
+            color: $primary-color;
+          }
+
+          .subject-name {
+            font-weight: 500;
+          }
+        }
+
+        .subject-stats {
+          flex: 1;
+          display: flex;
+          align-items: center;
+          gap: 16px;
+
+          ::ng-deep .ant-progress {
+            flex: 1;
+            margin: 0;
+          }
+
+          .stats-details {
+            width: 120px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            .improvement {
+              display: flex;
+              align-items: center;
+              gap: 4px;
+              font-size: 12px;
+
+              &.positive {
+                color: $success-color;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .activity-card,
+    .notes-card,
+    .actions-card {
+      margin-bottom: 24px;
+      box-shadow: $card-shadow;
+      border-radius: 8px;
+    }
+
+    .notes-card {
+      .note-item {
+        padding: 12px 0;
+        border-bottom: 1px solid #f0f0f0;
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        .note-header {
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 8px;
+
+          .subject {
+            font-weight: 500;
+            color: $primary-color;
+          }
+
+          .date {
+            color: rgba(0, 0, 0, 0.45);
+            font-size: 12px;
+          }
+        }
+
+        .note-content {
+          margin: 0;
+          color: rgba(0, 0, 0, 0.65);
+        }
+      }
+    }
+
+    .actions-card {
+      .action-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+
+        .action-button {
+          text-align: left;
+          height: 40px;
+
+          i {
+            margin-right: 8px;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Responsive styles
+@media (max-width: 768px) {
+  .student-profile-container {
+    padding: 16px;
+
+    .profile-header {
+      .header-content {
+        flex-direction: column;
+        text-align: center;
+
+        .student-info {
+          .info-badges {
+            justify-content: center;
+          }
+        }
+
+        .action-buttons {
+          width: 100%;
+          flex-direction: column;
+
+          button {
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+}

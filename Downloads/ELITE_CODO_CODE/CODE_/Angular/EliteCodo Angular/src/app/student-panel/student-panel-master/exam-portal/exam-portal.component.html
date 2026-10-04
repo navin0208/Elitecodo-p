@@ -1,0 +1,142 @@
+<section [ngStyle]="{ 'background-color':http.getBackgroundColor()}">
+    <div class="exam-layout">
+        <!-- Left Section: Questions -->
+        <div class="question-section">
+            <div class="question-container">
+                <div class="exam-header">
+                    <h1>{{getTestName()}}</h1>
+                    <div class="time-info">
+                        Time spent on question {{ currentQuestionIndex + 1 }}:
+                        {{ getTotalTimeSpent(currentQuestionIndex) }}s
+                    </div>
+                    <div class="marks-badge">
+                        {{ currentQuestion.marks }} Marks
+                    </div>
+                </div>
+
+                <div class="question-content">
+                    <div class="question-header">
+                        <span class="question-number">Question {{ currentQuestionIndex + 1 }}</span>
+
+                        <!-- New Important Question Checkbox -->
+                        <div class="important-star" [class.active]="importantQuestions[currentQuestionIndex]"
+                            (click)="toggleImportantQuestion()">
+                            <span class="anticon">
+                                <i nz-icon nzType="star" nzTheme="fill"></i>
+                            </span>
+                            <span class="star-label">Important</span>
+                        </div>
+
+                    </div>
+
+                    <!-- Question Text with HTML Support -->
+                    <div class="question-text" [innerHTML]="sanitizeHtml(currentQuestion.question)"></div>
+
+                    <!-- Options Grid -->
+                    <div class="options-grid">
+                        <div *ngFor="let optionNum of [1,2,3,4]; let i = index" class="option-wrapper" [class.selected]="isMultiSelectQuestion() 
+                          ? (selectedMultiAnswers[currentQuestionIndex] && selectedMultiAnswers[currentQuestionIndex][i]) 
+                          : selectedAnswer === i" (click)="selectAnswer(i)">
+                            <div class="option-content">
+                                <div class="option-marker">{{ ['A', 'B', 'C', 'D'][i] }}</div>
+                                <input *ngIf="isMultiSelectQuestion()" type="checkbox" class="multi-select-checkbox"
+                                    [checked]="selectedMultiAnswers[currentQuestionIndex] && selectedMultiAnswers[currentQuestionIndex][i]">
+                                <div class="option-text"
+                                    [innerHTML]="sanitizeHtml(currentQuestion['option' + optionNum])"></div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Navigation -->
+                    <div class="navigation-buttons">
+                        <button nz-button nzType="default" [disabled]="currentQuestionIndex === 0"
+                            (click)="previousQuestion()" class="nav-button">
+                            <span nz-icon nzType="left"></span>
+                            Previous
+                        </button>
+                        <button nz-button nzType="primary" (click)="nextQuestion()" class="nav-button">
+                            {{ isLastQuestion ? 'Submit' : 'Next' }}
+                            <span nz-icon [nzType]="isLastQuestion ? 'check' : 'right'"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Section -->
+        <div class="status-section">
+            <!-- Timer Card -->
+            <div class="timer-card" [class.warning]="remainingTime < 300">
+                <div class="timer-header">
+                    <span nz-icon nzType="clock-circle" nzTheme="outline"></span>
+                    <h3>Time Remaining</h3>
+                </div>
+                <div class="timer-display">{{ formatTime(remainingTime) }}</div>
+            </div>
+
+            <!-- Progress Card -->
+            <div class="progress-card">
+                <div class="progress-header">
+                    <h3>Exam Progress</h3>
+                </div>
+
+                <div class="progress-stats">
+                    <div class="stat-box">
+                        <div class="stat-circle total">
+                            <div class="stat-value">{{ questions.length }}</div>
+                            <div class="stat-label">Total Questions</div>
+                        </div>
+                    </div>
+
+                    <!-- <div class="stat-box">
+                        <div class="stat-circle answered">
+                            <div class="stat-value">{{ getAnsweredQuestionsCount() }}</div>
+                            <div class="stat-label">Questions Answered</div>
+                        </div>
+                    </div> -->
+
+                    <div class="stat-box">
+                        <div class="stat-circle remaining">
+                            <div class="stat-value">{{ questions.length - getAnsweredQuestionsCount() }}</div>
+                            <div class="stat-label">Questions Remaining</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-map">
+                    <div class="map-title">Questions Overview</div>
+                    <div class="map-legend">
+                        <div class="legend-item">
+                            <span class="legend-box answered"></span>
+                            <span>Answered</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-box current"></span>
+                            <span>Current</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-box important"></span>
+                            <span>Important</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-box visited-unanswered"></span>
+                            <span>Visited & Unanswered</span>
+                        </div>
+                    </div>
+                    <div class="map-grid">
+                        <div *ngFor="let question of questions; let i = index" class="question-box" [ngClass]="{
+                            'current': currentQuestionIndex === i,
+                            'answered': answeredQuestions[i],
+                            'important': importantQuestions[i] && !answeredQuestions[i],
+                            'visited-unanswered': visitedQuestions[i] && !answeredQuestions[i] && currentQuestionIndex !== i,
+                            'unanswered': !answeredQuestions[i] && !importantQuestions[i] && !visitedQuestions[i]
+                        }" (click)="goToQuestion(i)">
+                            {{ i + 1 }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

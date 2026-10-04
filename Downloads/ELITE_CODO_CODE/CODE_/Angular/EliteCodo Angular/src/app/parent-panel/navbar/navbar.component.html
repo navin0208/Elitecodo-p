@@ -1,0 +1,80 @@
+<nav class="navbar">
+    <header class="navbar-header">
+        <ul class="navbar-list navbar-alignment" data-justify="start">
+            <li class="navbar-item">
+                <div class="hidden-md">
+                    <button class="btn btn-outline-primary btn-claaa" type="button" title="Go back" (click)="goBack()">
+                        <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512"
+                            height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                            <path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="48"
+                                d="M244 400L100 256l144-144M120 256h292"></path>
+                        </svg>
+                    </button>
+                </div>
+            </li>
+            <a style="text-decoration: none;">
+                <li class="navbar-item logo-item">
+                    <img [src]="
+                    sessionStorageObj.adminlogoImage && sessionStorageObj.adminlogoImage.startsWith('https://zplusglobalmarketinsights.com/') 
+                      ? sessionStorageObj.adminlogoImage 
+                      : 'https://zplusglobalmarketinsights.com/auctionBanksImages/favicon.png'
+                  " height="48" width="48">
+                    <p *ngIf="sessionStorageObj.className!=='null'" class="logo-text m-0 text-dark">
+                        <span>{{sessionStorageObj.className}}</span></p>
+                </li>
+            </a>
+        </ul>
+        <ul class="navbar-list navbar-alignment" data-justify="end">
+            <p class="username hidden-md m-0">{{sessionStorageObj.userFullName}}</p>
+            <!-- Notification Bell -->
+            <li class="nav-item notification-dropdown">
+                <button class="notification-btn" id="notificationButton" (click)="toggleNotifications()">
+                    <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round"
+                        stroke-linejoin="round" height="1.5em" width="1.5em" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M21 19a2 2 0 0 1-2-2V10a7 7 0 1 0-14 0v7a2 2 0 0 1-2 2"></path>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                    </svg>
+                    <span class="notification-badge">{{ unreadNotifications }}</span>
+                </button>
+            </li>
+
+            <li class="nav-item dropdown" style="list-style: none;">
+                <a class="nav-link" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    <span class="avatar" aria-haspopup="true" aria-expanded="false" role="button" aria-label="avatar">
+                        <img [src]="
+                    sessionStorageObj.adminprofilePicture && sessionStorageObj.adminprofilePicture.startsWith('https://zplusglobalmarketinsights.com/') 
+                      ? sessionStorageObj.adminprofilePicture 
+                      : 'https://api.dicebear.com/7.x/avataaars/svg?seed=John'
+                  " height="100%" width="100%">
+                    </span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" (click)="goBack()">Go Back</a></li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li><a class="dropdown-item logout_btn" (click)="Logout()">Log Out</a></li>
+                </ul>
+            </li>
+
+            <li class="navbar-item">
+
+                <div class="hidden-md">
+                    <button class="btn btn-outline-danger btn-claaa" type="button" title="Log out" (click)="Logout()">
+                        <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24"
+                            stroke-linecap="round" stroke-linejoin="round" height="1em" width="1em"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                            <polyline points="16 17 21 12 16 7"></polyline>
+                            <line x1="21" y1="12" x2="9" y2="12"></line>
+                        </svg>
+                        Log Out
+                    </button>
+                </div>
+
+            </li>
+
+        </ul>
+    </header>
+</nav>

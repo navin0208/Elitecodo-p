@@ -1,0 +1,61 @@
+<!-- STANDARD SELECTION SECTION -->
+<section class="standard-selection-section py-5">
+  <div class="container">
+    <!-- Header -->
+    <div class="section-header text-center mb-5">
+      <h2 class="display-4 fw-bold">
+        <span class="highlight-text">Standard</span> Selection
+      </h2>
+      <div class="divider">
+        <span class="divider-icon">
+          <i class="fa-solid fa-graduation-cap"></i>
+        </span>
+      </div>
+      <p class="lead text-muted mt-3">
+        Select a standard to begin your assessment journey
+      </p>
+    </div>
+
+    <!-- Cards Grid -->
+    <div class="row row-cols-1 row-cols-md-3 g-4 mt-2">
+      <div class="col" *ngFor="let item of standardlist">
+        <div class="card-wrapper">
+          <div class="standard-card">
+            <div class="card-body">
+              <!-- Checkbox added here -->
+              <div class="form-check form-check-inline float-end">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  [id]="'standardCheckbox_' + item.standardId"
+                  [checked]="isStandardSelected(item.standardId)"
+                  (change)="toggleStandardSelection(item.standardId)"
+                />
+              </div>
+
+              <div class="icon-wrapper">
+                <i class="fa-solid fa-book-open"></i>
+              </div>
+              <h3 class="card-title">{{ item.standardName }}</h3>
+              <p class="card-text">
+                Comprehensive assessment designed to evaluate proficiency and
+                understanding in {{ item.standardName }} level concepts.
+              </p>
+            </div>
+            <div class="hover-overlay"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add this inside your container, after the cards grid -->
+    <div class="text-center mt-5" *ngIf="selectedStandardIds.length > 0">
+      <button class="btn-assessment" (click)="OpenTestSubject()">
+        <span>Proceed with Selected Standards</span>
+        <span class="badge-count">{{ selectedStandardIds.length }}</span>
+        <i class="fa-solid fa-arrow-right"></i>
+      </button>
+    </div>
+  </div>
+</section>
+<!-- STANDARD SELECTION SECTION ENDED -->

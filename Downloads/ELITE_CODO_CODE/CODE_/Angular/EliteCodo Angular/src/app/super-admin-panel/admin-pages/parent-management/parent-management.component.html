@@ -1,0 +1,216 @@
+<mat-card class="m-2 p-3">
+    <h3 class="text-center form-heaading" style="color: #17a2b8;">Parent Management*</h3>
+</mat-card>
+
+
+<nz-card>
+    <div class="container-fluid">
+
+        <!-- parent-management.component.html -->
+        <div class="container-fluid parent-management-wrapper">
+            <div class="row justify-content-center">
+                <div class="col-md-12">
+                    <div class="card shadow-lg border-0 rounded-lg">
+                        <div class="row m-2">
+
+                            <div class="col-md-6 form-group" *ngIf="selectedStudentId">
+                                <div>
+                                    <label for=""><strong>Student Name</strong></label>
+                                </div>
+                                <button class="btn activeStatus text-capitalize">{{ studentName }}</button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <form [formGroup]="regiStrationForm" class="needs-validation" novalidate>
+                                <div class="row g-3">
+                                    <!-- First Name -->
+                                    <div class="col-md-6">
+                                        <label for="firstName" class="form-label">First Name</label>
+                                        <div class="input-group has-validation">
+                                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                            <input type="text" class="form-control" id="firstName"
+                                                formControlName="firstName"
+                                                [ngClass]="{'is-invalid': regiStrationForm.get('firstName')?.invalid && regiStrationForm.get('firstName')?.touched}">
+                                            <div class="invalid-feedback"
+                                                *ngIf="regiStrationForm.get('firstName')?.invalid && regiStrationForm.get('firstName')?.touched">
+                                                <div *ngIf="regiStrationForm.get('firstName')?.errors?.['required']">
+                                                    First
+                                                    Name is required</div>
+                                                <div *ngIf="regiStrationForm.get('firstName')?.errors?.['pattern']">Only
+                                                    alphabets are allowed</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Last Name -->
+                                    <div class="col-md-6">
+                                        <label for="lastName" class="form-label">Last Name</label>
+                                        <div class="input-group has-validation">
+                                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                            <input type="text" class="form-control" id="lastName"
+                                                formControlName="lastName"
+                                                [ngClass]="{'is-invalid': regiStrationForm.get('lastName')?.invalid && regiStrationForm.get('lastName')?.touched}">
+                                            <div class="invalid-feedback"
+                                                *ngIf="regiStrationForm.get('lastName')?.invalid && regiStrationForm.get('lastName')?.touched">
+                                                <div *ngIf="regiStrationForm.get('lastName')?.errors?.['required']">Last
+                                                    Name
+                                                    is required</div>
+                                                <div *ngIf="regiStrationForm.get('lastName')?.errors?.['pattern']">Only
+                                                    alphabets are allowed</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Mobile Number -->
+                                    <div class="col-md-6">
+                                        <label for="mobile" class="form-label">Mobile Number</label>
+                                        <div class="input-group has-validation">
+                                            <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                            <input type="tel" class="form-control" id="mobile" formControlName="mobile"
+                                                onkeypress='return event.charCode>=48 && event.charCode <=57'
+                                                minlength="10" maxlength="10"
+                                                [ngClass]="{'is-invalid': regiStrationForm.get('mobile')?.invalid && regiStrationForm.get('mobile')?.touched}">
+                                            <div class="invalid-feedback"
+                                                *ngIf="regiStrationForm.get('mobile')?.invalid && regiStrationForm.get('mobile')?.touched">
+                                                <div *ngIf="regiStrationForm.get('mobile')?.errors?.['required']">Mobile
+                                                    number is required</div>
+                                                <div *ngIf="regiStrationForm.get('mobile')?.errors?.['pattern']">Invalid
+                                                    mobile number</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Email -->
+                                    <div class="col-md-6">
+                                        <label for="email" class="form-label">Email</label>
+                                        <div class="input-group has-validation">
+                                            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                            <input type="email" class="form-control" id="email" formControlName="email"
+                                                [ngClass]="{'is-invalid': regiStrationForm.get('email')?.invalid && regiStrationForm.get('email')?.touched}">
+                                            <div class="invalid-feedback"
+                                                *ngIf="regiStrationForm.get('email')?.invalid && regiStrationForm.get('email')?.touched">
+                                                <div *ngIf="regiStrationForm.get('email')?.errors?.['required']">Email
+                                                    is
+                                                    required</div>
+                                                <div *ngIf="regiStrationForm.get('email')?.errors?.['email']">Invalid
+                                                    email
+                                                    format</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <label class="d-block" style="color: rgb(161, 154, 154);" *ngIf="!isUpdate">Password
+                                        should be
+                                        atleast 8 characters
+                                        with atleast one number and one special character.</label>
+
+                                    <!-- Password -->
+                                    <div class="col-md-6" *ngIf="!isUpdate">
+                                        <label for="password" class="form-label">Password</label>
+                                        <div class="input-group has-validation">
+                                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                            <input [type]="showPassword ? 'text' : 'password'" class="form-control"
+                                                id="password" formControlName="password"
+                                                [ngClass]="{'is-invalid': regiStrationForm.get('password')?.invalid && regiStrationForm.get('password')?.touched}">
+                                            <button class="btn btn-outline-secondary" type="button"
+                                                (click)="togglePasswordVisibility('password')">
+                                                <i class="fas" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+                                            </button>
+                                            <div class="invalid-feedback"
+                                                *ngIf="regiStrationForm.get('password')?.invalid && regiStrationForm.get('password')?.touched">
+                                                <div *ngIf="regiStrationForm.get('password')?.errors?.['required']">
+                                                    Password
+                                                    is required</div>
+                                                <div *ngIf="regiStrationForm.get('password')?.errors?.['minlength']">
+                                                    Minimum 8
+                                                    characters required</div>
+                                                <div *ngIf="regiStrationForm.get('password')?.errors?.['pattern']">
+                                                    Password must include a number and special character
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Confirm Password Field -->
+                                    <div class="col-md-6 form-group-wrapper" *ngIf="!isUpdate">
+                                        <div class="form-group">
+                                            <label for="confirmPassword"><strong>Confirm Password</strong></label>
+                                            <div class="input-group">
+                                                <input [type]="showConfirmPassword ? 'text' : 'password'"
+                                                    formControlName="confirmPassword"
+                                                    [ngClass]="{ 'is-invalid': regiStrationForm.get('confirmPassword')?.touched && regiStrationForm.get('confirmPassword')?.invalid }"
+                                                    class="form-control" id="confirmPassword">
+                                                <button class="btn btn-outline-secondary" type="button"
+                                                    (click)="togglePasswordVisibility('confirmPassword')">
+                                                    <i class="fas"
+                                                        [ngClass]="showConfirmPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+                                                </button>
+                                            </div>
+                                            <div class="invalid-feedback-container">
+                                                <small class="text-danger"
+                                                    *ngIf="regiStrationForm.get('confirmPassword')?.touched">
+                                                    <span
+                                                        *ngIf="regiStrationForm.get('confirmPassword')?.hasError('required')">
+                                                        Confirm Password is required
+                                                    </span>
+                                                    <span
+                                                        *ngIf="regiStrationForm.get('confirmPassword')?.hasError('mustMatch')">
+                                                        Password and Confirm Password must match.
+                                                    </span>
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Address -->
+                                    <div class="col-md-12">
+                                        <label for="address" class="form-label">Address</label>
+                                        <div class="input-group has-validation">
+                                            <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+                                            <textarea class="form-control" id="address" formControlName="address"
+                                                rows="3"
+                                                [ngClass]="{'is-invalid': regiStrationForm.get('address')?.invalid && regiStrationForm.get('address')?.touched}"></textarea>
+                                            <div class="invalid-feedback"
+                                                *ngIf="regiStrationForm.get('address')?.invalid && regiStrationForm.get('address')?.touched">
+                                                <div *ngIf="regiStrationForm.get('address')?.errors?.['required']">
+                                                    Address is
+                                                    required</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Color Theme -->
+                                    <div class="col-md-12">
+                                        <label for="colorTheme" class="form-label">Choose Theme Color</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-palette"></i></span>
+                                            <input type="color" class="form-control form-control-color" id="colorTheme"
+                                                formControlName="colorTheme" (input)="onColorChange($event)">
+                                        </div>
+                                    </div>
+
+                                    <!-- submit--update btn -->
+                                    <!-- Modify the submit/update buttons section -->
+                                    <div class="col-md-12 my-3">
+                                        <button *ngIf="isSubmit" class="btn btn_color"
+                                            [disabled]="isLoading || regiStrationForm.invalid" (click)="submit()">
+                                            <i class="fa" [ngClass]="{ 'fa-spin fa-spinner': isLoading }"></i>
+                                            Submit Parent
+                                        </button>
+
+                                        <button *ngIf="isUpdate" class="btn btn_color"
+                                            [disabled]="isLoading || regiStrationForm.invalid" (click)="update()">
+                                            <i class="fa" [ngClass]="{ 'fa-spin fa-spinner': isLoading }"></i>
+                                            Update Parent
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</nz-card>

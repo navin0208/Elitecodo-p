@@ -1,0 +1,576 @@
+<section [ngStyle]="{ 'background-color': http.getBackgroundColor() }">
+  <div class="header">
+    <h1>Customize Test</h1>
+  </div>
+  <!-- Main Container -->
+  <div class="containers">
+    <div class="left-panel">
+      <div class="form-group">
+        <label for="instituteLayout">Select Format</label>
+        <select id="instituteLayout" class="form-control" [(ngModel)]="institute" (ngModelChange)="onInstituteChange()">
+          <option value="" disabled selected>Select</option>
+          <option value="Format 1">Format 1</option>
+          <option value="Format 2">Format 2</option>
+          <option value="Format 3">Format 3</option>
+          <option value="Format 4">Format 4</option>
+        </select>
+      </div>
+
+      <!-- Selected Subjects Display Section -->
+      <div class="form-group" *ngIf="selectedSubjectsList && selectedSubjectsList.length > 0">
+        <label>Selected Subjects</label>
+        <div class="selected-subjects-container">
+          <div *ngFor="let subject of selectedSubjectsList" class="subject-chip">
+            {{ subject.subjectName }}
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group" *ngIf="institute !== 'Format 4'">
+        <label for="columnLayout">Column Layout</label>
+        <select id="columnLayout" class="form-control" [(ngModel)]="selectedColumnType"
+          (ngModelChange)="onColumnTypeChange()">
+          <option value="single">Single Column</option>
+          <option value="double">Double Column</option>
+        </select>
+      </div>
+
+      <div class="form-group" *ngIf="institute === 'Format 4'">
+        <label for="columnLayout">Column Layout</label>
+        <select id="columnLayout" class="form-control" [(ngModel)]="selectedColumnTypePdf2"
+          (ngModelChange)="onColumnTypeChangePdf2()">
+          <option value="single">Single Column</option>
+          <option value="double">Double Column</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="watermarkInput">Watermark Text</label>
+        <input type="text" id="watermarkInput" class="inputwater" [(ngModel)]="pdfOneModel.watermark"
+          #watermark="ngModel" (ngModelChange)="onWatermarkChange()"
+          [class.is-invalid]="watermark.invalid && watermark.touched" maxlength="15" required />
+        <div *ngIf="watermark.invalid && watermark.touched" class="invalid-feedback">
+          <div *ngIf="watermark.errors?.['required']">
+            Watermark text is required
+          </div>
+          <div *ngIf="watermark.errors?.['maxlength']">
+            Watermark cannot exceed 15 characters
+          </div>
+        </div>
+
+        <div class="form-group-r">
+          <label for="angleControl">Watermark Rotation: {{ pdfOneModel.angle }}°</label>
+          <input type="range" id="angleControl" class="form-control-range" min="0" max="360" step="1"
+            [(ngModel)]="pdfOneModel.angle" (input)="onAngleChange()" />
+        </div>
+
+        <!-- Updated Watermark with dynamic rotation -->
+        <div class="watermark-container">
+          <p class="watermark-text" [style.--angle]="pdfOneModel.angle + 'deg'">
+            {{ pdfOneModel.watermark }}
+          </p>
+        </div>
+        <small class="form-text text-muted" *ngIf="!watermark.invalid">
+          Maximum 15 characters allowed
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label for="documentType">Document Type</label>
+        <select id="documentType" class="form-control" [(ngModel)]="selectedDocumentType"
+          (ngModelChange)="onDocumentTypeChange()">
+          <option value="word">Word</option>
+          <option value="pdf">PDF</option>
+        </select>
+      </div>
+
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+        <!-- Sets Column -->
+        <ng-container matColumnDef="Sets">
+          <th mat-header-cell *matHeaderCellDef>Sets</th>
+          <td mat-cell *matCellDef="let element; let i = index" [class.selected-row]="selectedRow === element"
+            (click)="selectRow(element)">
+            Set {{ getAlphabet(i) }}
+          </td>
+        </ng-container>
+
+        <!-- Test PDF Column -->
+        <ng-container matColumnDef="Test Pdf">
+          <th mat-header-cell *matHeaderCellDef>Test PDF</th>
+          <td mat-cell *matCellDef="let element; let i = index">
+            <button mat-icon-button color="primary" (click)="DownloadPdf1(element, i, 'Set ' + getAlphabet(i), false)"
+              [disabled]="isLoading" *ngIf="institute !== 'Format 4'">
+              <i class="fa" [ngClass]="{
+                  'fa-spin fa-spinner': isLoading && i === setIndexCurrent
+                }"></i>
+              <mat-icon *ngIf="!isLoading">download</mat-icon>
+            </button>
+
+            <button mat-icon-button color="primary" (click)="DownloadPdf2(element, i, 'Set ' + getAlphabet(i), false)"
+              [disabled]="isLoading" *ngIf="institute === 'Format 4'">
+              <i class="fa" [ngClass]="{
+                  'fa-spin fa-spinner': isLoading && i === setIndexCurrent
+                }"></i>
+              <mat-icon *ngIf="!isLoading">download</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <!-- OMR Column -->
+        <ng-container matColumnDef="Omr">
+          <th mat-header-cell *matHeaderCellDef>OMR</th>
+          <td mat-cell *matCellDef="let element; let i = index">
+            <button mat-icon-button color="accent" (click)="OMRDownload(i)">
+              <mat-icon *ngIf="!isLoading">picture_as_pdf</mat-icon>
+              <i class="fa" [ngClass]="{
+                  'fa-spin fa-spinner': isLoading && i === setIndexCurrent
+                }"></i>
+            </button>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="TeacherKey">
+          <th mat-header-cell *matHeaderCellDef>Teacher Key</th>
+          <td mat-cell *matCellDef="let element; let i = index">
+            <button mat-icon-button color="warn" (click)="DownloadPdf1(element, i, 'Set ' + getAlphabet(i), true)"
+              *ngIf="institute !== 'Format 4'">
+              <mat-icon *ngIf="!isLoading">assignment</mat-icon>
+              <i class="fa" [ngClass]="{
+                  'fa-spin fa-spinner': isLoading && i === setIndexCurrent
+                }"></i>
+            </button>
+            <button mat-icon-button color="warn" (click)="DownloadPdf2(element, i, 'Set ' + getAlphabet(i), true)"
+              *ngIf="institute === 'Format 4'">
+              <mat-icon *ngIf="!isLoading">assignment</mat-icon>
+              <i class="fa" [ngClass]="{
+                  'fa-spin fa-spinner': isLoading && i === setIndexCurrent
+                }"></i>
+            </button>
+          </td>
+        </ng-container>
+
+        <!-- Answer Key Column -->
+        <ng-container matColumnDef="AnswerKey">
+          <th mat-header-cell *matHeaderCellDef>Answer Key</th>
+          <td mat-cell *matCellDef="let element; let i = index">
+            <button mat-icon-button color="warn" (click)="downloadAnswerKey('Set ' + getAlphabet(i), i)"
+              [disabled]="!downloadedSets.includes(i)" *ngIf="institute !== 'Format 4'">
+              <mat-icon *ngIf="!isLoading">assignment</mat-icon>
+              <i class="fa" [ngClass]="{
+                  'fa-spin fa-spinner': isLoading && i === setIndexCurrent
+                }"></i>
+            </button>
+            <button mat-icon-button color="warn" (click)="downloadAnswerKey2('Set ' + getAlphabet(i), i)"
+              [disabled]="!downloadedSets.includes(i)" *ngIf="institute === 'Format 4'">
+              <mat-icon *ngIf="!isLoading">assignment</mat-icon>
+              <i class="fa" [ngClass]="{
+                  'fa-spin fa-spinner': isLoading && i === setIndexCurrent
+                }"></i>
+            </button>
+          </td>
+        </ng-container>
+
+        <!-- Table Rows -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+
+    <div style="padding-top: 30px" class="main-content">
+      <div style="border: 1px solid black; padding: 7px">
+        <div style="border: 1px solid black; padding: 6px">
+          <div class="main-content">
+            <!-- Format 4 Preview -->
+            <div *ngIf="institute === 'Format 4'" #coverPage class="center-preview">
+              <div class="preview-box">
+                <div class="preview-content">
+                  <div class="upper-section">
+                    <h4>Format 4</h4>
+                    <h5 *ngIf="showDepartmentName" class="department-name">
+                      {{ departmentName }}
+                    </h5>
+                    <!-- <h5 *ngIf="showSubjectName" class="institute-name">
+                      {{ subjectName }}
+                    </h5> -->
+                    <!-- Display Selected Subjects in Preview -->
+                    <div *ngIf="selectedSubjectsList && selectedSubjectsList.length > 0"
+                      class="info-row subjects-preview">
+                      <span *ngFor="let subject of selectedSubjectsList; let last = last">
+                        <strong>{{ subject.subjectName }}</strong><span *ngIf="!last">, </span>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="middle-section">
+                    <div class="info-row" *ngIf="showTotalQuestions">
+                      <span>Total Questions: {{ totalQuestions }}</span>
+                    </div>
+                    <div class="info-row" *ngIf="showTotalMarks">
+                      <span>Total Marks: {{ testObject.marks }}</span>
+                    </div>
+                  </div>
+                  <div class="upper-section_2">
+                    <div class="roll-no-section">
+                      <table class="roll-no-table">
+                        <tr>
+                          <td colspan="6">Roll No</td>
+                        </tr>
+                        <tr>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                        </tr>
+                      </table>
+                    </div>
+                    <div class="division-box" *ngIf="showDivision">
+                      <span>{{ division }}</span>
+                    </div>
+                    <div class="date-time-box">
+                      <div class="info-row" *ngIf="showDate">
+                        <span>Date: {{ testObject.testDate }}</span>
+                      </div>
+                      <div class="info-row" *ngIf="showTime">
+                        <span>Time: {{ testObject.startTime }} to {{ testObject.endTime }}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="bottom-section">
+                    <span class="signature">Candidate's Signature</span>
+                    <!-- <div class="info-row" *ngIf="showpapername">
+                      <h5>{{ paper }}</h5>
+                    </div> -->
+                    <div class="info-row" *ngIf="showpapername">
+                      <h5>
+                        JEE
+                        <span *ngFor="let subject of selectedSubjectsList; let last = last">
+                          {{ subject.subjectName }}<span *ngIf="!last">, </span>
+                        </span>
+                      </h5>
+                    </div>
+                    <span class="signature">Investigator's Signature</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Format 1 Preview -->
+            <div *ngIf="institute === 'Format 1'" class="exam-header">
+              <div class="left-column">
+                <img src="assets/images/ddlogo.png" alt="Company Logo" class="logo" />
+              </div>
+              <div class="center-column">
+                <div class="company-name"># Format 1</div>
+                <div class="exam-name-line">
+                  <span class="label">Exam Name :-</span>
+                  <span class="value">{{ testObject.testName }} Set A</span>
+                </div>
+                <!-- Display Selected Subjects in Format 1 Preview -->
+                <div *ngIf="selectedSubjectsList && selectedSubjectsList.length > 0" class="subjects-line">
+                  <span class="label">Subjects :-</span>
+                  <span class="value">
+                    <span *ngFor="let subject of selectedSubjectsList; let last = last">
+                      {{ subject.subjectName }}<span *ngIf="!last">, </span>
+                    </span>
+                  </span>
+                </div>
+              </div>
+              <div class="right-column">
+                <div class="detail-item">
+                  <span class="label">Date :-</span>
+                  <span class="value">{{ testObject.testDate }}</span>
+                </div>
+                <div class="detail-item">
+                  <span class="label">Time :-</span>
+                  <span class="value">{{ testObject.startTime }} to {{ testObject.endTime }}</span>
+                </div>
+                <div class="detail-item">
+                  <span class="label">Mark :-</span>
+                  <span class="value">{{ testObject.marks }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Format 2 Preview -->
+            <div *ngIf="institute === 'Format 2'" style="padding-top: 30px" class="main-content">
+              <div style="border: 1px solid black; padding: 7px">
+                <div style="border: 1px solid black; padding: 6px">
+                  <div class="main-content">
+                    <div #coverPage class="center-preview">
+                      <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <div style="flex: 1; display: flex; align-items: center">
+                          <img src="../../../../assets/images/chintamani.jpg" alt="Logo"
+                            style="height: 60px; margin-right: 15px" />
+                        </div>
+                        <div style="text-align: center; flex: 2">
+                          <h2 style="margin: 0; font-size: 24px; font-weight: bold;">
+                            Format 2
+                          </h2>
+                          <h3 style="margin: 5px 0 0 0; font-size: 18px; font-weight: normal;">
+                            Exam Name - {{ testObject.testName }} Set A
+                          </h3>
+                          <!-- Display Selected Subjects in Format 2 -->
+                          <!-- <div *ngIf="selectedSubjectsList && selectedSubjectsList.length > 0" style="margin-top: 5px;">
+                            <strong>Subjects:</strong>
+                            <span *ngFor="let subject of selectedSubjectsList; let last = last">
+                              {{ subject.subjectName }}<span *ngIf="!last">, </span>
+                            </span>
+                          </div> -->
+                        </div>
+                        <div style="text-align: right; flex: 1">
+                          <div><strong>Date:</strong> {{ testObject.testDate }}</div>
+                          <div><strong>Time:</strong> {{ testObject.startTime }} to {{ testObject.endTime }}</div>
+                          <div><strong>Mark:</strong> {{ testObject.marks }}</div>
+                        </div>
+                      </div>
+
+                      <div style="border-top: 2px solid #333; padding-top: 10px; margin-bottom: 20px;">
+                        <h4 style="margin: 0; text-align: center; font-size: 16px; font-weight: 600;">
+                          <span *ngFor="let subject of selectedSubjectsList; let last = last">
+                            {{ subject.subjectName }}<span *ngIf="!last"> | </span>
+                          </span>
+                        </h4>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="note-container">
+                <div class="note-header">
+                  <h6>Note :</h6>
+                </div>
+                <div class="note-content">
+                  <p>i. All Questions are compulsory</p>
+                  <p>ii. Darken () the appropriate circle (o) with black ball-point pen.</p>
+                </div>
+              </div>
+              <div style="border-top: 1px solid black; padding: 5px"></div>
+              <div style="border: 1px solid black; padding: 10px; text-align: center; margin-bottom: 10px;">
+                <h5>Physical World And Measurement</h5>
+              </div>
+              <div style="padding: 50px" *ngIf="columnType === 'Single Column'">
+                <div *ngFor="let item of testSelectedQuestions; let i = index">
+                  <div style="display: flex; margin-bottom: 10px; font-weight: 500">
+                    <span>Q{{ i + 1 }})&nbsp;</span>
+                    <p [innerHTML]="item.question"></p>
+                  </div>
+                  <div style="display: flex; gap: 20px; flex-wrap: wrap">
+                    <div style="display: flex">
+                      <span>A)&nbsp;</span>
+                      <span [innerHTML]="item.option1"></span>
+                    </div>
+                    <div style="display: flex">
+                      <span>B)&nbsp;</span>
+                      <span [innerHTML]="item.option2"></span>
+                    </div>
+                    <div style="display: flex">
+                      <span>C)&nbsp;</span>
+                      <span [innerHTML]="item.option3"></span>
+                    </div>
+                    <div style="display: flex">
+                      <span>D)&nbsp;</span>
+                      <span [innerHTML]="item.option4"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="columnType === 'Double Column'"
+                style="padding: 50px; display: flex; flex-direction: column; flex-wrap: wrap;">
+                <div style="width: 50%" *ngFor="let item of testSelectedQuestions; let i = index">
+                  <div style="display: flex; margin-bottom: 10px; font-weight: 500">
+                    <span>Q{{ i + 1 }})&nbsp;</span>
+                    <p [innerHTML]="item.question"></p>
+                  </div>
+                  <div style="display: flex; gap: 20px; flex-wrap: wrap">
+                    <div style="display: flex">
+                      <span>A)&nbsp;</span>
+                      <span [innerHTML]="item.option1"></span>
+                    </div>
+                    <div style="display: flex">
+                      <span>B)&nbsp;</span>
+                      <span [innerHTML]="item.option2"></span>
+                    </div>
+                    <div style="display: flex">
+                      <span>C)&nbsp;</span>
+                      <span [innerHTML]="item.option3"></span>
+                    </div>
+                    <div style="display: flex">
+                      <span>D)&nbsp;</span>
+                      <span [innerHTML]="item.option4"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Format 3 Preview -->
+            <div *ngIf="institute === 'Format 3'">
+              <div class="row">
+                <div class="logo">
+                  <img src="./assets/images/phoenix.png" alt="Logo" />
+                </div>
+              </div>
+              <div class="exam-header">
+                <p>
+                  <strong>Exam:</strong> {{ testObject.testName }} Set A |
+                  <strong>Date:</strong> {{ testObject.testDate }} |
+                  <strong>Time:</strong> {{ testObject.startTime }} to {{ testObject.endTime }} |
+                  <strong>Marks:</strong> {{ testObject.marks }}
+                  <!-- <strong>Subjects:</strong>
+                  <span *ngFor="let subject of selectedSubjectsList; let last = last">
+                    {{ subject.subjectName }}<span *ngIf="!last">, </span>
+                  </span> -->
+                </p>
+              </div>
+              <div class="box">
+                <span *ngFor="let subject of selectedSubjectsList; let last = last">
+                  {{ subject.subjectName }}<span *ngIf="!last">&nbsp;|&nbsp;</span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Note and Questions Section -->
+      <div *ngIf="institute !== 'Format 2'">
+        <div class="note-container">
+          <div class="note-header">
+            <h6>Note :</h6>
+          </div>
+          <div class="note-content">
+            <p>i. All Questions are compulsory</p>
+            <p>ii. Darken () the appropriate circle (o) with black ball-point pen.</p>
+          </div>
+        </div>
+        <div style="border-top: 1px solid black; padding: 5px"></div>
+        <div style="border: 1px solid black; padding: 10px; text-align: center; margin-bottom: 10px;">
+          <h5>Physical World And Measurement</h5>
+        </div>
+
+        <div style="padding: 50px" *ngIf="columnType === 'Single Column'">
+          <div *ngFor="let item of testSelectedQuestions; let i = index">
+            <div style="display: flex; margin-bottom: 10px; font-weight: 500">
+              <span>Q{{ i + 1 }})&nbsp;</span>
+              <p [innerHTML]="item.question"></p>
+            </div>
+            <div style="display: flex; gap: 20px; flex-wrap: wrap">
+              <div style="display: flex">
+                <span>A)&nbsp;</span> <span [innerHTML]="item.option1"></span>
+              </div>
+              <div style="display: flex">
+                <span>B)&nbsp;</span> <span [innerHTML]="item.option2"></span>
+              </div>
+              <div style="display: flex">
+                <span>C)&nbsp;</span> <span [innerHTML]="item.option3"></span>
+              </div>
+              <div style="display: flex">
+                <span>D)&nbsp;</span> <span [innerHTML]="item.option4"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="columnType === 'Double Column'"
+          style="padding: 50px; display: flex; flex-direction: column; flex-wrap: wrap;">
+          <div style="width: 50%" *ngFor="let item of testSelectedQuestions; let i = index">
+            <div style="display: flex; margin-bottom: 10px; font-weight: 500">
+              <span>Q{{ i + 1 }})&nbsp;</span>
+              <p [innerHTML]="item.question"></p>
+            </div>
+            <div style="display: flex; gap: 20px; flex-wrap: wrap">
+              <div style="display: flex">
+                <span>A)&nbsp;</span> <span [innerHTML]="item.option1"></span>
+              </div>
+              <div style="display: flex">
+                <span>B)&nbsp;</span> <span [innerHTML]="item.option2"></span>
+              </div>
+              <div style="display: flex">
+                <span>C)&nbsp;</span> <span [innerHTML]="item.option3"></span>
+              </div>
+              <div style="display: flex">
+                <span>D)&nbsp;</span> <span [innerHTML]="item.option4"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Panel with Form -->
+    <div class="right-panel">
+      <form [formGroup]="testForm">
+        <div class="checkbox-group">
+          <label> Total Marks </label>
+          <input type="number" formControlName="marks" placeholder="Total Marks" (input)="updateMarks($event)" />
+          <div *ngIf="f['marks']?.invalid && f['marks']?.touched" class="error">
+            Total Marks is required and must be non-negative.
+          </div>
+        </div>
+
+        <div class="checkbox-group">
+          <label> Test Name </label>
+          <input type="text" formControlName="testName" placeholder="Test Name" (input)="updateTestName($event)" />
+          <div *ngIf="f['testName']?.invalid && f['testName']?.touched" class="error">
+            Test Name is required.
+          </div>
+        </div>
+
+        <div class="checkbox-group">
+          <label> Show Date </label>
+          <input type="date" [min]="minDate" formControlName="testDate" (change)="onDateChange($event)"
+            [class.invalid]="f['testDate']?.invalid && f['testDate']?.touched" />
+          <div *ngIf="f['testDate']?.invalid && f['testDate']?.touched" class="error">
+            Date is required.
+          </div>
+        </div>
+
+        <div class="checkbox-group">
+          <label> Test Time </label>
+          <div class="time-input">
+            <input type="time" formControlName="startTime"
+              [class.invalid]="f['startTime']?.invalid && f['startTime']?.touched" (change)="updateStartTime($event)" />
+            to
+            <input type="time" formControlName="endTime"
+              [class.invalid]="f['endTime']?.invalid && f['endTime']?.touched" (change)="updateEndTime($event)" />
+          </div>
+          <div
+            *ngIf="(f['startTime']?.invalid || f['endTime']?.invalid) && (f['startTime']?.touched || f['endTime']?.touched)"
+            class="error">
+            Both start and end times are required.
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column" class="dropdown">
+          <label>
+            <input type="checkbox" formControlName="testModeCheckbox" /> Test
+            Mode:
+          </label>
+
+          <select formControlName="testMode" style="width: 132px; margin-top: 6px" id="category"
+            (change)="onCategoryChange($event)">
+            <option value="" disabled selected>Select</option>
+            <option value="Online">Online</option>
+            <option value="Offline">Offline</option>
+            <option value="Both">Both</option>
+          </select>
+        </div>
+
+        <div *ngIf="f['testMode']?.invalid && f['testMode']?.touched" class="error">
+          testMode is required.
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Bottom Buttons -->
+  <div class="bottom-buttons header">
+    <div style="width: 500px; display: flex; justify-content: space-between">
+      <button (click)="goBack()" class="btn-secondary">Back</button>
+      <button (click)="CreateTest()" class="btn-secondary">Submit</button>
+    </div>
+  </div>
+</section>

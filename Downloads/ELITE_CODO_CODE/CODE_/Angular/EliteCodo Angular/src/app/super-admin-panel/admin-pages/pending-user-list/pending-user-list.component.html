@@ -1,0 +1,161 @@
+<div class="dashboard-container">
+    <!-- Header Section -->
+    <div class="dashboard-header">
+        <div class="header-content">
+            <h2 class="dashboard-title">
+                <i class="fas fa-users-cog"></i>
+                Pending <span>{{currentRole}}s</span>
+            </h2>
+            <button class="btn btn-primary action-button" (click)="toggleBulkActivation()" *ngIf="hasData">
+                <i class="fas fa-users"></i>
+                {{ showBulkActivation ? 'Hide Bulk Actions' : 'Show Bulk Actions' }}
+            </button>
+        </div>
+    </div>
+
+    <!-- Search and Filters -->
+    <div class="filters-section">
+        <div class="row g-3">
+            <div class="col-md-4">
+                <div class="search-box">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" class="form-control search-input" [placeholder]="'Search ' + currentRole + '...'"
+                        [(ngModel)]="searchTerm" (ngModelChange)="onFilterChange()">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading State -->
+    <div class="loading-state" *ngIf="isLoading">
+        <div class="text-center p-5">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-2">Loading data...</p>
+        </div>
+    </div>
+
+    <!-- Error Message -->
+    <div class="error-state" *ngIf="errorMessage && !isLoading">
+        <div class="alert alert-danger text-center" role="alert">
+            {{ errorMessage }}
+        </div>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="!isLoading && !errorMessage && !hasData">
+        <div class="text-center p-5">
+            <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+            <h4 class="text-muted">No {{ currentRole | titlecase }}s</h4>
+            <p class="text-muted">There are currently no {{ currentRole }}s to display.</p>
+        </div>
+    </div>
+
+    <!-- User Table -->
+    <div class="table-container" *ngIf="hasData">
+        <table class="table custom-table">
+            <thead>
+                <tr>
+                    <th *ngIf="showBulkActivation" class="checkbox-column">
+                        <div class="custom-checkbox">
+                            <input type="checkbox" id="selectAll" (change)="selectAll($event)" class="form-check-input">
+                            <label for="selectAll"></label>
+                        </div>
+                    </th>
+                    <th>Creator Name</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                    <th>Registration Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let user of paginatedUsers" class="table-row-hover">
+                    <td *ngIf="showBulkActivation" class="checkbox-column">
+                        <div class="custom-checkbox">
+                            <input type="checkbox" [id]="'user' + user.id" [(ngModel)]="user.selected"
+                                class="form-check-input" (change)="onCheckboxChange(user)" />
+                            <label [for]="'user' + user.id"></label>
+                        </div>
+                    </td>
+                    <td class="text-center">
+                        <ng-container *ngIf="user.creator; else systemCreator">
+                            {{ user.creator.firstName }} {{ user.creator.lastName }}
+                        </ng-container>
+                        <ng-template #systemCreator>
+                            <span class="text-muted">System</span>
+                        </ng-template>
+                    </td>
+                    <td class="text-center">{{ user.name }}</td>
+                    <td class="text-center">{{ user.email }}</td>
+                    <td class="text-center">
+                        <span class="user-type-badge" [ngClass]="user.userType">
+                            {{ user.userType | titlecase }}
+                        </span>
+                    </td>
+                    <td class="text-center">
+                        <span class="status-badge" [ngClass]="user.status">
+                            {{ user.status | titlecase }}
+                        </span>
+                    </td>
+                    <td class="text-center">{{ user.registrationDate | date:'MMM d, y' }}</td>
+                    <td class="m-auto text-center">
+                        <div class="m-auto text-center action-buttons">
+                            <button class="m-auto text-center btn btn-outline-primary btn-sm action-btn"
+                                (click)="viewDetails(user)">
+                                <i class="fas fa-eye"></i>
+                                View
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Pagination -->
+        <div class="pagination-container" *ngIf="totalPages > 1">
+            <div class="pagination-wrapper">
+                <button class="pagination-btn" [class.disabled]="currentPage === 1"
+                    (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+
+                <div class="page-numbers">
+                    <button *ngFor="let page of visiblePages" class="page-number" [class.active]="page === currentPage"
+                        (click)="changePage(page)">
+                        {{ page }}
+                    </button>
+                </div>
+
+                <button class="pagination-btn" [class.disabled]="currentPage === totalPages"
+                    (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+
+            <div class="items-per-page">
+                <select [(ngModel)]="itemsPerPage" (change)="onItemsPerPageChange()" class="items-select">
+                    <option [value]="5">5 / page</option>
+                    <option [value]="10">10 / page</option>
+                    <option [value]="25">25 / page</option>
+                    <option [value]="50">50 / page</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Bulk Actions -->
+        <div class="bulk-actions" *ngIf="showBulkActivation">
+            <button class="btn btn-success me-2" (click)="bulkActivate()" [disabled]="disableBtn">
+                <i class="fas fa-check-circle"></i>
+                Activate Selected
+            </button>
+            <button class="btn btn-danger" (click)="bulkReject()" [disabled]="disableBtn">
+                <i class="fas fa-times-circle"></i>
+                Reject Selected
+            </button>
+        </div>
+    </div>
+</div>

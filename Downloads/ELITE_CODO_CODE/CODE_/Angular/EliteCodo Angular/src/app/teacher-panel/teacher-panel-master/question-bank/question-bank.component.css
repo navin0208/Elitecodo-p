@@ -1,0 +1,80 @@
+@media screen and (max-width: 500px) {
+    section {
+        position: absolute;
+        width: 100%;
+        transform: translateY(20px);
+        background-color: #4e54c8;
+    }
+}
+section {
+    position: absolute;
+    width: 100%;
+}
+
+.a {
+    background-color: #22c55e;
+}
+
+.b {
+    background-color: #f5d4fe;
+}
+
+.c {
+    background-color: #fed7aa;
+}
+
+.d {
+    background-color: #e9d5ff;
+}
+
+.e {
+    background-color: #c2f7d4;
+}
+
+.f {
+    background-color: #fecaca;
+}
+
+.g {
+    background-color: #bbf7d0;
+}
+
+.h {
+    background-color: #f1cea5;
+}
+
+.i {
+    background-color: #efc0c0;
+}
+
+.j {
+    background-color: #e5e7eb;
+}
+
+.k {
+    background-color: #b3e9c5;
+}
+
+
+.transition-all {
+    transition: all 0.3s ease-in-out;
+}
+
+.box-border {
+    box-sizing: border-box;
+}
+
+.rounded-lg {
+    border-radius: 12px;
+}
+
+.btn-light:hover {
+    opacity: 0.85;
+}
+
+.year_option_btn {
+    width: 96px;
+    height: 48px;
+    border-radius: 10px;
+    
+}

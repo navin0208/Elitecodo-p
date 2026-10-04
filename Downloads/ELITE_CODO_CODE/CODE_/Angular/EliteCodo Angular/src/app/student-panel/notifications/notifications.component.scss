@@ -1,0 +1,118 @@
+.notifications-container {
+    max-width: 900px;
+    margin: auto;
+    background: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 16px;
+    font-family: Arial, sans-serif;
+  
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+  
+      h2 {
+        font-size: 1.2rem;
+        margin: 0;
+      }
+  
+      button {
+        background: #28a745;
+        color: #fff;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+  
+        &:hover {
+          background: #218838;
+        }
+      }
+    }
+  
+    .notification-list {
+      .notification-card {
+        display: flex;
+        align-items: flex-start;
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        margin-bottom: 12px;
+        padding: 12px;
+        transition: transform 0.2s, box-shadow 0.2s;
+  
+        &.unread {
+          border-color: #28a745;
+        }
+  
+        &:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+  
+        .icon {
+          font-size: 1.5rem;
+          margin-right: 12px;
+          color: #28a745;
+        }
+  
+        .content {
+          flex: 1;
+  
+          h3 {
+            margin: 0 0 4px;
+            font-size: 1rem;
+          }
+  
+          p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #666;
+          }
+  
+          .time {
+            display: block;
+            margin-top: 4px;
+            font-size: 0.8rem;
+            color: #999;
+          }
+        }
+      }
+    }
+  
+    .view-all {
+      display: block;
+    //   width: 20%;
+      text-align: center;
+      background: #007bff;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      border-radius: 4px;
+      cursor: pointer;
+  
+      &:hover {
+        background: #0056b3;
+      }
+    }
+  }
+  
+
+  .notification-card {
+    &.new {
+      background-color: #e9f7ef;
+      animation: fade-in 0.5s ease-in-out;
+  
+      @keyframes fade-in {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+    }
+  }
+  

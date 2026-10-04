@@ -1,0 +1,61 @@
+<!-- <div class="col-md-3 text-center bg-light board_custom_option" (click)="routToBoardDash('exam-marks-distribution')">
+      <div class="img">
+        <img src="../../../../assets/images/BoardsImage/result_icon.png" style="height: clamp(100px, 180px, 180px)"
+          alt="" />
+      </div>
+
+      <div class="image-title py-2">Exam Result</div>
+    </div> -->
+
+<!-- Upload Content -->
+
+<!-- <div class="col-md-3 text-center bg-light board_custom_option" (click)="routToBoardDash('upload-content')">
+            <div class="img">
+                <img src="../../../../assets/images/BoardsImage/upload.jpg" style="height:clamp(100px, 180px, 180px)"
+                    alt="">
+            </div>
+
+            <div class="image-title py-2">
+                Upload Content
+            </div>
+        </div> -->
+
+<!-- <div class="col-md-3 text-center bg-light board_custom_option" (click)="routToBoardDash('question-bank')">
+      <div class="img">
+        <img src="../../../../assets/images/BoardsImage/question-bank.jpg" style="height: clamp(100px, 180px, 180px)"
+          alt="" />
+      </div>
+
+      <div class="image-title py-2">Question Bank</div>
+    </div> -->
+
+
+<!-- <div class="col-md-3 text-center bg-light board_custom_option" (click)="routToBoardDash('Formulae')">
+      <div class="img">
+        <img src="../../../../assets/images/BoardsImage/formulae.jpg" style="height: clamp(100px, 180px, 180px)"
+          alt="" />
+      </div>
+
+      <div class="image-title py-2">Formulae</div>
+    </div> -->
+
+<!-- dashboard.component.html -->
+<div class="dashboard-container" [ngStyle]="{ 'background-color': http.getBackgroundColor() }">
+  <div class="dashboard-header">
+    <h1>Learning Dashboard</h1>
+    <p>Manage your educational journey in one place</p>
+  </div>
+
+  <div class="cards-container">
+    <div class="card-item" *ngFor="let card of dashboardCards" (click)="routToBoardDash(card.route)"
+      [ngClass]="{'card-highlighted': card.highlighted}">
+      <div class="card-icon">
+        <img [src]="card.image" [alt]="card.title">
+      </div>
+      <div class="card-content">
+        <h3>{{card.title}}</h3>
+        <p>{{card.description}}</p>
+      </div>
+    </div>
+  </div>
+</div>

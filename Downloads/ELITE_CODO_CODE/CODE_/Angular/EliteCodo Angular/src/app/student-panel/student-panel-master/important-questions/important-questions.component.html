@@ -1,0 +1,139 @@
+<section [ngStyle]="{ 'background-color': http.getBackgroundColor() }">
+    <nz-card [nzTitle]="'Important Questions'" [nzExtra]="extraTemplate">
+        <ng-template #extraTemplate>
+            <nz-tag [nzColor]="'blue'" *ngIf="isTestWise && fetchImportantQuestions?.testId">
+                Test ID: {{ fetchImportantQuestions.testId }}
+            </nz-tag>
+            <nz-tag [nzColor]="'green'" *ngIf="!isTestWise">
+                Student Questions Collection
+            </nz-tag>
+        </ng-template>
+
+        <!-- Test Information - Only show for test-wise view -->
+        <div *ngIf="isTestWise && fetchImportantQuestions" class="test-info">
+            <div nz-row [nzGutter]="16">
+                <div nz-col [nzSpan]="12">
+                    <strong>Test Name:</strong> {{ fetchImportantQuestions.testName }}
+                </div>
+                <div nz-col [nzSpan]="12">
+                    <strong>Test Date:</strong> {{ fetchImportantQuestions.testDate | date:'yyyy-MM-dd' }}
+                </div>
+            </div>
+
+            <div nz-row [nzGutter]="16" class="mt-3" *ngIf="fetchImportantQuestions.startTime && fetchImportantQuestions.endTime">
+                <div nz-col [nzSpan]="12">
+                    <strong>Start Time:</strong> {{ getFormattedTime(fetchImportantQuestions.startTime) | date:'h:mm a' }}
+                </div>
+                <div nz-col [nzSpan]="12">
+                    <strong>End Time:</strong> {{ getFormattedTime(fetchImportantQuestions.endTime) | date:'h:mm a' }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Questions Section -->
+        <nz-divider nzText="Questions" nzOrientation="left"></nz-divider>
+
+        <div class="question-card" *ngFor="let question of questions; let i = index">
+            <!-- Column 1 -->
+            <div class="column-1">
+                <span>Q{{i+1}}</span>
+            </div>
+
+            <!-- Column 2 -->
+            <div class="column-2">
+                <!-- Question Header Info (for student-wise view) -->
+                <div *ngIf="!isTestWise && question.testName" class="question-header">
+                    <div class="test-info-small">
+                        <strong>Test:</strong> {{ question.testName }}
+                        <span *ngIf="question.standardName" class="ml-3">
+                            <strong>Standard:</strong> {{ question.standardName }}
+                        </span>
+                        <span *ngIf="question.chapterName" class="ml-3">
+                            <strong>Chapter:</strong> {{ question.chapterName }}
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Question Content -->
+                <div class="question-content" [innerHTML]="question.question"></div>
+                
+                <!-- Options Grid -->
+                <div class="options-grid">
+                    <div class="option-wrapper">
+                        <span class="option-label">Option A.</span>
+                        <div class="option" [innerHTML]="question.option1"
+                            [class.correct-answer]="isCorrectAnswer(question.multiAnswers, 'option1')">
+                        </div>
+                    </div>
+                    <div class="option-wrapper">
+                        <span class="option-label">Option B.</span>
+                        <div class="option" [innerHTML]="question.option2"
+                            [class.correct-answer]="isCorrectAnswer(question.multiAnswers, 'option2')">
+                        </div>
+                    </div>
+                    <div class="option-wrapper">
+                        <span class="option-label">Option C.</span>
+                        <div class="option" [innerHTML]="question.option3"
+                            [class.correct-answer]="isCorrectAnswer(question.multiAnswers, 'option3')">
+                        </div>
+                    </div>
+                    <div class="option-wrapper">
+                        <span class="option-label">Option D.</span>
+                        <div class="option" [innerHTML]="question.option4"
+                            [class.correct-answer]="isCorrectAnswer(question.multiAnswers, 'option4')">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Metadata Section -->
+                <div class="metadata">
+                    <!-- Marks Display -->
+                    <div class="marks-display">
+                        <i class="fas fa-award"></i> Marks: {{ question.marks }}
+                    </div>
+
+                    <!-- Category -->
+                    <div *ngIf="question.questionCategory" class="category-display">
+                        <i class="fas fa-tag"></i> Category: {{ question.questionCategory }}
+                    </div>
+
+                    <!-- Year of Appearance (for student-wise view) -->
+                    <div *ngIf="!isTestWise && question.yearOfAppearance" class="year-display">
+                        <i class="fas fa-calendar"></i> Year: {{ question.yearOfAppearance }}
+                    </div>
+
+                    <!-- Status (for student-wise view) -->
+                    <!-- <div *ngIf="!isTestWise && question.status" class="status-display">
+                        <i class="fas fa-info-circle"></i> Status: 
+                        <span [class]="question.status === 'Accepted' ? 'status-accepted' : 'status-pending'">
+                            {{ question.status }}
+                        </span>
+                    </div>exam-marks-distribution -->
+
+                    <!-- Time Spent -->
+                    <div *ngIf="question.timeSpentSeconds">
+                        <span class="time-spent-title"><i class="fas fa-clock"></i> Time Spent:</span>
+                        <span class="time-spent-content">{{ question.timeSpentSeconds }} seconds</span>
+                    </div>
+
+                    <!-- Explanation -->
+                    <div *ngIf="question.explanation">
+                        <span class="explanation-title"><i class="fas fa-lightbulb"></i> Explanation:</span>
+                        <span [innerHTML]="question.explanation" class="explanation-content"></span>
+                    </div>
+
+                    <!-- Solution -->
+                    <div *ngIf="question.solution">
+                        <span class="solution-title"><i class="fas fa-check-circle"></i> Solution:</span>
+                        <span [innerHTML]="question.solution" class="solution-content"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- No Questions Message -->
+        <div *ngIf="questions.length === 0" class="no-questions">
+            <nz-empty nzNotFoundContent="No important questions found"></nz-empty>
+        </div>
+    </nz-card>
+</section>

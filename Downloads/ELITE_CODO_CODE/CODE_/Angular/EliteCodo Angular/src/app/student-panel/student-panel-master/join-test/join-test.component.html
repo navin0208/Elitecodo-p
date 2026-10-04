@@ -1,0 +1,98 @@
+<section [ngStyle]="{ 'background-color': http.getBackgroundColor() }">
+    <div class="tests-container">
+        <div class="page-header">
+            <h1 class="page-title">Available Tests</h1>
+
+            <div class="midleDiv" style="font-size: large;">
+                <label class="mx-2">
+                    <input type="radio" name="testType" value="Mock" [(ngModel)]="selectedTestType"
+                        (change)="filterTests()" />
+                    Mock
+                </label>
+                <label class="mx-2">
+                    <input type="radio" name="testType" value="Schedule" [(ngModel)]="selectedTestType"
+                        (change)="filterTests()" />
+                    Schedule
+                </label>
+            </div>
+
+            <div class="search-filter">
+                <input type="text" placeholder="Search tests..." class="search-input" [ngModel]="searchText"
+                    (input)="onSearch($event)">
+                <select class="difficulty-filter" [ngModel]="selectedStandard" (change)="onStandardChange($event)">
+                    <option value="">All Standards</option>
+                    <option *ngFor="let standard of getUniqueStandards()">{{standard}}</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="tests-grid">
+            <div *ngIf="filteredTests.length === 0" class="no-tests">
+                No tests found matching your criteria.
+            </div>
+
+            <div *ngFor="let test of filteredTests" class="test-card">
+                <div class="test-card-content">
+                    <div class="test-header">
+                        <h2>{{ test.testName }}</h2>
+                        <div class="status-badges">
+                            <span class="status-badge text-center" [ngClass]="getTestStatus(test).class">
+                                {{ getTestStatus(test).status }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="test-details">
+                        <div class="detail-grid">
+                            <div class="detail-item">
+                                <i class="icon-marks"></i>
+                                <span>
+                                    <strong>Marks:</strong> {{ test.marks }}
+                                </span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="icon-type"></i>
+                                <span>
+                                    <strong>Type:</strong> {{ test.typeOfTest }}
+                                </span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="icon-clock"></i>
+                                <span>
+                                    <strong>Duration:</strong> {{ getDuration(test) }}
+                                </span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="icon-calendar"></i>
+                                <span>
+                                    <strong>Schedule:</strong> {{ formatDateTime(test) }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="subjects-chapters">
+                        <div class="detail-item">
+                            <strong>Subjects:</strong> {{ test.subjectName.join(', ') }}
+                        </div>
+                        <div class="detail-item">
+                            <strong>Chapters:</strong> {{ test.chapterName.join(', ') }}
+                        </div>
+                    </div>
+
+                    <div class="test-footer">
+                        <div class="exam-info">
+                            <span>{{ test.questionCount }} Questions</span>
+                            <!-- <span>{{ test.yearOfAppearance }}</span> -->
+                        </div>
+                        <button class="start-test-btn" (click)="navigateToTest(test)" [disabled]="isTestEnded(test)"
+                            [ngClass]="{'btn-disabled': isTestEnded(test)}">
+                            {{ isTestEnded(test) ? 'Test Ended' : 'Start Test' }}
+                            <i class="icon-arrow-right" *ngIf="!isTestEnded(test)"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

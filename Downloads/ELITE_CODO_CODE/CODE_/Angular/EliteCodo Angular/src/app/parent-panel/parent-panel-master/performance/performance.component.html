@@ -1,0 +1,186 @@
+<section [ngStyle]="{ 'background-color': http.getBackgroundColor() }">
+    <div class="performance-dashboard">
+        <!-- Loading Skeleton -->
+        <nz-skeleton *ngIf="isLoading && !hasData" [nzActive]="true" [nzLoading]="true"></nz-skeleton>
+
+        <!-- Error State -->
+        <nz-alert *ngIf="errorMessage" nzType="error" [nzMessage]="errorMessage" nzShowIcon class="error-alert">
+            <button nz-button nzType="primary" (click)="refreshData()" nzSize="small">
+                <i nz-icon nzType="reload"></i> Try Again
+            </button>
+        </nz-alert>
+
+        <!-- Actual Content (shown when data is loaded and no error) -->
+        <ng-container *ngIf="!isLoading && hasData && !errorMessage">
+            <!-- Page Header -->
+            <div class="dashboard-header">
+                <div class="header-row">
+                    <h1 class="main-title">Student Performance Dashboard</h1>
+                    <button nz-button nzType="default" nzShape="circle" (click)="refreshData()" [nzLoading]="isLoading"
+                        class="refresh-btn">
+                        <i nz-icon nzType="sync"></i>
+                    </button>
+                </div>
+                <div class="student-info">
+                    <ng-container *ngIf="isLoading; else avatarTemplate">
+                        <nz-skeleton [nzActive]="true" [nzAvatar]="true" [nzParagraph]="false"></nz-skeleton>
+                    </ng-container>
+
+                    <ng-template #avatarTemplate>
+                        <nz-avatar [nzSize]="64" nzIcon="user" [nzSrc]="dashboardData.student.avatar">
+                        </nz-avatar>
+                    </ng-template>
+
+                    <div class="student-details">
+                        <h2>{{ dashboardData.student.name }}</h2>
+                        <p>{{ dashboardData.overallGrade }} | Roll No: {{ dashboardData.student.rollNo }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Stats Cards -->
+            <div nz-row [nzGutter]="[24, 24]" class="header-stats">
+                <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="6">
+                    <nz-skeleton [nzActive]="true" [nzLoading]="isLoading">
+                        <div class="stat-card grade">
+                            <div class="stat-icon">
+                                <i nz-icon nzType="trophy" nzTheme="fill"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3>Overall Grade</h3>
+                                <div class="stat-value">{{ dashboardData.overallGrade }}%</div>
+                                <nz-progress [nzPercent]="dashboardData.overallGrade" [nzShowInfo]="false"
+                                    [nzStrokeColor]="'#1890ff'"></nz-progress>
+                            </div>
+                        </div>
+                    </nz-skeleton>
+                </div>
+                <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="6">
+                    <nz-skeleton [nzActive]="true" [nzLoading]="isLoading">
+                        <div class="stat-card attendance">
+                            <div class="stat-icon">
+                                <i nz-icon nzType="calendar" nzTheme="fill"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3>Attendance</h3>
+                                <div class="stat-value">{{ dashboardData.attendance }}%</div>
+                                <nz-progress [nzPercent]="dashboardData.attendance" [nzShowInfo]="false"
+                                    [nzStrokeColor]="'#52c41a'"></nz-progress>
+                            </div>
+                        </div>
+                    </nz-skeleton>
+                </div>
+                <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="6">
+                    <nz-skeleton [nzActive]="true" [nzLoading]="isLoading">
+                        <div class="stat-card rank">
+                            <div class="stat-icon">
+                                <i nz-icon nzType="crown" nzTheme="fill"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3>Class Rank</h3>
+                                <div class="stat-value">#{{ dashboardData.classRank.rank }}</div>
+                                <div class="rank-text">{{ dashboardData.classRank.percentile }}</div>
+                            </div>
+                        </div>
+                    </nz-skeleton>
+                </div>
+                <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="6">
+                    <nz-skeleton [nzActive]="true" [nzLoading]="isLoading">
+                        <div class="stat-card improvement">
+                            <div class="stat-icon">
+                                <i nz-icon nzType="line-chart" nzTheme="outline"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3>Improvement</h3>
+                                <div class="stat-value">{{ dashboardData.improvement >= 0 ? '+' : '' }}{{
+                                    dashboardData.improvement }}%</div>
+                                <div class="improvement-text">From Last Term</div>
+                            </div>
+                        </div>
+                    </nz-skeleton>
+                </div>
+            </div>
+
+            <!-- Performance Charts Section -->
+            <div nz-row [nzGutter]="[24, 24]" class="chart-section">
+                <div nz-col [nzXs]="24" [nzLg]="14">
+                    <nz-card class="chart-card" [nzTitle]="subjectTitle">
+                        <ng-template #subjectTitle>
+                            <div class="card-title">
+                                <i nz-icon nzType="bar-chart" nzTheme="outline"></i>
+                                <span>Subject Performance</span>
+                            </div>
+                        </ng-template>
+                        <nz-skeleton [nzActive]="true" [nzLoading]="isLoading">
+                            <div echarts [options]="subjectChartOption" class="chart"></div>
+                        </nz-skeleton>
+                    </nz-card>
+                </div>
+                <div nz-col [nzXs]="24" [nzLg]="10">
+                    <nz-card class="chart-card" [nzTitle]="attendanceTitle">
+                        <ng-template #attendanceTitle>
+                            <div class="card-title">
+                                <i nz-icon nzType="pie-chart" nzTheme="outline"></i>
+                                <span>Attendance Overview</span>
+                            </div>
+                        </ng-template>
+                        <nz-skeleton [nzActive]="true" [nzLoading]="isLoading">
+                            <div echarts [options]="attendanceChartOption" class="chart"></div>
+                        </nz-skeleton>
+                    </nz-card>
+                </div>
+            </div>
+
+            <!-- Performance Table -->
+            <nz-card class="detail-section my-3" [nzTitle]="detailTitle">
+                <ng-template #detailTitle>
+                    <div class="card-title">
+                        <i nz-icon nzType="table" nzTheme="outline"></i>
+                        <span>Detailed Performance Analysis</span>
+                    </div>
+                </ng-template>
+                <nz-skeleton [nzActive]="true" [nzLoading]="isLoading">
+                    <nz-table #basicTable [nzData]="dashboardData.subjects" [nzPageSize]="5" [nzShowSizeChanger]="true"
+                        class="performance-table">
+                        <thead>
+                            <tr>
+                                <th>Subject</th>
+                                <th>Score</th>
+                                <th>Class Average</th>
+                                <th>Improvement</th>
+                                <th>Trend</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let data of basicTable.data">
+                                <td>
+                                    <span class="subject-name">{{ data.subject }}</span>
+                                </td>
+                                <td>
+                                    <nz-progress [nzPercent]="data.score" [nzShowInfo]="true"
+                                        [nzStrokeColor]="getProgressColor(data.score)"></nz-progress>
+                                </td>
+                                <td>{{ data.average }}%</td>
+                                <td>
+                                    <span [class]="getImprovementClass(data.improvement)">
+                                        {{ data.improvement > 0 ? '+' : '' }}{{ data.improvement }}%
+                                    </span>
+                                </td>
+                                <td>
+                                    <i nz-icon [nzType]="getTrendIcon(data.trend)"
+                                        [class]="getTrendClass(data.trend)"></i>
+                                </td>
+                                <td>
+                                    <nz-tag [nzColor]="getStatusColor(data.score)">
+                                        {{ getStatus(data.score) }}
+                                    </nz-tag>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </nz-skeleton>
+            </nz-card>
+        </ng-container>
+    </div>
+</section>

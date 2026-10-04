@@ -1,0 +1,68 @@
+<!-- Component Template (notification.component.html) -->
+<div class="notification-container">
+  <div class="notification-header">
+    <div class="icon-wrapper">
+      <mat-icon class="success-icon">check_circle</mat-icon>
+    </div>
+    <h2 class="notification-title">{{ data.roleName }} Role Created Successfully</h2>
+    <button mat-icon-button class="close-button" (click)="close()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div class="notification-content">
+    <p class="status-message">
+      <mat-icon class="status-icon">access_time</mat-icon>
+      {{ data.roleName }} role activation is pending approval.
+    </p>
+
+    <div class="activation-steps">
+      <h3>To complete activation:</h3>
+      <div class="steps-container">
+        <div class="step">
+          <div class="step-icon-wrapper">
+            <mat-icon>dashboard</mat-icon>
+          </div>
+          <div class="step-content">
+            <span>Navigate to <strong>Dashboard</strong></span>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-icon-wrapper">
+            <mat-icon>people_outline</mat-icon>
+          </div>
+          <div class="step-content">
+            <span>Go to <strong>Pending Users</strong> section</span>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-icon-wrapper">
+            <mat-icon>person_add</mat-icon>
+          </div>
+          <div class="step-content">
+            <span>Select the {{ data.roleName }} role you created</span>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-icon-wrapper">
+            <mat-icon>check_circle_outline</mat-icon>
+          </div>
+          <div class="step-content">
+            <span>Complete the activation process</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="notification-actions">
+    <button mat-button class="secondary-button" (click)="close()">Dismiss</button>
+    <button mat-raised-button color="primary" (click)="navigateToDashboard()">
+      <mat-icon>arrow_forward</mat-icon>
+      Go to Pending Users
+    </button>
+  </div>
+</div>

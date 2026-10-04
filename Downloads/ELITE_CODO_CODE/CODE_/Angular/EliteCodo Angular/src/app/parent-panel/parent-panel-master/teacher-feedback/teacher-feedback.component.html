@@ -1,0 +1,178 @@
+<!-- teacher-feedback.component.html (Redesigned) -->
+<section class="teacher-feedback-section" [ngStyle]="{ 'background-color': http.getBackgroundColor() }">
+  <div class="container">
+    <!-- Header -->
+    <div class="page-header">
+      <div class="header-content">
+        <h1 class="page-title">Parent-Teacher Communication</h1>
+        <p class="page-subtitle">Stay connected with your child's teachers</p>
+      </div>
+      <button class="new-message-btn" nz-button nzType="primary" (click)="showNewFeedbackModal()">
+        <i nz-icon nzType="plus-circle"></i>
+        New Message
+      </button>
+    </div>
+
+    <!-- Dashboard Cards -->
+    <div class="dashboard-cards">
+      <div class="card insights-card">
+        <div class="card-header">
+          <i nz-icon nzType="bar-chart" nzTheme="outline"></i>
+          <h3>Communications Overview</h3>
+        </div>
+        <div class="stats-container">
+          <div class="stat-item">
+            <div class="stat-value">{{ totalFeedbacks }}</div>
+            <div class="stat-label">Total Messages</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">{{ responseRate }}</div>
+            <div class="stat-label">Response Rate</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Messages Section -->
+    <div class="messages-section">
+      <div class="section-header">
+        <h2>Messages History</h2>
+        <div class="view-options">
+          <nz-radio-group [(ngModel)]="selectedStatus" (ngModelChange)="onStatusChange()">
+            <label nz-radio-button nzValue="all">All</label>
+            <label nz-radio-button nzValue="unread">Pending</label>
+            <label nz-radio-button nzValue="read">Responded</label>
+          </nz-radio-group>
+        </div>
+      </div>
+
+      <!-- Message Cards -->
+      <div class="message-cards">
+        <div *ngFor="let feedback of getFilteredFeedbacks()"  [ngClass]="{'has-response': feedback.reply}" class="message-card"
+          [ngClass]="{'has-response': feedback.reply}">
+          <div class="card-top">
+            <div class="message-meta">
+              <nz-avatar [nzSrc]="
+                    sessionStorageObj.adminprofilePicture && sessionStorageObj.adminprofilePicture.startsWith('https://zplusglobalmarketinsights.com/') 
+                      ? sessionStorageObj.adminprofilePicture 
+                      : 'https://api.dicebear.com/7.x/avataaars/svg?seed=John'
+                  "></nz-avatar>
+              <div class="sender-info">
+                <h4>{{ feedback.userName }}</h4>
+                <p>{{ feedback.userType }}</p>
+              </div>
+            </div>
+            <div class="message-status">
+              <nz-tag [nzColor]="getStatusColor(feedback.status)">{{ feedback.status }}</nz-tag>
+              <span class="message-date">{{ feedback.date | date: 'MMM d, y' }}</span>
+            </div>
+          </div>
+
+          <div class="message-content">
+            <h5 class="message-title">{{ feedback.title }}</h5>
+            <p class="message-text">{{ feedback.message }}</p>
+            <div *ngIf="feedback.attachments" class="message-attachments">
+              <a [href]="feedback.attachments" target="_blank" class="attachment-link">
+                <i nz-icon nzType="paper-clip"></i>
+                View Attachment
+              </a>
+            </div>
+          </div>
+
+          <div *ngIf="feedback.reply" class="response-container">
+            <div class="response-header">
+              <i nz-icon nzType="solution"></i>
+              <span>Teacher's Response</span>
+            </div>
+            <div class="response-content">
+              <p>{{ feedback.reply.message }}</p>
+              <div *ngIf="feedback.reply.attachments" class="message-attachments" style="margin: 5px 0;">
+                <a [href]="feedback.reply.attachments" target="_blank" class="attachment-link">
+                  <i nz-icon nzType="paper-clip"></i>
+                  View Teacher's Attachment
+                </a>
+              </div>
+              <div class="response-meta">
+                <span>{{ feedback.reply.date | date: 'MMM d, y' }}</span>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="message-actions">
+            <!-- <button *ngIf="!feedback.reply" nz-button nzType="default" class="remind-btn"
+              (click)="sendReminder(feedback)">
+              <i nz-icon nzType="bell"></i>
+              Send Reminder
+            </button> -->
+            <!-- <button nz-button nzType="text" class="details-btn">
+              <i nz-icon nzType="eye"></i>
+              View Details
+            </button> -->
+          </div>
+        </div>
+        <!-- After the message cards section -->
+        <div class="pagination-container" *ngIf="feedbacks && feedbacks.length > 0">
+          <nz-pagination [nzPageIndex]="currentPage" [nzTotal]="totalItems" [nzPageSize]="pageSize"
+            [nzShowSizeChanger]="true" [nzPageSizeOptions]="[5, 10, 20, 50]" (nzPageIndexChange)="onPageChange($event)"
+            (nzPageSizeChange)="onPageSizeChange($event)">
+          </nz-pagination>
+        </div>
+
+        <!-- Empty State -->
+        <div *ngIf="feedbacks?.length === 0" class="empty-state">
+          <i nz-icon nzType="inbox" nzTheme="outline"></i>
+          <p>No messages yet. Start a conversation with your child's teacher.</p>
+          <button nz-button nzType="primary" (click)="showNewFeedbackModal()">Send First Message</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- New Feedback Modal -->
+  <nz-modal [(nzVisible)]="isModalVisible" nzTitle="Send New Message" (nzOnCancel)="handleModalCancel()"
+    (nzOnOk)="handleModalOk()" [nzWidth]="650" class="feedback-modal">
+    <ng-container *nzModalContent>
+      <form nz-form [formGroup]="feedbackForm" class="feedback-form">
+        <nz-form-item>
+          <nz-form-label [nzSpan]="6">Message Title</nz-form-label>
+          <nz-form-control [nzSpan]="18" [nzErrorTip]="'Please enter a title'">
+            <input nz-input formControlName="title" placeholder="Enter a brief subject for your message" />
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label [nzSpan]="6">Message</nz-form-label>
+          <nz-form-control [nzSpan]="18" [nzErrorTip]="'Please enter your message (minimum 10 characters)'">
+            <textarea nz-input formControlName="description" [nzAutosize]="{ minRows: 5, maxRows: 8 }"
+              placeholder="What would you like to communicate to the teacher?">
+            </textarea>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label [nzSpan]="6">Attachments</nz-form-label>
+          <nz-form-control [nzSpan]="18">
+            <nz-upload nzType="drag" [nzMultiple]="false" nzAccept=".pdf,.doc,.docx,.jpg,.png"
+              (nzChange)="handleFileUpload($event)" [nzLimit]="1">
+              <div class="upload-area">
+                <p class="upload-drag-icon">
+                  <i nz-icon nzType="upload"></i>
+                </p>
+                <p class="upload-text">Click or drag file to this area to upload</p>
+                <p class="upload-hint">Support for a single PDF, DOC, DOCX, JPG or PNG file</p>
+              </div>
+            </nz-upload>
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+    </ng-container>
+    <div *nzModalFooter>
+      <button nz-button (click)="handleModalCancel()">Cancel</button>
+      <button nz-button nzType="primary" (click)="handleModalOk()" [nzLoading]="isLoading">
+        <span *ngIf="!isLoading">Send Message</span>
+        <span *ngIf="isLoading">Sending...</span>
+      </button>
+    </div>
+  </nz-modal>
+</section>

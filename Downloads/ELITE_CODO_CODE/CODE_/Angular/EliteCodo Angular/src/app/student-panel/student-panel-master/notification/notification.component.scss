@@ -1,0 +1,1045 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+// Variables
+$primary-color: #1890ff;
+$primary-dark: #0050b3;
+$primary-light: #e6f7ff;
+$success-color: #52c41a;
+$success-light: #f6ffed;
+$border-radius-large: 16px;
+$border-radius-medium: 12px;
+$border-radius-small: 8px;
+$box-shadow-light: 0 2px 8px rgba(0, 0, 0, 0.06);
+$box-shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.08);
+$box-shadow-heavy: 0 8px 24px rgba(0, 0, 0, 0.12);
+$transition-standard: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+// Main dashboard container
+.notification-dashboard {
+    min-height: 100vh;
+    position: absolute;
+    width: 100%;
+    padding: 2rem;
+    font-family: 'Poppins', sans-serif;
+
+    @media (max-width: 768px) {
+        padding: 1rem;
+    }
+}
+
+.container {
+    margin: 0 auto;
+    position: relative;
+}
+
+// Enhanced Banner with Particles
+.notification-banner {
+    margin-bottom: 3rem;
+    padding: 0;
+    background: linear-gradient(135deg, #1890ff 0%, #0050b3 100%);
+    color: white;
+    border-radius: $border-radius-large;
+    box-shadow: $box-shadow-heavy;
+    overflow: hidden;
+    position: relative;
+
+    // Particle animation container
+    .particles-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+
+        .particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+
+            @for $i from 1 through 10 {
+                &:nth-child(#{$i}) {
+                    top: random(100) * 1%;
+                    left: random(100) * 1%;
+                    width: (random(15) + 5) * 1px;
+                    height: (random(15) + 5) * 1px;
+                    animation-duration: (random(20) + 10) * 1s;
+                    animation-delay: random(5) * -1s;
+                }
+            }
+        }
+    }
+
+    @keyframes float {
+        0% {
+            transform: translate(0, 0) rotate(0deg);
+            opacity: 0;
+        }
+
+        10% {
+            opacity: 1;
+        }
+
+        90% {
+            opacity: 1;
+        }
+
+        100% {
+            transform: translate(random(100) - 50px, random(100) - 50px) rotate(360deg);
+            opacity: 0;
+        }
+    }
+
+    .banner-content {
+        display: flex;
+        align-items: center;
+        padding: 3rem;
+        position: relative;
+        z-index: 1;
+
+        @media (max-width: 768px) {
+            flex-direction: column;
+            padding: 2rem;
+            text-align: center;
+        }
+    }
+
+    .banner-icon-container {
+        margin-right: 2rem;
+
+        @media (max-width: 768px) {
+            margin-right: 0;
+            margin-bottom: 1.5rem;
+        }
+    }
+
+    .banner-icon {
+        font-size: 2.5rem;
+        background: rgba(255, 255, 255, 0.15);
+        height: 100px;
+        width: 100px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+
+        &::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: -8px;
+            right: -8px;
+            bottom: -8px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            animation: pulse 3s infinite;
+        }
+    }
+
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        50% {
+            transform: scale(1.1);
+            opacity: 0.4;
+        }
+
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    .pulse-animation {
+        animation: pulse-shadow 2s infinite;
+    }
+
+    @keyframes pulse-shadow {
+        0% {
+            box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.5);
+        }
+
+        70% {
+            box-shadow: 0 0 0 15px rgba(255, 255, 255, 0);
+        }
+
+        100% {
+            box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+        }
+    }
+
+    .banner-text {
+        flex: 1;
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin-bottom: 0;
+        }
+    }
+
+    .reveal-text {
+        position: relative;
+        animation: reveal 1s ease forwards;
+    }
+
+    .reveal-text-delay {
+        position: relative;
+        animation: reveal 1s 0.3s ease forwards;
+        opacity: 0;
+    }
+
+    @keyframes reveal {
+        0% {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .banner-stats {
+        display: flex;
+        gap: 1.5rem;
+        margin-left: 2rem;
+
+        @media (max-width: 768px) {
+            margin-left: 0;
+            margin-top: 1.5rem;
+            justify-content: center;
+        }
+
+        .stat-item {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem 1.5rem;
+            border-radius: $border-radius-small;
+            min-width: 100px;
+
+            .stat-count {
+                font-size: 2rem;
+                font-weight: 600;
+                line-height: 1;
+            }
+
+            .stat-label {
+                font-size: 0.9rem;
+                opacity: 0.8;
+                margin-top: 0.5rem;
+            }
+        }
+    }
+}
+
+// Floating Controls with Glassmorphism
+.floating-controls {
+    margin-bottom: 2rem;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    border-radius: $border-radius-medium;
+    box-shadow: $box-shadow-medium;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    position: relative;
+
+    @media (max-width: 992px) {
+        flex-direction: column;
+        gap: 1rem;
+        overflow: auto;
+    }
+
+    .control-section {
+        padding: 0.5rem;
+
+        @media (max-width: 992px) {
+            width: 100%;
+        }
+    }
+}
+
+// Filter Tabs with Active Indicator
+.filter-tabs {
+    display: flex;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: $border-radius-small;
+    padding: 0.5rem;
+    position: relative;
+
+    .tab-indicators {
+        position: absolute;
+        top: 0.5rem;
+        left: 0.5rem;
+        right: 0.5rem;
+        bottom: 0.5rem;
+        pointer-events: none;
+
+        .tab-indicator {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            width: 33.33%;
+            background: white;
+            border-radius: $border-radius-small;
+            box-shadow: $box-shadow-light;
+            transition: $transition-standard;
+        }
+    }
+
+    .tab {
+        position: relative;
+        z-index: 1;
+        padding: 0.75rem 1.25rem;
+        font-weight: 500;
+        color: rgba(0, 0, 0, 0.6);
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        transition: $transition-standard;
+        border-radius: $border-radius-small;
+
+        i {
+            margin-right: 8px;
+            font-size: 1.1rem;
+        }
+
+        .tab-count {
+            margin-left: 8px;
+            font-size: 0.8rem;
+            background: rgba(0, 0, 0, 0.05);
+            color: rgba(0, 0, 0, 0.5);
+            height: 20px;
+            min-width: 20px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 6px;
+            transition: $transition-standard;
+        }
+
+        &.active {
+            color: $primary-color;
+
+            .tab-count {
+                background: $primary-color;
+                color: white;
+            }
+        }
+    }
+}
+
+// Enhanced Search Input
+.search-section {
+    flex: 1;
+    margin: 0 1rem;
+
+    @media (max-width: 992px) {
+        margin: 0;
+    }
+
+    .search-container {
+        position: relative;
+        border-radius: $border-radius-small;
+        background: rgba(255, 255, 255, 0.5);
+        transition: $transition-standard;
+        border: 1px solid transparent;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+
+        &.focus {
+            border-color: $primary-color;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(24, 144, 255, 0.1);
+        }
+
+        .search-icon {
+            color: rgba(0, 0, 0, 0.4);
+            font-size: 1.1rem;
+            margin-left: 1rem;
+        }
+
+        input {
+            flex: 1;
+            border: none;
+            background: none;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            outline: none;
+
+            &::placeholder {
+                color: rgba(0, 0, 0, 0.35);
+            }
+        }
+
+        .clear-search {
+            background: none;
+            border: none;
+            color: rgba(0, 0, 0, 0.4);
+            cursor: pointer;
+            padding: 0.5rem;
+            margin-right: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: $transition-standard;
+
+            &:hover {
+                background: rgba(0, 0, 0, 0.05);
+                color: rgba(0, 0, 0, 0.6);
+            }
+        }
+    }
+}
+
+// View Controls
+.view-controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    .view-mode-toggle {
+        display: flex;
+        gap: 0.5rem;
+
+        button {
+            background: rgba(255, 255, 255, 0.5);
+            border: none;
+            color: rgba(0, 0, 0, 0.4);
+            width: 36px;
+            height: 36px;
+            border-radius: $border-radius-small;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: $transition-standard;
+
+            &:hover {
+                background: white;
+                color: rgba(0, 0, 0, 0.6);
+            }
+
+            &.active {
+                background: white;
+                color: $primary-color;
+                box-shadow: $box-shadow-light;
+            }
+        }
+    }
+
+    .sort-button {
+        background: rgba(255, 255, 255, 0.5);
+        border: none;
+        color: rgba(0, 0, 0, 0.65);
+        padding: 0.5rem 1rem;
+        border-radius: $border-radius-small;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        transition: $transition-standard;
+
+        &:hover {
+            background: white;
+        }
+    }
+}
+
+// Notifications Content Container
+.notifications-content {
+    background: white;
+    border-radius: $border-radius-large;
+    box-shadow: $box-shadow-medium;
+    padding: 2rem;
+    min-height: 300px;
+
+    @media (max-width: 768px) {
+        padding: 1.5rem;
+    }
+}
+
+// Enhanced Empty State with Animation
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 3rem 0;
+    animation: fadeIn 0.5s ease;
+
+    .empty-animation {
+        position: relative;
+        margin-bottom: 2rem;
+    }
+
+    .empty-icon-container {
+        background: #f7f9fc;
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 2rem;
+        position: relative;
+        z-index: 1;
+
+        i {
+            font-size: 3.5rem;
+            color: #bfbfbf;
+        }
+    }
+
+    .ripple-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .ripple {
+            position: absolute;
+            border: 4px solid $primary-color;
+            border-radius: 50%;
+            opacity: 0;
+            width: 120px;
+            height: 120px;
+            animation: ripple 3s infinite ease-out;
+
+            &:nth-child(2) {
+                animation-delay: 1s;
+            }
+
+            &:nth-child(3) {
+                animation-delay: 2s;
+            }
+        }
+    }
+
+    @keyframes ripple {
+        0% {
+            transform: scale(0.8);
+            opacity: 0.6;
+        }
+
+        100% {
+            transform: scale(1.6);
+            opacity: 0;
+        }
+    }
+
+    h3 {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+        color: rgba(0, 0, 0, 0.85);
+    }
+
+    p {
+        color: rgba(0, 0, 0, 0.45);
+        margin-bottom: 1.5rem;
+    }
+
+    .empty-actions {
+        button {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+// Card View Mode
+.notification-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+
+    @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.staggered-fade-in>* {
+    animation: fadeInUp 0.5s ease forwards;
+    opacity: 0;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.notification-card {
+    background: white;
+    border-radius: $border-radius-medium;
+    box-shadow: $box-shadow-light;
+    overflow: hidden;
+    border: 1px solid #f0f0f0;
+    transition: $transition-standard;
+    position: relative;
+    overflow: auto;
+
+    &:hover {
+        box-shadow: $box-shadow-medium;
+        transform: translateY(-3px);
+    }
+
+    &.unread {
+        box-shadow: 0 0 0 1px rgba($primary-color, 0.2), $box-shadow-light;
+    }
+
+    .unread-indicator {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: $primary-color;
+        z-index: 1;
+    }
+
+    .notification-header {
+        padding: 1.5rem;
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid #f0f0f0;
+        position: relative;
+
+        .notification-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            flex-shrink: 0;
+
+            &.general {
+                background: $primary-light;
+                color: $primary-color;
+            }
+
+            &.report {
+                background: $success-light;
+                color: $success-color;
+            }
+
+            i {
+                font-size: 1.5rem;
+            }
+        }
+
+        .notification-meta {
+            flex: 1;
+
+            .notification-type-badge {
+                display: inline-flex;
+                padding: 0.25rem 0.75rem;
+                border-radius: 12px;
+                font-size: 0.75rem;
+                font-weight: 500;
+                margin-bottom: 0.5rem;
+
+                &.general {
+                    background: $primary-light;
+                    color: $primary-color;
+                }
+
+                &.report {
+                    background: $success-light;
+                    color: $success-color;
+                }
+            }
+
+            .notification-date {
+                display: flex;
+                align-items: center;
+                font-size: 0.8rem;
+                color: rgba(0, 0, 0, 0.45);
+
+                i {
+                    margin-right: 4px;
+                    font-size: 0.9rem;
+                }
+            }
+        }
+
+        .notification-actions-top {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+
+            button {
+                background: none;
+                border: none;
+                color: rgba(0, 0, 0, 0.45);
+                cursor: pointer;
+                width: 32px;
+                height: 32px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 50%;
+                transition: $transition-standard;
+
+                &:hover {
+                    background: rgba(0, 0, 0, 0.05);
+                    color: rgba(0, 0, 0, 0.65);
+                }
+            }
+        }
+    }
+
+    .notification-body {
+        padding: 1.5rem;
+
+        .notification-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: rgba(0, 0, 0, 0.85);
+        }
+
+        .notification-content {
+            color: rgba(0, 0, 0, 0.65);
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .attachment-preview {
+            display: flex;
+            align-items: center;
+            background: #f9f9f9;
+            padding: 0.75rem;
+            border-radius: $border-radius-small;
+            margin-bottom: 1rem;
+
+            .file-icon {
+                color: #f56a00;
+                font-size: 1.5rem;
+                margin-right: 0.75rem;
+            }
+
+            .file-info {
+                .file-name {
+                    font-weight: 500;
+                    font-size: 0.9rem;
+                    margin-bottom: 0.25rem;
+                }
+
+                .file-meta {
+                    font-size: 0.8rem;
+                    color: rgba(0, 0, 0, 0.45);
+                }
+            }
+        }
+
+        .report-details {
+            margin-top: 1rem;
+
+            .report-type {
+                display: flex;
+                align-items: center;
+                font-size: 0.9rem;
+                color: rgba(0, 0, 0, 0.65);
+                margin-bottom: 0.75rem;
+
+                i {
+                    margin-right: 0.5rem;
+                }
+            }
+
+            .student-tags {
+                .student-label {
+                    font-size: 0.8rem;
+                    color: rgba(0, 0, 0, 0.45);
+                    margin-bottom: 0.5rem;
+                    display: block;
+                }
+
+                .student-avatars {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 0.5rem;
+
+                    .student-avatar {
+                        display: flex;
+                        align-items: center;
+                        background: #f5f5f5;
+                        padding: 0.25rem 0.5rem;
+                        border-radius: 12px;
+
+                        nz-avatar {
+                            margin-right: 0.25rem;
+                        }
+
+                        .student-name {
+                            font-size: 0.8rem;
+                            font-weight: 500;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .notification-footer {
+        padding: 1rem 1.5rem;
+        border-top: 1px solid #f0f0f0;
+        display: flex;
+        gap: 0.5rem;
+
+        button {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+
+            i {
+                font-size: 1rem;
+            }
+        }
+    }
+
+    &.general-notification {
+        border-top: 3px solid $primary-color;
+    }
+
+    &.report-notification {
+        border-top: 3px solid $success-color;
+    }
+}
+
+// List View Mode
+.notification-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    .notification-list-item {
+        display: flex;
+        background: white;
+        border-radius: $border-radius-medium;
+        box-shadow: $box-shadow-light;
+        overflow: hidden;
+        border: 1px solid #f0f0f0;
+        padding: 1rem;
+        transition: $transition-standard;
+        animation: fadeInUp 0.5s ease forwards;
+        position: relative;
+
+        &:hover {
+            box-shadow: $box-shadow-medium;
+        }
+
+        &.unread {
+            box-shadow: 0 0 0 1px rgba($primary-color, 0.2), $box-shadow-light;
+            background-color: rgba($primary-light, 0.3);
+        }
+
+        &.general-notification {
+            border-left: 4px solid $primary-color;
+        }
+
+        &.report-notification {
+            border-left: 4px solid $success-color;
+        }
+
+        .list-item-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            flex-shrink: 0;
+
+            &.general {
+                background: $primary-light;
+                color: $primary-color;
+            }
+
+            &.report {
+                background: $success-light;
+                color: $success-color;
+            }
+
+            i {
+                font-size: 1.5rem;
+            }
+        }
+
+        .list-item-content {
+            flex: 1;
+            min-width: 0;
+
+            .list-item-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                margin-bottom: 0.5rem;
+
+                @media (max-width: 768px) {
+                    flex-direction: column;
+                }
+
+                .notification-title {
+                    font-size: 1.1rem;
+                    font-weight: 600;
+                    margin-bottom: 0.5rem;
+                    color: rgba(0, 0, 0, 0.85);
+                }
+
+                .notification-meta-inline {
+                    display: flex;
+                    align-items: center;
+                    gap: 0.75rem;
+                    flex-shrink: 0;
+
+                    .notification-type-badge {
+                        display: inline-flex;
+                        padding: 0.25rem 0.75rem;
+                        border-radius: 12px;
+                        font-size: 0.75rem;
+                        font-weight: 500;
+
+                        &.general {
+                            background: $primary-light;
+                            color: $primary-color;
+                        }
+
+                        &.report {
+                            background: $success-light;
+                            color: $success-color;
+                        }
+                    }
+
+                    .notification-date {
+                        display: flex;
+                        align-items: center;
+                        font-size: 0.8rem;
+                        color: rgba(0, 0, 0, 0.45);
+
+                        i {
+                            margin-right: 4px;
+                            font-size: 0.9rem;
+                        }
+                    }
+                }
+            }
+
+            .notification-content {
+                color: rgba(0, 0, 0, 0.65);
+                margin-bottom: 0.75rem;
+                line-height: 1.5;
+            }
+
+            .list-item-students {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+                margin-bottom: 0.75rem;
+
+                .student-chip {
+                    display: flex;
+                    align-items: center;
+                    background: #f5f5f5;
+                    padding: 0.25rem 0.5rem;
+                    border-radius: 12px;
+                    font-size: 0.8rem;
+
+                    nz-avatar {
+                        margin-right: 0.25rem;
+                    }
+                }
+            }
+
+            .list-item-attachment {
+                display: flex;
+                align-items: center;
+                color: rgba(0, 0, 0, 0.65);
+                font-size: 0.9rem;
+
+                i {
+                    margin-right: 0.5rem;
+                }
+            }
+        }
+
+        .list-item-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-left: 1rem;
+            align-self: center;
+
+            button {
+                width: 36px;
+                height: 36px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+    }
+}
+
+// Animation for the components
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}

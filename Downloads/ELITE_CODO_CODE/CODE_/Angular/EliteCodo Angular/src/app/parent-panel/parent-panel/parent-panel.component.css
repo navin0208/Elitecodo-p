@@ -1,0 +1,27 @@
+.watermark-wrapper {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 20;
+    pointer-events: none;
+    border: none;
+    /* Removes any border */
+    outline: none;
+    /* Removes any outline */
+
+}
+
+.data {
+    font-size: 3rem;
+    color: rgba(0, 0, 0, 0.1);
+    text-align: center;
+    opacity: 0.1;
+}
+
+.make {
+    position: relative;
+    z-index: 1;
+    opacity: 1;
+    /* Lower than the watermark (10) */
+}

@@ -1,0 +1,167 @@
+/* Component Styles (notification.component.scss) */
+.notification-container {
+  max-width: 500px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  background-color: white;
+  transform: translateY(0);
+  animation: slide-in 0.3s ease-out;
+}
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.notification-header {
+  display: flex;
+  align-items: center;
+  padding: 20px 24px;
+  background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+  color: white;
+}
+
+.icon-wrapper {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  height: 40px;
+  width: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16px;
+}
+
+.success-icon {
+  color: white;
+  font-size: 24px;
+  height: 24px;
+  width: 24px;
+}
+
+.notification-title {
+  flex: 1;
+  margin: 0;
+  font-size: 18px;
+  font-weight: 500;
+  color: white;
+
+}
+
+.close-button {
+  color: white;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.close-button:hover {
+  opacity: 1;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.notification-content {
+  padding: 24px;
+}
+
+.status-message {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  color: #495057;
+  margin-bottom: 24px;
+  padding: 12px 16px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #2575fc;
+}
+
+.status-icon {
+  color: #2575fc;
+  margin-right: 12px;
+}
+
+.activation-steps h3 {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 20px;
+  color: #343a40;
+}
+
+.steps-container {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  border-radius: 8px;
+  background-color: #f8f9fa;
+  transition: all 0.2s ease;
+}
+
+.step:hover {
+  background-color: #e9ecef;
+  transform: translateX(5px);
+}
+
+.step-icon-wrapper {
+  background-color: #2575fc;
+  color: white;
+  height: 36px;
+  width: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16px;
+}
+
+.step-content {
+  font-size: 14px;
+  color: #495057;
+}
+
+.step-content strong {
+  color: #212529;
+  font-weight: 600;
+}
+
+.notification-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 16px 24px;
+  background-color: #f8f9fa;
+  border-top: 1px solid #e9ecef;
+}
+
+.secondary-button {
+  margin-right: 12px;
+  color: #6c757d;
+}
+
+[mat-raised-button].mat-primary {
+  background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 16px;
+  box-shadow: 0 4px 12px rgba(37, 117, 252, 0.2);
+  transition: all 0.2s ease;
+}
+
+[mat-raised-button].mat-primary:hover {
+  box-shadow: 0 6px 16px rgba(37, 117, 252, 0.3);
+  transform: translateY(-2px);
+}

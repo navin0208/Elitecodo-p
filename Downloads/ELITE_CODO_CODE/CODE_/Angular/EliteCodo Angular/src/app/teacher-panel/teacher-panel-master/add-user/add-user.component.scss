@@ -1,0 +1,488 @@
+    // teacher-management.component.scss
+    .w-25 :focus {
+        background: azure;
+        color: #52c41a;
+    }
+
+    @media screen and (max-width: 500px) {
+        section {
+            position: absolute;
+            width: 100%;
+            transform: translateY(20px);
+        }
+    }
+
+    section {
+        position: absolute;
+        width: 100%;
+    }
+
+
+    // Cards Styling
+    .main-card {
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+
+        &:hover {
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+        }
+    }
+
+    .stats-card {
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.09);
+        transition: all 0.3s ease;
+
+        &:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        }
+
+        .stats-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+
+            i {
+                font-size: 24px;
+            }
+        }
+
+        h2 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #262626;
+            margin: 0;
+        }
+
+        p {
+            font-size: 14px;
+            color: #8c8c8c;
+        }
+    }
+
+    // Tabs Styling
+    .custom-tabs {
+        margin-top: 16px;
+
+        ::ng-deep {
+            .ant-tabs-nav {
+                margin-bottom: 24px;
+            }
+
+            .ant-tabs-tab {
+                padding: 12px 24px;
+                transition: all 0.3s ease;
+
+                &:hover {
+                    color: #1890ff;
+                }
+            }
+
+            .ant-tabs-tab-active {
+                background: #e6f7ff;
+                border-radius: 4px;
+            }
+        }
+    }
+
+    // Table Styling
+    ::ng-deep {
+        .ant-table {
+            background: white;
+            border-radius: 8px;
+
+            .ant-table-thead>tr>th {
+                background: #fafafa;
+                font-weight: 600;
+                padding: 16px;
+            }
+
+            .ant-table-tbody>tr>td {
+                padding: 16px;
+            }
+
+            .ant-table-tbody>tr:hover>td {
+                background: #fafafa;
+            }
+        }
+    }
+
+    // Avatar and User Info
+    nz-avatar {
+        background-color: #1890ff;
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+        &:hover {
+            transform: scale(1.05);
+        }
+    }
+
+    // Buttons Styling
+    [nz-button] {
+        border-radius: 6px;
+        padding: 6px 16px;
+        height: auto;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+
+        i {
+            font-size: 16px;
+        }
+
+        &:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+    }
+
+    // Modal Styling
+    ::ng-deep {
+        .ant-modal-content {
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .ant-modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .ant-modal-body {
+            padding: 24px;
+        }
+
+        .ant-form-item {
+            margin-bottom: 24px;
+        }
+
+        .ant-input {
+            padding: 8px 12px;
+            border-radius: 6px;
+        }
+
+        .ant-select {
+            width: 100%;
+        }
+
+        .ant-select-selector {
+            border-radius: 6px !important;
+            padding: 8px 12px !important;
+            height: auto !important;
+        }
+    }
+
+    // Tags Styling
+    nz-tag {
+        border-radius: 4px;
+        padding: 4px 8px;
+        font-size: 12px;
+
+        &.ant-tag-success {
+            background: #f6ffed;
+            border-color: #b7eb8f;
+            color: #52c41a;
+        }
+
+        &.ant-tag-error {
+            background: #fff2f0;
+            border-color: #ffccc7;
+            color: #ff4d4f;
+        }
+    }
+
+    // Action Buttons
+    .action-buttons {
+        display: flex;
+        gap: 8px;
+
+        a {
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+
+            &:hover {
+                background: #f5f5f5;
+            }
+        }
+    }
+
+    // Responsive Styles
+    @media (max-width: 768px) {
+        :host {
+            padding: 16px;
+        }
+
+        .stats-card {
+            margin-bottom: 16px;
+        }
+
+        .ant-table {
+            overflow-x: auto;
+        }
+
+        [nz-button] {
+            padding: 4px 12px;
+        }
+
+        ::ng-deep {
+            .ant-modal {
+                max-width: 90vw;
+            }
+
+            .ant-table-thead>tr>th,
+            .ant-table-tbody>tr>td {
+                padding: 12px 8px;
+            }
+        }
+    }
+
+    // Form Grid
+    .row {
+        margin: 0 -12px;
+
+        .col-md-6 {
+            padding: 0 12px;
+        }
+    }
+
+    // Loading States
+    .loading-spinner {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 200px;
+    }
+
+    // Error States
+    .error-message {
+        color: #ff4d4f;
+        font-size: 12px;
+        margin-top: 4px;
+    }
+
+    // Success States
+    .success-message {
+        color: #52c41a;
+        font-size: 12px;
+        margin-top: 4px;
+    }
+
+    /* Form Group Wrapper */
+    /* .form-group-wrapper {
+        margin-bottom: 20px;
+    } */
+
+    .form-group {
+        position: relative;
+    }
+
+    /* Input Group Styles */
+    .input-group {
+        position: relative;
+    }
+
+    .input-group .form-control {
+        padding-right: 40px;
+        /* Space for toggle button */
+    }
+
+    .input-group .toggle-password {
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 10;
+        background: none;
+        border: none;
+        cursor: pointer;
+    }
+
+    /* Invalid Feedback Container */
+    .invalid-feedback-container {
+        min-height: 20px;
+        margin-top: 5px;
+    }
+
+    /* Error State */
+    .is-invalid .form-control {
+        border-color: red;
+    }
+
+    /* Additional Styles */
+    .profile_picture {
+        border-radius: 50%;
+        height: 100px;
+        padding: 10px;
+    }
+
+    // Notification Component Styles
+
+    .notification-container {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 350px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        z-index: 1000;
+        transition: all 0.3s ease;
+
+        .notification-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            .icon-wrapper {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .success-icon {
+                color: #52c41a;
+                font-size: 28px;
+            }
+
+            .info-icon {
+                color: #1890ff;
+                font-size: 28px;
+            }
+
+            .notification-title {
+                font-size: 18px;
+                font-weight: 600;
+                flex-grow: 1;
+                margin-left: 12px;
+                color: #333;
+            }
+
+            .close-button {
+                background: none;
+                border: none;
+                cursor: pointer;
+
+                mat-icon {
+                    font-size: 20px;
+                    color: #8c8c8c;
+                    transition: color 0.2s ease;
+
+                    &:hover {
+                        color: #333;
+                    }
+                }
+            }
+        }
+
+        .notification-content {
+            .status-message {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                font-size: 14px;
+                color: #595959;
+
+                .status-icon {
+                    color: #faad14;
+                    font-size: 20px;
+                }
+            }
+
+            .activation-steps {
+                margin-top: 12px;
+
+                h3 {
+                    font-size: 16px;
+                    font-weight: 600;
+                    margin-bottom: 8px;
+                    color: #333;
+                }
+
+                .steps-container {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 8px;
+
+                    .step {
+                        display: flex;
+                        align-items: center;
+                        gap: 12px;
+                        padding: 8px;
+                        background: #f9f9f9;
+                        border-radius: 6px;
+                        transition: all 0.3s ease;
+
+                        &:hover {
+                            background: #e6f7ff;
+                        }
+
+                        .step-icon-wrapper {
+                            width: 32px;
+                            height: 32px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            background: #1890ff;
+                            color: white;
+                            border-radius: 50%;
+                            font-size: 16px;
+                        }
+
+                        .step-content {
+                            font-size: 14px;
+                            color: #333;
+                        }
+                    }
+                }
+            }
+        }
+
+        .notification-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            margin-top: 12px;
+
+            .secondary-button {
+                background: none;
+                border: 1px solid #d9d9d9;
+                color: #595959;
+                border-radius: 6px;
+                padding: 6px 12px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+
+                &:hover {
+                    background: #f5f5f5;
+                }
+            }
+
+            button {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+            }
+        }
+    }
+
+    // Responsive Styling
+    @media (max-width: 500px) {
+        .notification-container {
+            width: 90%;
+            right: 5%;
+            bottom: 10px;
+        }
+    }

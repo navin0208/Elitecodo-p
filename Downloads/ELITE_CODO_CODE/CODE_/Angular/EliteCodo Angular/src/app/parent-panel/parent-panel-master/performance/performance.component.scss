@@ -1,0 +1,211 @@
+section {
+    position: absolute;
+    width: 100%;
+}
+
+.performance-dashboard {
+    padding: 24px;
+    min-height: 100vh;
+}
+
+.dashboard-header {
+    margin-bottom: 32px;
+    background: white;
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+}
+
+.main-title {
+    font-size: 28px;
+    color: #1f1f1f;
+    margin-bottom: 24px;
+    font-weight: 600;
+}
+
+.student-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    .student-details {
+        h2 {
+            margin: 0;
+            font-size: 20px;
+            color: #1f1f1f;
+        }
+
+        p {
+            margin: 4px 0 0;
+            color: #666;
+        }
+    }
+}
+
+/* Add to your component's SCSS file */
+.error-alert {
+    margin-bottom: 24px;
+}
+
+.refresh-btn {
+    margin-left: 16px;
+}
+
+.header-row {
+    display: flex;
+    align-items: center;
+}
+
+/* Skeleton styling */
+nz-skeleton {
+    width: 100%;
+}
+
+/* Chart skeleton needs specific height */
+.chart-card nz-skeleton {
+    height: 300px;
+}
+
+/* Table skeleton */
+.detail-section nz-skeleton {
+    height: 400px;
+}
+
+.detail-section {
+    height: 400px;
+    overflow: auto;
+}
+
+.stat-card {
+    background: white;
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    height: 100%;
+    display: flex;
+    gap: 16px;
+
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    }
+
+    .stat-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        font-size: 24px;
+    }
+
+    .stat-content {
+        flex: 1;
+
+        h3 {
+            margin: 0;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 600;
+            margin: 8px 0;
+        }
+    }
+
+    &.grade .stat-icon {
+        background: rgba(24, 144, 255, 0.1);
+        color: #1890ff;
+    }
+
+    &.attendance .stat-icon {
+        background: rgba(82, 196, 26, 0.1);
+        color: #52c41a;
+    }
+
+    &.rank .stat-icon {
+        background: rgba(250, 173, 20, 0.1);
+        color: #faad14;
+    }
+
+    &.improvement .stat-icon {
+        background: rgba(114, 46, 209, 0.1);
+        color: #722ed1;
+    }
+}
+
+.chart-card {
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+
+    .chart {
+        height: 400px;
+    }
+}
+
+.card-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #1f1f1f;
+    font-weight: 500;
+
+    i {
+        font-size: 18px;
+        color: #1890ff;
+    }
+}
+
+.performance-table {
+    .subject-name {
+        font-weight: 500;
+        color: #1f1f1f;
+    }
+
+    .improvement-up {
+        color: #52c41a;
+        font-weight: 500;
+    }
+
+    .improvement-down {
+        color: #f5222d;
+        font-weight: 500;
+    }
+
+    .trend-up {
+        color: #52c41a;
+    }
+
+    .trend-down {
+        color: #f5222d;
+    }
+
+    .trend-stable {
+        color: #faad14;
+    }
+}
+
+:host ::ng-deep {
+    .ant-card {
+        border-radius: 12px;
+    }
+
+    .ant-card-head {
+        border-bottom: 1px solid #f0f0f0;
+        padding: 0 24px;
+        min-height: 60px;
+    }
+
+    .ant-table-thead>tr>th {
+        background: #fafafa;
+        font-weight: 500;
+    }
+
+    .ant-progress-inner {
+        border-radius: 4px;
+    }
+}

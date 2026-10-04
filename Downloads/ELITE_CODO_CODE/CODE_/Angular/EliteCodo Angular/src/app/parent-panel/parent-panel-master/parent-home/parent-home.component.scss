@@ -1,0 +1,334 @@
+section {
+    position: absolute;
+    width: 100%;
+}
+
+.upcoming-events {
+    max-height: 350px;
+    overflow-y: auto;
+    padding-right: 8px;
+
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+
+    .event-item {
+        margin-bottom: 12px;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+}
+
+.profile-section>img {
+    border-radius: 50%;
+}
+
+// parent-dashboard.component.scss
+.dashboard-wrapper {
+    display: flex;
+    min-height: 100vh;
+    // background-color: #f0f2f5;  => needs to be replaced if necessary
+
+    // Quick Sidebar Styles
+    .quick-sidebar {
+        width: 300px;
+        background: white;
+        padding: 24px;
+        border-right: 1px solid #f0f0f0;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        overflow-y: auto;
+
+        .profile-section {
+            text-align: center;
+            margin-bottom: 24px;
+
+            .profile-info {
+                margin-top: 16px;
+
+                h3 {
+                    margin: 0;
+                    font-size: 18px;
+                    font-weight: 600;
+                }
+
+                p {
+                    color: #666;
+                    margin: 4px 0 0;
+                }
+            }
+        }
+
+        .quick-stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 24px 0;
+
+            .stat-item {
+                text-align: center;
+
+                span {
+                    display: block;
+                    margin-top: 8px;
+                    color: #666;
+                    font-size: 14px;
+                }
+            }
+        }
+
+        .upcoming-events {
+            h4 {
+                margin-bottom: 16px;
+                font-weight: 600;
+            }
+
+            .event-item {
+                display: flex;
+                align-items: center;
+                padding: 12px;
+                background: #f8f9fa;
+                border-radius: 8px;
+                margin-bottom: 12px;
+
+                .event-date {
+                    background: #1890ff;
+                    color: white;
+                    padding: 8px;
+                    border-radius: 6px;
+                    text-align: center;
+                    min-width: 60px;
+
+                    .day {
+                        font-size: 18px;
+                        font-weight: bold;
+                        display: block;
+                    }
+
+                    .month {
+                        font-size: 12px;
+                    }
+                }
+
+                .event-info {
+                    margin-left: 12px;
+
+                    h5 {
+                        margin: 0;
+                        font-size: 14px;
+                    }
+
+                    p {
+                        margin: 4px 0 0;
+                        color: #666;
+                        font-size: 12px;
+                    }
+                }
+            }
+        }
+    }
+
+    // Main Content Styles
+    .main-content {
+        flex: 1;
+        padding: 24px;
+        // background: #f0f2f5;  => needs to be replaced if necessary
+
+        .header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+
+            .welcome-text {
+                h2 {
+                    margin: 0;
+                    font-size: 24px;
+                    font-weight: 600;
+                }
+
+                p {
+                    color: #666;
+                    margin: 4px 0 0;
+                }
+            }
+
+            .action-buttons {
+                display: flex;
+                gap: 12px;
+            }
+        }
+
+        // Features Grid
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+
+            .feature-card {
+                background: white;
+                border-radius: 16px;
+                overflow: hidden;
+                transition: all 0.3s ease;
+                cursor: pointer;
+                position: relative;
+
+                &:hover {
+                    transform: translateY(-5px);
+                    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+                }
+
+                .card-content {
+                    padding: 24px;
+
+                    .card-icon {
+                        width: 48px;
+                        height: 48px;
+                        border-radius: 12px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        margin-bottom: 16px;
+
+                        span {
+                            font-size: 24px;
+                            color: white;
+                        }
+                    }
+
+                    h3 {
+                        margin: 0 0 8px;
+                        font-size: 18px;
+                        font-weight: 600;
+                    }
+
+                    p {
+                        color: #666;
+                        margin: 0 0 16px;
+                    }
+                }
+
+                // Card Variants
+                &.academic-card .card-icon {
+                    background: linear-gradient(135deg, #1890ff, #096dd9);
+                }
+
+                &.tests-card .card-icon {
+                    background: linear-gradient(135deg, #722ed1, #531dab);
+                }
+
+                &.feedback-card .card-icon {
+                    background: linear-gradient(135deg, #13c2c2, #08979c);
+                }
+
+                &.performance-card .card-icon {
+                    background: linear-gradient(135deg, #52c41a, #389e0d);
+                }
+
+                .metrics {
+                    .metric {
+                        display: flex;
+                        justify-content: space-between;
+                        margin-bottom: 8px;
+
+                        .value {
+                            font-weight: 600;
+                            color: #1890ff;
+                        }
+
+                        .label {
+                            color: #666;
+                        }
+                    }
+                }
+
+                .message-preview {
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    background: #f8f9fa;
+                    padding: 12px;
+                    border-radius: 8px;
+
+                    .preview-text {
+                        p {
+                            margin: 0;
+                            font-size: 14px;
+                        }
+
+                        span {
+                            color: #666;
+                            font-size: 12px;
+                        }
+                    }
+                }
+            }
+        }
+
+        // Recent Activity Table
+        .recent-activity {
+            background: white;
+            padding: 24px;
+            border-radius: 16px;
+            margin-top: 24px;
+
+            h3 {
+                margin: 0 0 16px;
+                font-size: 18px;
+                font-weight: 600;
+            }
+
+            .activity-icon {
+                margin-right: 8px;
+            }
+        }
+    }
+}
+
+// Responsive Adjustments
+@media (max-width: 1024px) {
+    .dashboard-wrapper {
+        flex-direction: column;
+
+        .quick-sidebar {
+            width: 100%;
+            height: auto;
+            position: static;
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-wrapper {
+        .main-content {
+            padding: 16px;
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header-actions {
+                flex-direction: column;
+                gap: 16px;
+                align-items: flex-start;
+            }
+        }
+    }
+}

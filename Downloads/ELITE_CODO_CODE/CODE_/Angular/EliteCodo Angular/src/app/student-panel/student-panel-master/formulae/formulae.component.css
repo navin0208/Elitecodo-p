@@ -1,0 +1,16 @@
+@media screen and (max-width: 500px) {
+    section {
+        position: absolute;
+        width: 100%;
+        transform: translateY(20px);
+    }
+}
+@media screen and (max-width: 500px) {
+    #grid_collection{
+        margin: 20px;
+    }
+}
+section {
+    position: absolute;
+    width: 100%;
+}

@@ -1,0 +1,182 @@
+<nz-card>
+    <h3 class="text-center" style="color: #17a2b8;">Questions By Teachers*</h3>
+
+    <div class="filter-container my-4">
+        <div nz-row [nzGutter]="16">
+            <!-- Name Filter -->
+            <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="6">
+                <nz-input-group [nzPrefix]="namePrefix">
+                    <input type="text" nz-input placeholder="Search by name" [(ngModel)]="filters.name"
+                        (ngModelChange)="applyFilters()" />
+                </nz-input-group>
+                <ng-template #namePrefix>
+                    <span nz-icon nzType="user" nzTheme="outline"></span>
+                </ng-template>
+            </div>
+
+            <!-- Email Filter -->
+            <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="6">
+                <nz-input-group [nzPrefix]="emailPrefix">
+                    <input type="text" nz-input placeholder="Search by email" [(ngModel)]="filters.email"
+                        (ngModelChange)="applyFilters()" />
+                </nz-input-group>
+                <ng-template #emailPrefix>
+                    <span nz-icon nzType="mail" nzTheme="outline"></span>
+                </ng-template>
+            </div>
+
+
+            <!-- Mobile Filter -->
+            <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="6">
+                <nz-input-group [nzPrefix]="mobilePrefix">
+                    <input type="text" nz-input placeholder="Search by mobile" [(ngModel)]="filters.mobile"
+                        (ngModelChange)="applyFilters()" />
+                </nz-input-group>
+                <ng-template #mobilePrefix>
+                    <span nz-icon nzType="phone" nzTheme="outline"></span>
+                </ng-template>
+            </div>
+
+
+            <!-- Status Filter -->
+            <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="6">
+                <nz-select class="w-100" [(ngModel)]="filters.status" (ngModelChange)="applyFilters()"
+                    nzPlaceHolder="Filter by status">
+                    <nz-option nzValue="" nzLabel="All Status"></nz-option>
+                    <nz-option nzValue="Active" nzLabel="Active"></nz-option>
+                    <nz-option nzValue="Inactive" nzLabel="Inactive"></nz-option>
+                </nz-select>
+            </div>
+
+            <!-- Question Count Filter -->
+            <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="6">
+                <nz-select class="w-100" [(ngModel)]="filters.questionCount" (ngModelChange)="applyFilters()"
+                    nzPlaceHolder="Filter by questions">
+                    <nz-option nzValue="" nzLabel="All Questions"></nz-option>
+                    <nz-option nzValue="with" nzLabel="With Questions"></nz-option>
+                    <nz-option nzValue="without" nzLabel="Without Questions"></nz-option>
+                </nz-select>
+            </div>
+
+
+
+        </div>
+
+        <!-- Reset Filters Button -->
+        <div nz-row class="mt-3">
+            <div nz-col [nzSpan]="24" class="text-end">
+                <button nz-button nzType="primary" (click)="resetFilters()">
+                    <span nz-icon nzType="clear" nzTheme="outline"></span>
+                    Clear Filters
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="loading" class="loading-state">
+        <div class="spinner">
+            <div class="bounce1"></div>
+            <div class="bounce2"></div>
+            <div class="bounce3"></div>
+        </div>
+        <p>Fetching Teachers Questions...</p>
+    </div>
+
+
+    <!-- Content -->
+    <div *ngIf="!loading && !errorMsg">
+        <button nz-button nzType="primary" class="my-3" routerLink="../all-accepted-questions">
+            All Accepted Questions
+        </button>
+
+        <!-- No Results After Filtering -->
+        <div *ngIf="filteredTeachers.length === 0" class="no-results-message">
+            <nz-result nzStatus="warning" nzTitle="No Teachers Found"
+                nzSubTitle="No teachers match the current filter criteria. Please try adjusting your filters.">
+                <div *nzExtra>
+                    <button nz-button nzType="primary" (click)="resetFilters()">Reset Filters</button>
+                </div>
+            </nz-result>
+        </div>
+
+        <!-- Teachers List -->
+        <div *ngIf="filteredTeachers.length > 0" class="cards-container">
+
+            <div class="row d-flex">
+                <div class="col-lg-5 col-xl-4" *ngFor="let item of updateDisplayedTeachers()">
+                    <div class="teacher-card" [class.no-questions]="item.pendingQuestionCount === 0">
+                        <div class="card-header">
+                            <div class="profile-image">
+                                <img [src]="item.profilePicture" [alt]="item.firstName">
+                                <div class="status-indicator" [class.active]="item.status === 'Active'">
+                                    <span class="status-dot"></span>
+                                </div>
+                            </div>
+                            <div class="question-count" [class.warning]="item.pendingQuestionCount === 0">
+                                <span nz-icon [nzType]="item.pendingQuestionCount === 0 ? 'warning' : 'check-circle'"
+                                    [nzTheme]="'fill'"></span>
+                                <span>{{item.pendingQuestionCount}} Questions</span>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="name">
+                                <h2>{{ item.firstName + ' ' + item.lastName }}</h2>
+                                <span class="email">{{ item.email }}</span>
+                            </div>
+
+                            <div class="stats-grid">
+                                <div class="count-item" (click)="statusWiseQuestion('Accepted',item.id)">
+                                    <span class="count-label">Accepted Questions</span>
+                                    <span class="count-value accepted">{{ item.acceptedQuestionCount }}</span>
+                                </div>
+                                <div class="count-item" (click)="statusWiseQuestion('Rejected',item.id)">
+                                    <span class="count-label">Rejected Questions</span>
+                                    <span class="count-value rejected">{{ item.rejectedQuestionCount }}</span>
+                                </div>
+                            </div>
+
+                            <div class="stats">
+                                <div class="stat-item">
+                                    <span nz-icon nzType="phone" nzTheme="outline"></span>
+                                    {{ item.mobile }}
+                                </div>
+                                <div class="stat-item">
+                                    <span nz-icon nzType="user" nzTheme="outline"></span>
+                                    {{ item.role | slice:5 }}
+                                </div>
+                            </div>
+
+                            <div class="question-status" *ngIf="item.pendingQuestionCount === 0">
+                                <nz-alert nzType="warning" nzMessage="No questions pending" nzShowIcon>
+                                </nz-alert>
+                            </div>
+
+                            <div class="card-actions">
+                                <button nz-button nzType="primary" (click)="teacherIdWiseQuestion(item.id)">
+                                    <span nz-icon nzType="solution" nzTheme="outline"></span>
+                                    Pending Questions
+                                </button>
+                                <button nz-button nzType="default" (click)="teacherIdInfo(item.id)">
+                                    <span nz-icon nzType="user" nzTheme="outline"></span>
+                                    Profile
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <app-pagination [currentPage]="currentPage" [itemsPerPage]="itemsPerPage"
+                [totalItems]="filteredTeachers.length" (pageChange)="onPageChange($event)"
+                (itemsPerPageChange)="onItemsPerPageChange($event)">
+            </app-pagination>
+        </div>
+    </div>
+
+    <!-- Error Message -->
+    <div *ngIf="errorMsg" class="error-message text-danger">
+        <p>Error loading data. Please try again later.</p>
+    </div>
+</nz-card>

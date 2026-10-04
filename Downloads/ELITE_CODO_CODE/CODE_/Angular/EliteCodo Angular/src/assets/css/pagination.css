@@ -1,0 +1,142 @@
+.pagination-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 2rem 0;
+}
+
+.pagination-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.pagination-btn {
+    background: white;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.pagination-btn:hover:not(.disabled) {
+    background: #f8fafc;
+    border-color: #94a3b8;
+}
+
+.pagination-btn.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.page-numbers {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.page-number {
+    min-width: 40px;
+    height: 40px;
+    border: none;
+    background: white;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.page-number:hover:not(.active) {
+    background: #f8fafc;
+}
+
+.page-number.active {
+    background: #3b82f6;
+    color: white;
+    font-weight: bold;
+}
+
+.items-per-page select {
+    padding: 0.5rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.items-per-page select:hover {
+    border-color: #94a3b8;
+}
+
+.items-per-page {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.items-select {
+    padding: 0.5rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    background: white;
+    color: #1e293b;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    outline: none;
+}
+
+.items-select:hover {
+    border-color: #94a3b8;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .pagination-container {
+        padding: 0.75rem;
+    }
+
+    .pagination-btn {
+        padding: 0.5rem 0.75rem;
+    }
+
+    .btn-text {
+        display: none;
+    }
+
+    .page-number {
+        min-width: 36px;
+        height: 36px;
+    }
+}
+
+@media (max-width: 480px) {
+    .mobile-summary {
+        display: block;
+    }
+
+    .page-numbers {
+        display: none;
+    }
+
+    .pagination-wrapper {
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .pagination-btn {
+        padding: 0.5rem 1rem;
+    }
+
+    .btn-text {
+        display: inline;
+    }
+
+    .items-per-page {
+        margin-top: 0.5rem;
+    }
+}

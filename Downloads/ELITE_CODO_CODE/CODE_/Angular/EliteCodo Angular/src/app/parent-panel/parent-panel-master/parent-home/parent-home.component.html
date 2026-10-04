@@ -1,0 +1,163 @@
+<section [ngStyle]="{ 'background-color': http.getBackgroundColor() }">
+  <div class="dashboard-wrapper">
+    <!-- Sidebar Quick Access -->
+    <div class="quick-sidebar">
+      <div class="profile-section">
+        <img [src]="dashboardData.student.avatar" width="64" />
+        <div class="profile-info">
+          <h3>{{ dashboardData.student.name }}</h3>
+          <p>Grade {{ dashboardData.overallGrade }} | Roll No:{{ dashboardData.student.rollNo }}</p>
+        </div>
+      </div>
+
+      <div class="quick-stats">
+        <div class="stat-item">
+          <nz-progress [nzPercent]="parentAttendancePercentage" nzType="dashboard" [nzWidth]="80"></nz-progress>
+          <span>Attendance</span>
+        </div>
+        <div class="stat-item">
+          <nz-progress [nzPercent]="parentAttendancePerformance" nzType="dashboard" [nzWidth]="80"
+            [nzStrokeColor]="'#722ed1'"></nz-progress>
+          <span>Performance</span>
+        </div>
+      </div>
+
+      <nz-divider></nz-divider>
+
+      <div class="upcoming-events">
+        <h4>Upcoming</h4>
+        <div class="event-item" *ngFor="let event of upcomingEvents">
+          <div class="event-date">
+            <span class="day">{{ event.day }}</span>
+            <span class="month">{{ event.month }}</span>
+          </div>
+          <div class="event-info">
+            <h5>{{ event.title }}</h5>
+            <p>{{ event.time }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+      <div class="header-actions">
+        <div class="welcome-text">
+          <h2>Welcome Back!</h2>
+          <p>Here's your child's learning journey</p>
+        </div>
+        <div class="action-buttons">
+          <!-- <button nz-button nzType="primary" nzShape="round">
+            <span nz-icon nzType="download"></span>Download Report
+          </button>
+          <button nz-button nzType="default" nzShape="round">
+            <span nz-icon nzType="bell"></span>
+          </button> -->
+        </div>
+      </div>
+
+      <!-- Feature Cards Grid -->
+      <div class="features-grid">
+        <div class="feature-card academic-card" [routerLink]="'/parent/parent_home/report-card'">
+          <div class="card-content">
+            <div class="card-icon">
+              <span nz-icon nzType="trophy" nzTheme="outline"></span>
+            </div>
+            <h3>Academic Progress</h3>
+            <p>View detailed academic reports and grades</p>
+            <div class="metrics">
+              <div class="metric">
+                <span class="value">{{ averageScore }}%</span>
+                <span class="label">Average Score</span>
+              </div>
+              <nz-progress [nzPercent]="averageScore" nzSize="small"
+                [nzStatus]="getProgressStatus(averageScore)"></nz-progress>
+            </div>
+          </div>
+        </div>
+
+        <div class="feature-card tests-card" [routerLink]="'/parent/parent_home/practice-tests'">
+          <div class="card-content">
+            <div class="card-icon">
+              <span nz-icon nzType="experiment" nzTheme="outline"></span>
+            </div>
+            <h3>Practice Tests</h3>
+            <p>Track test performance and improvements</p>
+            <div class="test-stats">
+              <div class="test-stats">
+                <nz-tag [nzColor]="'green'">{{ completedTests }} Completed</nz-tag>
+                <nz-tag [nzColor]="'blue'">{{ pendingTests }} Pending</nz-tag>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="feature-card feedback-card" [routerLink]="'/parent/parent_home/teacher-feedback'">
+          <div class="card-content">
+            <div class="card-icon">
+              <span nz-icon nzType="message" nzTheme="outline"></span>
+            </div>
+            <h3>Teacher Feedback</h3>
+            <p>Recent communications and feedback</p>
+            <div class="message-preview">
+              <nz-avatar nzIcon="user" [nzSize]="32"></nz-avatar>
+              <div class="preview-text">
+                <p>New message from Mrs. Smith</p>
+                <span>2 hours ago</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="feature-card performance-card" [routerLink]="'/parent/parent_home/performance'">
+          <div class="card-content">
+            <div class="card-icon">
+              <span nz-icon nzType="line-chart" nzTheme="outline"></span>
+            </div>
+            <h3>Overall Performance</h3>
+            <p>Comprehensive performance metrics</p>
+            <div class="chart-preview">
+              <nz-timeline>
+                <nz-timeline-item nzColor="green">Math: A+</nz-timeline-item>
+                <nz-timeline-item nzColor="blue">Science: A</nz-timeline-item>
+                <nz-timeline-item nzColor="grey">English: A-</nz-timeline-item>
+              </nz-timeline>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Activity Section -->
+      <!-- For the Recent Activity section, replace the existing nz-table with this: -->
+      <div class="recent-activity">
+        <h3>Recent Activity</h3>
+        <nz-table #activityTable [nzData]="displayData" [nzTotal]="total" [nzPageSize]="pageSize"
+          [nzPageIndex]="pageIndex" [nzFrontPagination]="false" [nzShowSizeChanger]="true"
+          [nzPageSizeOptions]="[5, 10, 20]" (nzPageIndexChange)="onPageIndexChange($event)"
+          (nzPageSizeChange)="onPageSizeChange($event)">
+          <thead>
+            <tr>
+              <th>Activity</th>
+              <th>Subject</th>
+              <th>Date</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let activity of displayData">
+              <td>
+                <span nz-icon [nzType]="activity.icon" class="activity-icon"></span>
+                {{ activity.name }}
+              </td>
+              <td>{{ activity.subject }}</td>
+              <td>{{ activity.date | date:'mediumDate' }}</td>
+              <td>
+                <nz-tag [nzColor]="activity.statusColor">{{ activity.status }}</nz-tag>
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+      </div>
+    </div>
+  </div>
+</section>

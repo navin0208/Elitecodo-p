@@ -1,0 +1,337 @@
+/* Styles */
+:host {
+    .filter-container {
+        .ant-input-group {
+            margin-bottom: 16px;
+        }
+    }
+
+    nz-select {
+        width: 100%;
+        margin-bottom: 16px;
+    }
+}
+
+.cards-container {
+    padding: 2rem;
+    background: #f0f2f5;
+}
+
+.teacher-card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.teacher-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.teacher-card.no-questions {
+    border: 1px solid #ffccc7;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+}
+
+.profile-image {
+    position: relative;
+    width: 100px;
+    height: 100px;
+}
+
+.profile-image img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.status-indicator {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    width: 20px;
+    height: 20px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.status-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #ff4d4f;
+}
+
+.status-indicator.active .status-dot {
+    background: #52c41a;
+}
+
+.question-count {
+    background: #f6ffed;
+    color: #52c41a;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+}
+
+.question-count.warning {
+    background: #fff2e8;
+    color: #fa541c;
+}
+
+.name {
+    margin-bottom: 1rem;
+}
+
+.name h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1f1f1f;
+    margin-bottom: 0.25rem;
+}
+
+.email {
+    color: #8c8c8c;
+    font-size: 0.9rem;
+}
+
+.stats {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #595959;
+    font-size: 0.9rem;
+}
+
+.question-status {
+    margin: 1rem 0;
+}
+
+.card-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.card-actions button {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    height: 40px;
+}
+
+/* Animation for new cards */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.teacher-card {
+    animation: slideIn 0.3s ease-out forwards;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .col-lg-4 {
+        margin-bottom: 1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .teacher-card {
+        padding: 1rem;
+    }
+
+    .profile-image {
+        width: 80px;
+        height: 80px;
+    }
+
+
+}
+
+@media (max-width: 1550px) {
+    .card-actions {
+        flex-direction: column;
+    }
+}
+
+
+/* Pagination */
+
+.dots {
+    display: inline-block;
+}
+
+.dots span {
+    display: inline-block;
+    margin-left: 5px;
+    font-size: inherit;
+    animation: blink 1.5s infinite both;
+}
+
+.dots span:nth-child(2) {
+    animation-delay: 0.3s;
+}
+
+.dots span:nth-child(3) {
+    animation-delay: 0.6s;
+}
+
+@keyframes blink {
+    0% {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+/* Pagination Styles */
+.pagination-container {
+    background: white;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.pagination-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.page-indicator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 100px;
+}
+
+.page-indicator span {
+    font-weight: 500;
+    color: #1f1f1f;
+}
+
+.page-indicator small {
+    color: #8c8c8c;
+}
+
+/* Error State */
+.error-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .page-container {
+        padding: 1rem;
+    }
+
+    .header-card {
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .pagination-controls {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .page-indicator {
+        margin: 0.5rem 0;
+    }
+}
+
+/* Add these new styles to your existing CSS */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    background: #fafafa;
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+.count-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.75rem;
+    border-radius: 6px;
+    cursor: pointer;
+    background: white;
+}
+
+.count-label {
+    font-size: 0.85rem;
+    color: #8c8c8c;
+    margin-bottom: 0.25rem;
+}
+
+.count-value {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.count-value.accepted {
+    color: #52c41a;
+}
+
+.count-value.rejected {
+    color: #ff4d4f;
+}
+
+@media (max-width: 768px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+    }
+}

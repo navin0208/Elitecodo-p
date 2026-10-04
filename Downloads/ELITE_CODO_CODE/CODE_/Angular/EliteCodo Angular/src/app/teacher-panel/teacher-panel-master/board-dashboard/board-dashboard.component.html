@@ -1,0 +1,165 @@
+<section [ngStyle]="{ 'background-color':http.getBackgroundColor()}">
+    <div class="row justify-content-center container-fluid" id="grid_collection">
+
+        <!-- <div class="col-md-3 text-center bg-light board_custom_option" (click)="routToBoardDash('offline_test')">
+            <div class="img">
+                <img src="../../../../assets/images/BoardsImage/result_icon.png"
+                    style="height:clamp(100px, 180px, 180px)" alt="">
+            </div>
+
+            <div class="image-title py-2">
+                Exam Result
+            </div>
+        </div>
+        <div class="col-md-3 text-center bg-light board_custom_option" (click)="routToBoardDash('upload-content')">
+            <div class="img">
+                <img src="../../../../assets/images/BoardsImage/upload.jpg" style="height:clamp(100px, 180px, 180px)"
+                    alt="">
+            </div>
+
+            <div class="image-title py-2">
+                Upload Content
+            </div>
+        </div>
+
+
+        <div class="col-md-3 text-center bg-light board_custom_option" (click)="routToBoardDash('tests')">
+            <div class="img">
+                <img src="../../../../assets/images/BoardsImage/tests.jpg" style="height:clamp(100px, 180px, 180px)"
+                    alt="">
+            </div>
+
+            <div class="image-title py-2">
+                Tests
+            </div>
+        </div>
+
+        <div class="col-md-3 text-center bg-light board_custom_option" (click)="routToBoardDash('AddQuestion')">
+            <div class="img">
+                <img src="../../../../assets/images/BoardsImage/tests2.jpg" style="height:clamp(100px, 180px, 180px)"
+                    alt="">
+            </div>
+
+            <div class="image-title py-2">
+                Add Question
+            </div>
+        </div>
+        <div class="col-md-3 text-center bg-light board_custom_option" (click)="routToBoardDash('ViewQuestions')">
+            <div class="img">
+                <img src="../../../../assets/images/BoardsImage/tests2.jpg" style="height:clamp(100px, 180px, 180px)"
+                    alt="">
+            </div>
+
+            <div class="image-title py-2">
+                View Questions
+            </div>
+        </div>
+
+
+        <div class="col-md-3 text-center bg-light board_custom_option" (click)="routToBoardDash('Overall-Reports')">
+            <div class="img">
+                <img src="../../../../assets/images/BoardsImage/tests3.jpg" style="height:clamp(100px, 180px, 180px)"
+                    alt="">
+            </div>
+
+            <div class="image-title py-2">
+                Overall Reports
+            </div>
+        </div>
+        <div class="col-md-3 text-center bg-light board_custom_option" (click)="routToBoardDash('communication')">
+            <div class="img">
+                <img src="https://img01.flagma.co.il/photo/ishchu-onlayn-rabotu-znayu-russkiy-i-angliyskiy-1698648_medium.jpg"
+                    style="height:clamp(100px, 180px, 180px)" alt="">
+            </div>
+
+            <div class="image-title py-2">
+                Communication
+            </div>
+        </div>
+        <div class="col-md-3 text-center bg-light board_custom_option" (click)="routToBoardDash('add-user')">
+            <div class="img">
+                <img src="../../../../assets/images/BoardsImage/add-user.png" style="height:clamp(100px, 180px, 180px)"
+                    alt="">
+            </div>
+
+            <div class="image-title py-2">
+                Add Users
+            </div>
+        </div>
+        <div class="col-md-3 text-center bg-light board_custom_option"
+            (click)="routToBoardDash('teacher-feedback-managemnt')">
+            <div class="img">
+                <img src="../../../../assets/images/BoardsImage/feedbacak.png" style="height:clamp(100px, 180px, 180px)"
+                    alt="">
+            </div>
+
+            <div class="image-title py-2">
+                Feedbacks
+            </div>
+        </div> -->
+
+        <div class="dashboard-container" [ngStyle]="{ 'background-color': http.getBackgroundColor() }">
+            <div class="dashboard-header">
+                <h1>Teacher Dashboard</h1>
+                <p>Manage your classes, students, and educational resources in one place</p>
+            </div>
+
+
+            <div class="cards-container">
+                <div class="card-item" *ngFor="let card of teacherDashboardCards" (click)="routToBoardDash(card.route)"
+                    [ngClass]="{'card-highlighted': card.highlighted}">
+                    <div class="card-icon">
+                        <img [src]="card.image" [alt]="card.title">
+                    </div>
+                    <div class="card-content">
+                        <h3>{{card.title}}</h3>
+                        <p>{{card.description}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+<!-- <div class="col-md-3 text-center bg-light board_custom_option" (click)="routToBoardDash('cet')">
+            <div class="img">
+                <img src="../../../../assets/images/BoardsImage/tests3.jpg" style="height:clamp(100px, 180px, 180px)"
+                    alt="">
+            </div>
+
+            <div class="image-title py-2">
+                Reports
+            </div>
+        </div> -->
+
+<!-- <div class="col-md-3 text-center bg-light board_custom_option" (click)="routToBoardDash('question-bank')">
+            <div class="img">
+                <img src="../../../../assets/images/BoardsImage/question-bank.jpg"
+                    style="height:clamp(100px, 180px, 180px)" alt="">
+            </div>
+
+            <div class="image-title py-2">
+                Question Bank
+            </div>
+        </div> -->
+
+<!-- <div class="col-md-3 text-center bg-light board_custom_option" (click)="routToBoardDash('cet')">
+            <div class="img">
+                <img src="../../../../assets/images/BoardsImage/formulae.jpg" style="height:clamp(100px, 180px, 180px)"
+                    alt="">
+            </div>
+
+            <div class="image-title py-2">
+                Formulae
+            </div>
+        </div> -->
+
+<!-- <div class="col-md-3 text-center bg-light board_custom_option" (click)="routToBoardDash('cet')">
+            <div class="img">
+                <img src="../../../../assets/images/BoardsImage/logout.png" style="height:clamp(100px, 180px, 180px)">
+            </div>
+
+            <div class="image-title py-2">
+                Logout
+            </div>
+        </div> -->

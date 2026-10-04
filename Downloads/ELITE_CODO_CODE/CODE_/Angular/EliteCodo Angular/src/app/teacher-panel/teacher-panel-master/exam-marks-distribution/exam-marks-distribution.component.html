@@ -1,0 +1,72 @@
+<section>
+    <div class="container">
+        <h2 *ngIf="currentTest">Test: {{ currentTest.name }}</h2>
+
+        <div *ngIf="tests.length > 0" class="test-selector">
+            <label>Select Test:</label>
+            <select (change)="onTestSelect($event)">
+                <option value="">Select a Test</option>
+                <option *ngFor="let test of tests" [value]="test.id">
+                    {{ test.name }} (ID: {{ test.id }})
+                </option>
+            </select>
+        </div>
+
+        <div *ngIf="currentTest" class="test-details">
+            <div class="subjects">
+                <h3>Subjects:</h3>
+                <ul>
+                    <li *ngFor="let subject of currentTest.subjects">
+                        {{ subject.name }} (ID: {{ subject.id }})
+                    </li>
+                </ul>
+            </div>
+
+            <div class="students-grades">
+                <h3>Students Grades</h3>
+                <table *ngIf="currentTest.students.length > 0">
+                    <thead>
+                        <tr>
+                            <th>
+                                <input type="checkbox" [checked]="isAllSelected" (change)="toggleAllStudents($event)" />
+                            </th>
+                            <th>Student Name</th>
+                            <th *ngFor="let subject of currentTest.subjects">
+                                {{ subject.name }} ({{subject.id}})
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let student of currentTest.students">
+                            <td>
+                                <input type="checkbox" [checked]="isStudentSelected(student.id)"
+                                    (change)="toggleStudentSelection(student.id, $event)" />
+                            </td>
+                            <td>{{ student.name }} (ID: {{ student.id }})</td>
+                            <td *ngFor="let subject of currentTest.subjects">
+                                <input type="number" [value]="getStudentGrade(student, subject.id)"
+                                    (change)="updateStudentGrade(student, subject.id, $event)" min="0" max="100"
+                                    placeholder="Enter grade" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p *ngIf="currentTest.students.length === 0">No students found for this test.</p>
+            </div>
+
+            <div class="submission-section">
+                <button (click)="submitGrades()" [disabled]="!canSubmitGrades">
+                    Submit Grades
+                </button>
+            </div>
+        </div>
+
+        <div *ngIf="errorMessage" class="error-message">
+            {{ errorMessage }}
+        </div>
+
+        <div *ngIf="successMessage" class="success-message">
+            {{ successMessage }}
+        </div>
+    </div>
+</section>

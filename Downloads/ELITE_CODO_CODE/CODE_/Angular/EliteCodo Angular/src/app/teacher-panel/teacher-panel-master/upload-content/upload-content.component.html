@@ -1,0 +1,444 @@
+<section [ngStyle]="{ 'background-color': http.getBackgroundColor() }">
+  <div class="content-upload-container">
+    <div class="upload-navigation">
+      <div class="nav-header">
+        <h1>Content Studio</h1>
+        <p>Seamless Educational Content Management</p>
+      </div>
+
+      <div class="content-type-selector">
+        <div class="view-resources-container" (click)="navigateToResources()">
+          <div class="resources-content">
+            <div class="icon-wrapper">
+              <i nz-icon nzType="book" nzTheme="outline"></i>
+            </div>
+            <div class="text-wrapper">
+              <h3>View All Study Resources</h3>
+              <p>Explore comprehensive learning materials</p>
+            </div>
+            <div class="arrow-wrapper">
+              <i nz-icon nzType="right" nzTheme="outline"></i>
+            </div>
+          </div>
+          <div class="resources-hover-effect"></div>
+        </div>
+
+        <div
+          *ngFor="let type of contentTypes"
+          class="content-type-card"
+          [class.active]="selectedContentType === type.id"
+          (click)="selectContentType(type)"
+          [@cardAnimation]="
+            selectedContentType === type.id ? 'active' : 'inactive'
+          "
+        >
+          <div
+            class="card-icon"
+            [class.active]="selectedContentType === type.id"
+          >
+            <i
+              nz-icon
+              [nzType]="type.icon"
+              nzTheme="outline"
+              [style.color]="
+                selectedContentType === type.id
+                  ? 'var(--primary-color)'
+                  : 'white'
+              "
+            ></i>
+          </div>
+          <div class="card-details">
+            <h3>{{ type.title }}</h3>
+            <p>{{ type.description }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="upload-workspace" *ngIf="selectedContentType">
+      <div class="workspace-header">
+        <h2>{{ getSelectedContentTypeTitle() }} Upload</h2>
+        <button nz-button nzType="text" (click)="resetSelection()">
+          <i nz-icon nzType="close"></i> Change Content Type
+        </button>
+      </div>
+
+      <label
+        class="d-block my-5 text-center"
+        style="color: rgb(161, 154, 154)"
+        *ngIf="
+          selectedContentType === 'notes' || selectedContentType === 'summary'
+        "
+      >
+        If You Want chapter-level content. Please ensure you do not select a
+        topic if you are uploading chapter-specific data.
+      </label>
+
+      <form nz-form [formGroup]="uploadForm" class="upload-form my-5">
+        <div class="form-grid">
+          <div class="row justify-content-center">
+            <!-- Entrance Exam Name -->
+            <div class="col-md-4 my-3 form-group">
+              <div class="">
+                <label for=""><strong>Entrance Exam Name</strong></label>
+              </div>
+              <nz-select
+                formControlName="examName"
+                nzPlaceHolder="Select Exam"
+                (ngModelChange)="onEntranceExamChange($event)"
+              >
+                <nz-option
+                  *ngFor="let item of activeExam"
+                  [nzValue]="item.entranceExamId"
+                  [nzLabel]="item.entranceExamName"
+                ></nz-option>
+              </nz-select>
+              <span class="invalid-feedback">
+                <span
+                  *ngIf="uploadForm.get('examName')?.hasError('required')"
+                  class="text-danger"
+                >
+                  Entrance Exam Name is required
+                </span>
+              </span>
+            </div>
+
+            <!-- Standard Name -->
+            <div
+              class="col-md-4 my-3 form-group"
+              *ngIf="
+                selectedContentType !== 'question' &&
+                selectedContentType !== 'schedule'
+              "
+            >
+              <div class="">
+                <label for=""><strong>Standard Name</strong></label>
+              </div>
+              <nz-select
+                formControlName="standard"
+                nzPlaceHolder="Select Standard"
+                (ngModelChange)="onStandardChange($event)"
+              >
+                <nz-option
+                  *ngFor="let item of filteredStandards"
+                  [nzValue]="item.standardId"
+                  [nzLabel]="item.standardName"
+                ></nz-option>
+              </nz-select>
+              <span class="invalid-feedback">
+                <span
+                  *ngIf="uploadForm.get('standard')?.hasError('required')"
+                  class="text-danger"
+                >
+                  Standard is required
+                </span>
+              </span>
+            </div>
+
+            <!-- Test Name -->
+            <div
+              class="col-md-4 my-3 form-group"
+              *ngIf="selectedContentType === 'schedule'"
+            >
+              <div class="">
+                <label for=""><strong>Test Name</strong></label>
+              </div>
+              <nz-select formControlName="testName" nzPlaceHolder="Select test">
+                <nz-option
+                  *ngFor="let item of testData"
+                  [nzValue]="item.testId"
+                  [nzLabel]="item.testName"
+                ></nz-option>
+              </nz-select>
+              <span class="invalid-feedback">
+                <span
+                  *ngIf="uploadForm.get('testName')?.hasError('required')"
+                  class="text-danger"
+                >
+                  Test is required
+                </span>
+              </span>
+            </div>
+
+            <!-- Test DateTime -->
+            <div
+              class="col-md-6 my-3 form-group"
+              *ngIf="selectedContentType === 'schedule'"
+            >
+              <div class="text-center">
+                <label for=""><strong>Test Date-Time</strong></label>
+              </div>
+              <input
+                type="datetime-local"
+                class="form-control"
+                formControlName="testDateTime"
+              />
+              <span class="invalid-feedback">
+                <span
+                  *ngIf="uploadForm.get('testDateTime')?.hasError('required')"
+                  class="text-danger"
+                >
+                  Test Date-Time is required
+                </span>
+              </span>
+            </div>
+
+            <!-- Subject Name -->
+            <div
+              class="col-md-4 my-3 form-group"
+              *ngIf="
+                selectedContentType !== 'schedule' &&
+                selectedContentType !== 'question'
+              "
+            >
+              <div class="">
+                <label for=""><strong>Subject Name</strong></label>
+              </div>
+              <nz-select
+                formControlName="subject"
+                nzPlaceHolder="Select subject"
+                (ngModelChange)="onSubjectChange($event)"
+              >
+                <nz-option
+                  *ngFor="let item of filteredSubjects"
+                  [nzValue]="item.subjectId"
+                  [nzLabel]="item.subjectName"
+                ></nz-option>
+              </nz-select>
+              <span class="invalid-feedback">
+                <span
+                  *ngIf="uploadForm.get('subject')?.hasError('required')"
+                  class="text-danger"
+                >
+                  Subject is required
+                </span>
+              </span>
+            </div>
+
+            <!-- Chapter Name -->
+            <div
+              class="col-md-6 my-3 form-group"
+              *ngIf="
+                selectedContentType !== 'schedule' &&
+                selectedContentType !== 'question'
+              "
+            >
+              <div class="">
+                <label for=""><strong>Chapter Name</strong></label>
+              </div>
+              <nz-select
+                formControlName="chapter"
+                nzPlaceHolder="Select Chapter"
+                (ngModelChange)="onChapterChange($event)"
+              >
+                <nz-option
+                  *ngFor="let chapter of filteredChapters"
+                  [nzValue]="chapter.chapterId"
+                  [nzLabel]="chapter.chapterName"
+                ></nz-option>
+              </nz-select>
+              <span class="invalid-feedback">
+                <span
+                  *ngIf="uploadForm.get('chapter')?.hasError('required')"
+                  class="text-danger"
+                >
+                  Chapter is required
+                </span>
+              </span>
+            </div>
+
+            <!-- Topic Name -->
+            <div
+              class="col-md-6 my-3 form-group"
+              *ngIf="
+                selectedContentType !== 'schedule' &&
+                selectedContentType !== 'question'
+              "
+            >
+              <div class="">
+                <label for=""><strong>Topic Name</strong></label>
+              </div>
+              <nz-select formControlName="topic" nzPlaceHolder="Select Topic">
+                <nz-option
+                  *ngFor="let topic of filteredTopics"
+                  [nzValue]="topic.topicId"
+                  [nzLabel]="topic.topicName"
+                ></nz-option>
+              </nz-select>
+            </div>
+
+            <!-- Exam Year for Question Papers -->
+            <div
+              class="col-md-4 my-3 form-group"
+              *ngIf="selectedContentType === 'question'"
+            >
+              <div>
+                <label for=""><strong>Exam Year</strong></label>
+              </div>
+              <input
+                type="number"
+                formControlName="examYear"
+                class="form-control"
+                min="1900"
+                max="2099"
+                placeholder="Enter exam year"
+              />
+              <span class="invalid-feedback">
+                <span
+                  *ngIf="uploadForm.get('examYear')?.hasError('required')"
+                  class="text-danger"
+                >
+                  Exam Year is required
+                </span>
+              </span>
+            </div>
+
+            <!-- Upload Content -->
+            <div class="col-md-12 form-group">
+              <div class="upload-card">
+                <div class="upload-header">
+                  <strong class="text-capitalize"
+                    >Upload {{ selectedContentType }}</strong
+                  >
+                </div>
+                <div class="upload-body" (click)="fileInput.click()">
+                  <input
+                    type="file"
+                    #fileInput
+                    formControlName="url"
+                    (change)="handleFileInput($event, 'url')"
+                    hidden
+                  />
+
+                  <!-- Loader -->
+                  <div *ngIf="isLoading" class="upload-loader">
+                    <i nz-icon nzType="loading" nzSpin class="loading-icon"></i>
+                    <p class="loading-text">Uploading...</p>
+                  </div>
+
+                  <!-- Placeholder -->
+                  <div
+                    *ngIf="!isLoading && !uploadForm.get('url')?.value"
+                    class="upload-placeholder"
+                  >
+                    <i nz-icon nzType="cloud-upload" class="upload-icon"></i>
+                    <p class="upload-text">Drag & Drop or Click to Upload</p>
+                  </div>
+
+                  <!-- Preview -->
+                  <div
+                    *ngIf="!isLoading && uploadForm.get('url')?.value"
+                    class="upload-preview"
+                  >
+                    <!-- Image Preview -->
+                    <img
+                      *ngIf="isImage(uploadForm.get('url')?.value)"
+                      [src]="uploadForm.get('url')?.value"
+                      alt="Preview"
+                      class="preview-image"
+                    />
+
+                    <!-- File Name for Non-Image Files -->
+                    <div
+                      *ngIf="!isImage(uploadForm.get('url')?.value)"
+                      class="file-name-preview"
+                    >
+                      <i nz-icon nzType="file-text" class="file-icon"></i>
+                      <span>{{ fileName }}</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="upload-footer">
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    (click)="fileInput.click()"
+                  >
+                    Choose File
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Content Title -->
+            <div class="col-md-6 my-3 form-group">
+              <div class="">
+                <label for=""><strong>Content Title</strong></label>
+              </div>
+              <nz-form-control
+                nzErrorTip="Please provide detailed Title (min. 20 characters)"
+              >
+                <nz-textarea-count [nzMaxCharacterCount]="1000">
+                  <textarea
+                    formControlName="title"
+                    nz-input
+                    [nzAutosize]="{ minRows: 2, maxRows: 8 }"
+                    [placeholder]="
+                      'Describe your ' + selectedContentType + ' title...'
+                    "
+                  ></textarea>
+                </nz-textarea-count>
+              </nz-form-control>
+              <span class="invalid-feedback">
+                <span
+                  *ngIf="uploadForm.get('title')?.hasError('required')"
+                  class="text-danger"
+                >
+                  Title is required
+                </span>
+              </span>
+            </div>
+
+            <!-- Content Description -->
+            <div
+              class="col-md-6 my-3 form-group"
+              *ngIf="selectedContentType !== 'question'"
+            >
+              <div class="">
+                <label for=""><strong>Content Description</strong></label>
+              </div>
+              <nz-form-control
+                nzErrorTip="Please provide detailed description (min. 20 characters)"
+              >
+                <nz-textarea-count [nzMaxCharacterCount]="1000">
+                  <textarea
+                    formControlName="description"
+                    nz-input
+                    [nzAutosize]="{ minRows: 4, maxRows: 8 }"
+                    [placeholder]="
+                      'Describe your ' + selectedContentType + ' Description...'
+                    "
+                  ></textarea>
+                </nz-textarea-count>
+              </nz-form-control>
+              <span class="invalid-feedback">
+                <span
+                  *ngIf="uploadForm.get('description')?.hasError('required')"
+                  class="text-danger"
+                >
+                  Description is required
+                </span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="submit-section my-4">
+          <button
+            nz-button
+            nzType="primary"
+            nzSize="large"
+            [disabled]="isLoading || uploadForm.invalid"
+            (click)="submitUpload()"
+          >
+            Publish Content
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <div class="upload-workspace" id="null_space" *ngIf="!selectedContentType">
+      <h1>Please select Content type</h1>
+    </div>
+  </div>
+</section>

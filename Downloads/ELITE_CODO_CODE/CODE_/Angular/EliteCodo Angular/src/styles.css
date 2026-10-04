@@ -1,0 +1,218 @@
+:root {
+    --primary-color: #4361ee;
+    --secondary-color: #3a0ca3;
+    --accent-color: #f72585;
+    --success-color: #4cc9f0;
+    --warning-color: #f8961e;
+    --danger-color: #f94144;
+    --light-color: #f8f9fa;
+    --dark-color: #212529;
+    --physics-color: #4cc9f0;
+    --chemistry-color: #f72585;
+    --biology-color: #4ade80;
+    --border-radius: 12px;
+    --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* You can add global styles to this file, and also import other style files */
+@import "primeng/resources/themes/lara-light-blue/theme.css";
+@import "primeng/resources/primeng.css";
+
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+/* Apply caret-color: transparent to everything except input and textarea */
+*:not(input):not(textarea) {
+    caret-color: transparent;
+}
+
+/* Ensure caret color is visible for input and textarea */
+input,
+textarea {
+    caret-color: auto;
+    /* or specify a color, e.g., caret-color: black; */
+}
+
+/* @import 'variables'; */
+
+:root {
+    --primary-color: #6a11cb;
+    --secondary-color: #2575fc;
+    --background-color: #f4f6f9;
+    --text-color: #2c3e50;
+    --card-background: white;
+    --primary-color: #6a11cb;
+    --secondary-color: #2575fc;
+    --background-color: #f4f6f9;
+    --text-color: #2c3e50;
+    --card-background: white;
+}
+
+
+.white_color {
+    color: white;
+}
+
+.footer {
+    width: 100%;
+}
+
+.main_content {
+    padding: 0 18% 0 0;
+    background-color: black;
+}
+
+/* * {
+    scrollbar-width: none;
+}
+*::-webkit-scrollbar {
+    width: 0.5em;
+}
+*::-webkit-scrollbar-thumb {
+    background-color: transparent;
+} */
+/* For WebKit-based browsers (Chrome, Edge, Safari) */
+::-webkit-scrollbar {
+    width: 10px;
+    /* Width of vertical scrollbar */
+    height: 10px;
+    /* Height of horizontal scrollbar */
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #888;
+    /* Scrollbar color */
+    border-radius: 10px;
+    /* Rounded corners */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+    /* Color when hovered */
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    /* Track background */
+}
+
+/* For Firefox */
+* {
+    scrollbar-width: thin;
+    /* Sets scrollbar width to thin */
+    scrollbar-color: #888 #f1f1f1;
+    /* Thumb color and track color */
+}
+
+
+/* =============================================== */
+/* You can add global styles to this file, and also import other style files */
+
+/* @tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+ */
+
+table {
+    width: 100%;
+}
+
+th.mat-header-cell {
+    /* padding: 0 20px !important; */
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-size: 0.8125rem;
+}
+
+.mat-elevation-z8 {
+    box-shadow: none;
+}
+
+td.mat-cell {
+    font-size: 0.9375rem;
+}
+
+th {
+    background: #F6F6F7;
+    text-align: center;
+    padding: 20px;
+    /* margin: -5px; */
+    /* width:1%; */
+    /* margin-top: -20px; */
+    font-size: 15px;
+    font-weight: 500;
+    /* color: white; */
+}
+
+.btn_space {
+    display: flex;
+    justify-content: end;
+    transform: translateY(-10px);
+}
+
+.btns {
+    padding: 0.5rem 2rem;
+    border-radius: 8px;
+}
+
+.btn_color {
+    background-image: linear-gradient(to right, #02AAB0 0%, #00CDAC 51%, #02AAB0 100%);
+    /* margin: 10px;     */
+    padding: 10px 25px;
+    text-align: center;
+    text-transform: uppercase;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white;
+    box-shadow: 0 0 20px #eee;
+    border-radius: 10px;
+    display: block;
+}
+
+
+
+.btn_color:hover {
+    background-position: right center;
+    color: #fff;
+    text-decoration: none;
+}
+
+
+.form-control:focus {
+    outline: none;
+    box-shadow: none;
+    border-color: initial;
+    border-color: blue !important;
+}
+
+.activeStatus {
+    background-color: #EBF9EB;
+    color: #74D073;
+}
+
+.inactiveStatus {
+    background-color: #f9ebeb;
+    color: #d07373;
+}
+
+.navbar-alignment {
+    margin: 0;
+}
+
+nz-table {
+    overflow-x: auto;
+}

@@ -1,0 +1,835 @@
+.plan-customizer-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.customizer-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.customizer-header h2 {
+  color: #1a202c;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.customizer-header .subtitle {
+  color: #718096;
+  font-size: 1rem;
+}
+
+/* Default Slots */
+.default-slots {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.slot-card {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  border-radius: 12px;
+  border: 2px solid #e2e8f0;
+  transition: all 0.3s ease;
+}
+
+.slot-card.default {
+  background: #f7fafc;
+  border-color: #e2e8f0;
+}
+
+.slot-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #edf2f7;
+  border-radius: 50%;
+  margin-right: 1rem;
+  color: #4a5568;
+  font-size: 1.2rem;
+}
+
+.slot-info {
+  flex: 1;
+}
+
+.slot-info h4 {
+  color: #4a5568;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin: 0 0 0.25rem 0;
+}
+
+.slot-info .count {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2d3748;
+}
+
+.slot-info .included {
+  font-size: 0.75rem;
+  color: #48bb78;
+  margin: 0;
+}
+
+/* Extra Slots */
+.extra-slots {
+  margin-bottom: 2rem;
+}
+
+.extra-slots h3 {
+  color: #2d3748;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.slot-config {
+  background: #f7fafc;
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.slot-config:last-child {
+  margin-bottom: 0;
+}
+
+.config-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.config-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.config-label i {
+  color: #4a5568;
+}
+
+.config-price {
+  display: flex;
+  align-items: baseline;
+  gap: 0.25rem;
+}
+
+.config-price .price {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #2d3748;
+}
+
+.config-price .per-unit {
+  font-size: 0.8rem;
+  color: #718096;
+}
+
+.config-control {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  max-width: 200px;
+}
+
+.config-control button {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  background: #edf2f7;
+  color: #4a5568;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.config-control button:hover:not(:disabled) {
+  background: #e2e8f0;
+}
+
+.config-control button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.config-control .slot-input {
+  width: 60px;
+  height: 36px;
+  text-align: center;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #2d3748;
+  background: white;
+}
+
+.config-control .slot-input:focus {
+  outline: none;
+  border-color: #4f46e5;
+}
+
+.config-extra-info {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.config-extra-info .total-slots {
+  color: #4a5568;
+}
+
+.config-extra-info .extra-cost {
+  color: #48bb78;
+  font-weight: 600;
+}
+
+/* Price Summary */
+.price-summary {
+  background: #f7fafc;
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.summary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.summary-header h3 {
+  margin: 0;
+  color: #2d3748;
+  font-size: 1.1rem;
+}
+
+.summary-header i {
+  color: #718096;
+}
+
+.summary-details {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  color: #4a5568;
+}
+
+.summary-total {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.75rem 0;
+  margin-top: 0.5rem;
+  border-top: 2px solid #e2e8f0;
+  font-weight: 700;
+  color: #2d3748;
+}
+
+.summary-total .total-price {
+  color: #4f46e5;
+  font-size: 1.2rem;
+}
+
+/* Actions */
+.customizer-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.btn-back {
+  padding: 0.75rem 1.5rem;
+  background: transparent;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  color: #4a5568;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-back:hover {
+  background: #f7fafc;
+  border-color: #cbd5e0;
+}
+
+.btn-proceed {
+  padding: 0.75rem 2rem;
+  background: #4f46e5;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-proceed:hover:not(:disabled) {
+  background: #4338ca;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+}
+
+.btn-proceed:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .default-slots {
+    grid-template-columns: 1fr;
+  }
+
+  .customizer-actions {
+    flex-direction: column;
+  }
+
+  .btn-back,
+  .btn-proceed {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Institute specific styles */
+.institute-customization {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.institute-slot {
+  background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.institute-slot:hover {
+  border-color: #8b5cf6;
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.1);
+}
+
+.institute-slot .config-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.institute-slot .config-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.institute-slot .config-label i {
+  font-size: 1.3rem;
+  color: #8b5cf6;
+}
+
+.institute-slot .config-price {
+  display: flex;
+  align-items: baseline;
+  gap: 0.25rem;
+}
+
+.institute-slot .config-price .price {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #8b5cf6;
+}
+
+.institute-slot .config-price .per-unit {
+  font-size: 0.85rem;
+  color: #718096;
+}
+
+.institute-slot .config-control {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.institute-slot .config-control button {
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 50%;
+  background: white;
+  color: #4a5568;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.institute-slot .config-control button:hover:not(:disabled) {
+  background: #8b5cf6;
+  color: white;
+  transform: scale(1.05);
+}
+
+.institute-slot .config-control button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.institute-slot .config-control .slot-input {
+  width: 80px;
+  height: 44px;
+  text-align: center;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #2d3748;
+  background: white;
+  transition: all 0.2s ease;
+}
+
+.institute-slot .config-control .slot-input:focus {
+  outline: none;
+  border-color: #8b5cf6;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+}
+
+.institute-slot .config-extra-info {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 0.75rem;
+  border-top: 1px solid #e2e8f0;
+  font-size: 0.95rem;
+}
+
+.institute-slot .config-extra-info .total-slots {
+  color: #4a5568;
+}
+
+.institute-slot .config-extra-info .extra-cost {
+  color: #8b5cf6;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+/* Price Summary - Institute */
+.price-summary .summary-note {
+  margin-top: 0.75rem;
+  padding: 0.5rem;
+  background: #fef3c7;
+  border-radius: 6px;
+  color: #92400e;
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.price-summary .summary-note small {
+  display: block;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .institute-slot .config-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .institute-slot .config-control {
+    justify-content: center;
+  }
+  
+  .institute-slot .config-extra-info {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+  }
+}
+
+/* ======================================== */
+/* Duration Selection Styles */
+/* ======================================== */
+
+.duration-slot {
+  background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-top: 0.5rem;
+}
+
+.duration-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.duration-btn {
+  flex: 1;
+  min-width: 70px;
+  padding: 0.75rem 1rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+  position: relative;
+}
+
+.duration-btn:hover {
+  border-color: #8b5cf6;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.15);
+}
+
+.duration-btn.active {
+  border-color: #8b5cf6;
+  background: #faf5ff;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+}
+
+.duration-value {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #2d3748;
+}
+
+.duration-btn.active .duration-value {
+  color: #8b5cf6;
+}
+
+.duration-label {
+  font-size: 0.7rem;
+  color: #718096;
+  font-weight: 500;
+}
+
+.duration-btn.active .duration-label {
+  color: #8b5cf6;
+}
+
+.duration-badge {
+  font-size: 0.55rem;
+  font-weight: 700;
+  color: white;
+  background: #48bb78;
+  padding: 0.1rem 0.5rem;
+  border-radius: 10px;
+  position: absolute;
+  top: -6px;
+  right: -6px;
+}
+
+/* Highlight row in price summary */
+.summary-row.highlight {
+  background: #faf5ff;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  margin: 0.25rem 0;
+  font-weight: 600;
+}
+
+.price-highlight {
+  color: #8b5cf6;
+  font-weight: 700;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .duration-options {
+    gap: 0.5rem;
+  }
+  
+  .duration-btn {
+    min-width: 55px;
+    padding: 0.5rem 0.75rem;
+  }
+  
+  .duration-value {
+    font-size: 1rem;
+  }
+}
+
+/* ======================================== */
+/* Duration Selection - Dropdown Styles     */
+/* ======================================== */
+
+.duration-slot {
+  background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-top: 0.5rem;
+}
+
+.duration-slot .config-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.duration-slot .config-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.duration-slot .config-label i {
+  font-size: 1.2rem;
+  color: #8b5cf6;
+}
+
+.duration-select {
+  padding: 0.6rem 2rem 0.6rem 1rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #2d3748;
+  background: white url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%234a5568' d='M6 8L1 3h10z'/%3E%3C/svg%3E") no-repeat right 0.75rem center;
+  background-size: 12px;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.3s ease;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  min-width: 150px;
+}
+
+.duration-select:hover {
+  border-color: #b794f4;
+}
+
+.duration-select:focus {
+  border-color: #8b5cf6;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+}
+
+.duration-select option {
+  padding: 0.5rem;
+  font-weight: 500;
+}
+
+.duration-info {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 0.75rem;
+  border-top: 1px solid #e2e8f0;
+  font-size: 0.95rem;
+}
+
+.duration-info .duration-note {
+  color: #4a5568;
+}
+
+.duration-info .duration-price {
+  color: #8b5cf6;
+  font-weight: 700;
+}
+
+/* Highlight row in price summary */
+.summary-row.highlight {
+  background: #faf5ff;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  margin: 0.25rem 0;
+  font-weight: 600;
+}
+
+.price-highlight {
+  color: #8b5cf6;
+  font-weight: 700;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .duration-slot .config-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .duration-select {
+    min-width: 100%;
+    width: 100%;
+  }
+  
+  .duration-info {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+  }
+}
+
+/* ======================================== */
+/* Teacher Plan Styles                      */
+/* ======================================== */
+
+.teacher-customization {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.teacher-slot {
+  background: linear-gradient(135deg, #f0f7ff 0%, #e8f0fe 100%);
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.teacher-slot:hover {
+  border-color: #0ea5e9;
+  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.1);
+}
+
+.teacher-slot .config-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.teacher-slot .config-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.teacher-slot .config-label i {
+  font-size: 1.3rem;
+  color: #0ea5e9;
+}
+
+.teacher-slot .config-price .price {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #0ea5e9;
+}
+
+.teacher-slot .config-price .per-unit {
+  font-size: 0.85rem;
+  color: #718096;
+}
+
+.teacher-slot .config-control {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.teacher-slot .config-control button {
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 50%;
+  background: white;
+  color: #4a5568;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.teacher-slot .config-control button:hover:not(:disabled) {
+  background: #0ea5e9;
+  color: white;
+  transform: scale(1.05);
+}
+
+.teacher-slot .config-control button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.teacher-slot .config-control .slot-input {
+  width: 80px;
+  height: 44px;
+  text-align: center;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #2d3748;
+  background: white;
+  transition: all 0.2s ease;
+}
+
+.teacher-slot .config-control .slot-input:focus {
+  outline: none;
+  border-color: #0ea5e9;
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.2);
+}
+
+.teacher-slot .config-extra-info {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 0.75rem;
+  border-top: 1px solid #e2e8f0;
+  font-size: 0.95rem;
+}

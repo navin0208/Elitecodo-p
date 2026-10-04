@@ -1,0 +1,425 @@
+<mat-card class="m-2 p-3">
+  <h3 class="text-center form-heaading" style="color: #17a2b8;">Sub-Topic Management*</h3>
+</mat-card>
+
+<div class="container-fluid">
+  <mat-card>
+    <div class="heading">
+      <div class="row p-relative">
+        <div class="col-md-8">
+          <mat-form-field appearance="fill" class="example-full-width w-50">
+            <mat-label>Search</mat-label>
+            <input matInput (keyup)="applyFilter($event)" #input>
+          </mat-form-field>
+        </div>
+        <div class="col-md-4 p-relative ">
+          <button class="btn float-end btns table-view-btn btn-info heading" (click)="openSubmitDialog(submitDialog)">
+            <svg class="plusSign" stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 448 512"
+              height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z">
+              </path>
+            </svg>
+            Create Sub-Topic</button>
+        </div>
+      </div>
+    </div>
+
+    <hr class="hr-14">
+    <div class="container-fluid">
+
+      <div class="table-responsive table-responsive" #epltable>
+        <table mat-table [dataSource]="dataSource" id="sampleTable" #sampleTable matSort class="mat-elevation-z8 ">
+
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Sr.No. </th>
+            <td mat-cell *matCellDef="let element; index as i;"> {{paginator.pageSize * paginator.pageIndex
+              + i
+              + 1}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="date">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Create Date </th>
+            <td mat-cell *matCellDef="let element"> {{element.date}}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="subTopicName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Sub-Topic Name </th>
+            <td mat-cell *matCellDef="let element"> {{element.subTopicName}}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="topicName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Topic Name </th>
+            <td mat-cell *matCellDef="let element"> {{element.topicMaster.topicName}}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="chapterName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Chapter Name </th>
+            <td mat-cell *matCellDef="let element"> {{element.chapterMaster.chapterName}}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="subjectName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Subject Name </th>
+            <td mat-cell *matCellDef="let element"> {{element.subjectMaster.subjectName}}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="entranceExamName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Entrance Exam Name </th>
+            <td mat-cell *matCellDef="let element"> {{element.entranceExamMaster.entranceExamName}}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="standardName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Standard Name </th>
+            <td mat-cell *matCellDef="let element"> {{element.standardMaster.standardName}}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+            <td mat-cell *matCellDef="let element">
+
+
+              <p [ngClass]="{'status': true, 'activeStatus': element.status === 'Active', 'inactiveStatus': element.status === 'inactive'}"
+                class="status text-center py-2" style="position: relative;top: 8px;">{{ element.status
+                === 'Active' ? 'Active' : 'In-Active' }}
+              </p>
+
+
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="edit">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Action </th>
+            <td mat-cell *matCellDef="let element">
+              <button style="background: #1976d2;color: white;" type="button" class="btn " title="Edit subTopicId"
+                (click)="edit(element.subTopicId,myDialog)">
+                <i class="fa fa-pencil-square"></i>
+              </button>
+
+              <button style="background: #ce0707;color: white;" type="button" class="btn mx-1" title="Edit subTopicId"
+                (click)="deleteSubTopic(element.subTopicId)">
+                <i class="fa fa-trash" aria-hidden="true"></i>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+              <h4 class="text-center p-5">**No data matching the filter.**</h4>
+            </td>
+          </tr>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+        <br>
+        <mat-paginator [pageSizeOptions]="[5, 50, 100, 200]" showFirstLastButtons class="stylespagination">
+        </mat-paginator>
+      </div>
+    </div>
+  </mat-card>
+</div>
+
+<ng-template #myDialog>
+  <div class="">
+    <span>
+      <h1 matDialogTitle>Sub-Topic Management </h1>
+
+    </span>
+    <button type="button" class="btn-close float-end mr-4" aria-label="Close" (click)="close()"></button>
+  </div>
+  <span></span>
+  <mat-dialog-content style="max-height: 100vh; overflow: auto;">
+
+    <div class="container-fluid">
+
+      <form [formGroup]="regiStrationForm">
+        <div class="row m-2">
+
+          <!-- entranceExamId -->
+          <div class="col-md-6 form-group">
+            <div class="">
+              <label for=""><strong>Entrance Exam Name</strong></label>
+            </div>
+            <nz-select class="w-100" formControlName="entranceExamId" [(ngModel)]="subTopicMasterModel.entranceExamId"
+              [ngClass]="{ 'is-invalid': regiStrationForm.get('entranceExamId')?.touched && regiStrationForm.get('entranceExamId')?.invalid }"
+              nzAllowClear>
+              <nz-option *ngFor="let item of activeExam" [nzLabel]="item.entranceExamName"
+                [nzValue]="item.entranceExamId"></nz-option>
+            </nz-select>
+            <span class="invalid-feedback">
+              <span *ngIf="regiStrationForm.get('entranceExamId')?.hasError('required')" class="text-danger">
+                Entrance Exam Id is required
+              </span>
+            </span>
+          </div>
+          <!-- standardId  -->
+          <div class="col-md-6 form-group">
+            <div class="">
+              <label for=""><strong>Standard Name </strong></label>
+            </div>
+            <nz-select class="w-100" formControlName="standardId" [(ngModel)]="subTopicMasterModel.standardId"
+              [ngClass]="{ 'is-invalid': regiStrationForm.get('standardId')?.touched && regiStrationForm.get('standardId')?.invalid }"
+              nzAllowClear>
+              <nz-option *ngFor="let item of activestandard" [nzLabel]="item.standardName"
+                [nzValue]="item.standardId"></nz-option>
+            </nz-select>
+            <span class="invalid-feedback">
+              <span *ngIf="regiStrationForm.get('standardId')?.hasError('required')" class="text-danger">
+                standard is required
+              </span>
+            </span>
+          </div>
+          <!-- subjectId -->
+          <div class="col-md-6 form-group">
+            <div class="">
+              <label for=""><strong>Subject Name</strong></label>
+            </div>
+            <nz-select class="w-100" formControlName="subjectId" [(ngModel)]="subTopicMasterModel.subjectId"
+              [ngClass]="{ 'is-invalid': regiStrationForm.get('subjectId')?.touched && regiStrationForm.get('subjectId')?.invalid }"
+              nzAllowClear>
+              <nz-option *ngFor="let item of activesubject" [nzLabel]="item.subjectName"
+                [nzValue]="item.subjectId"></nz-option>
+            </nz-select>
+            <span class="invalid-feedback">
+              <span *ngIf="regiStrationForm.get('subjectId')?.hasError('required')" class="text-danger">
+                subject is required
+              </span>
+            </span>
+          </div>
+          <!-- Chapter  -->
+          <div class="col-md-6 form-group">
+            <div class="">
+              <label for=""><strong>Chapter Name</strong></label>
+            </div>
+            <nz-select class="w-100" formControlName="chapterId" [(ngModel)]="subTopicMasterModel.chapterId"
+              [ngClass]="{ 'is-invalid': regiStrationForm.get('chapterId')?.touched && regiStrationForm.get('chapterId')?.invalid }"
+              nzAllowClear>
+              <nz-option *ngFor="let item of activeChapter" [nzLabel]="item.chapterName"
+                [nzValue]="item.chapterId"></nz-option>
+            </nz-select>
+            <span class="invalid-feedback">
+              <span *ngIf="regiStrationForm.get('chapterId')?.hasError('required')" class="text-danger">
+                chapterId is required
+              </span>
+            </span>
+          </div>
+          <!-- topicId  -->
+          <div class="col-md-6 form-group">
+            <div class="">
+              <label for=""><strong>Topic Name</strong></label>
+            </div>
+            <nz-select class="w-100" formControlName="topicId" [(ngModel)]="subTopicMasterModel.topicId"
+              [ngClass]="{ 'is-invalid': regiStrationForm.get('topicId')?.touched && regiStrationForm.get('topicId')?.invalid }"
+              nzAllowClear>
+              <nz-option *ngFor="let item of activeTopic" [nzLabel]="item.topicName"
+                [nzValue]="item.topicId"></nz-option>
+            </nz-select>
+            <span class="invalid-feedback">
+              <span *ngIf="regiStrationForm.get('topicId')?.hasError('required')" class="text-danger">
+                Topic is required
+              </span>
+            </span>
+          </div>
+          <!-- subTopicName -->
+          <div class="col-md-6 form-group">
+            <label for=""><strong>Sub Topic Name </strong></label>
+            <input formControlName="subTopicName" [(ngModel)]="subTopicMasterModel.subTopicName" type="text"
+              [ngClass]="{ 'is-invalid': regiStrationForm.get('subTopicName')?.touched && regiStrationForm.get('subTopicName')?.invalid }"
+              class="form-control" name="" id="">
+            <span class="invalid-feedback">
+              <span *ngIf="regiStrationForm.get('subTopicName')?.hasError('pattern');">Sub Topic
+                Name is
+                not
+                valid</span>
+              <span *ngIf="regiStrationForm.get('subTopicName')?.hasError('required')">Sub Topic
+                Name is required
+              </span>
+            </span>
+          </div>
+
+          <!-- status -->
+          <div class="col-md-6 form-group">
+            <div class="">
+              <label for=""><strong>status</strong></label>
+            </div>
+            <nz-select class="w-100" formControlName="status" [(ngModel)]="subTopicMasterModel.status"
+              [ngClass]="{ 'is-invalid': regiStrationForm.get('status')?.touched && regiStrationForm.get('status')?.invalid }"
+              nzAllowClear>
+              <nz-option nzLabel="Active" nzValue="Active"></nz-option>
+              <nz-option nzLabel="In-Active" nzValue="inactive"></nz-option>
+            </nz-select>
+            <span class="invalid-feedback">
+              <span *ngIf="regiStrationForm.get('status')?.hasError('required')" class="text-danger">
+                Status is required
+              </span>
+            </span>
+          </div>
+
+          <!-- submit--update btn -->
+          <div class="col-md-12 my-3">
+            <button *ngIf="isSubmit" class="btn btn_color" [disabled]="isLoading && regiStrationForm.invalid "
+              (click)="submit()">
+              <i class="fa" [ngClass]="{ 'fa-spin fa-spinner': isLoading }"></i>
+              {{ button }}
+            </button>
+
+            <button *ngIf="isUpdate" class="btn btn-success" [disabled]="isLoading  && regiStrationForm.invalid"
+              (click)="update()">
+              <i class="fa" [ngClass]="{ 'fa-spin fa-spinner': isLoading }"></i>
+              {{ button }}
+            </button>
+          </div>
+        </div>
+      </form>
+
+    </div>
+
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="close()" color="primary">Dismiss</button>
+  </mat-dialog-actions>
+</ng-template>
+
+<ng-template #submitDialog>
+  <div class="">
+    <span>
+      <h1 matDialogTitle>Create Sub-Topic</h1>
+    </span>
+    <button type="button" class="btn-close float-end mr-4" aria-label="Close" (click)="closeSubmitDialog()"></button>
+  </div>
+  <mat-dialog-content style="max-height: 100vh; overflow: auto;">
+    <div class="container-fluid">
+      <form [formGroup]="regiStrationForm">
+        <div class="row m-2">
+          <!-- entranceExamId -->
+          <div class="col-md-6 form-group">
+            <div class="">
+              <label for=""><strong>Entrance Exam Name</strong></label>
+            </div>
+            <nz-select class="w-100" formControlName="entranceExamId" (ngModelChange)="onEntranceExamChange($event)"
+              [ngClass]="{ 'is-invalid': regiStrationForm.get('entranceExamId')?.touched && regiStrationForm.get('entranceExamId')?.invalid }"
+              nzAllowClear>
+              <nz-option *ngFor="let item of activeExam" [nzLabel]="item.entranceExamName"
+                [nzValue]="item.entranceExamId"></nz-option>
+            </nz-select>
+            <span class="invalid-feedback">
+              <span *ngIf="regiStrationForm.get('entranceExamId')?.hasError('required')" class="text-danger">
+                Entrance Exam Id is required
+              </span>
+            </span>
+          </div>
+          <!-- standardId  -->
+          <div class="col-md-6 form-group">
+            <div class="">
+              <label for=""><strong>Standard Name </strong></label>
+            </div>
+            <nz-select class="w-100" formControlName="standardId" (ngModelChange)="onStandardChange($event)"
+              [ngClass]="{ 'is-invalid': regiStrationForm.get('standardId')?.touched && regiStrationForm.get('standardId')?.invalid }"
+              nzAllowClear>
+              <nz-option *ngFor="let item of filteredStandards" [nzLabel]="item.standardName"
+                [nzValue]="item.standardId"></nz-option>
+            </nz-select>
+            <span class="invalid-feedback">
+              <span *ngIf="regiStrationForm.get('standardId')?.hasError('required')" class="text-danger">
+                Standard is required
+              </span>
+            </span>
+          </div>
+          <!-- subjectId -->
+          <div class="col-md-6 form-group">
+            <div class="">
+              <label for=""><strong>Subject Name</strong></label>
+            </div>
+            <nz-select class="w-100" formControlName="subjectId" (ngModelChange)="onSubjectChange($event)"
+              [ngClass]="{ 'is-invalid': regiStrationForm.get('subjectId')?.touched && regiStrationForm.get('subjectId')?.invalid }"
+              nzAllowClear>
+              <nz-option *ngFor="let item of filteredSubjects" [nzLabel]="item.subjectName"
+                [nzValue]="item.subjectId"></nz-option>
+            </nz-select>
+            <span class="invalid-feedback">
+              <span *ngIf="regiStrationForm.get('subjectId')?.hasError('required')" class="text-danger">
+                Subject is required
+              </span>
+            </span>
+          </div>
+          <!-- Chapter  -->
+          <div class="col-md-6 form-group">
+            <div class="">
+              <label for=""><strong>Chapter Name</strong></label>
+            </div>
+            <nz-select class="w-100" formControlName="chapterId" (ngModelChange)="onChapterChange($event)"
+              [ngClass]="{ 'is-invalid': regiStrationForm.get('chapterId')?.touched && regiStrationForm.get('chapterId')?.invalid }"
+              nzAllowClear>
+              <nz-option *ngFor="let item of filteredChapters" [nzLabel]="item.chapterName"
+                [nzValue]="item.chapterId"></nz-option>
+            </nz-select>
+            <span class="invalid-feedback">
+              <span *ngIf="regiStrationForm.get('chapterId')?.hasError('required')" class="text-danger">
+                Chapter is required
+              </span>
+            </span>
+          </div>
+          <!-- topicId  -->
+          <div class="col-md-6 form-group">
+            <div class="">
+              <label for=""><strong>Topic Name</strong></label>
+            </div>
+            <nz-select class="w-100" formControlName="topicId"
+              [ngClass]="{ 'is-invalid': regiStrationForm.get('topicId')?.touched && regiStrationForm.get('topicId')?.invalid }"
+              nzAllowClear>
+              <nz-option *ngFor="let item of filteredTopics" [nzLabel]="item.topicName"
+                [nzValue]="item.topicId"></nz-option>
+            </nz-select>
+            <span class="invalid-feedback">
+              <span *ngIf="regiStrationForm.get('topicId')?.hasError('required')" class="text-danger">
+                Topic is required
+              </span>
+            </span>
+          </div>
+          <!-- subTopicName -->
+          <div class="col-md-6 form-group">
+            <label for=""><strong>Sub Topic Name </strong></label>
+            <input formControlName="subTopicName" type="text"
+              [ngClass]="{ 'is-invalid': regiStrationForm.get('subTopicName')?.touched && regiStrationForm.get('subTopicName')?.invalid }"
+              class="form-control" name="" id="">
+            <span class="invalid-feedback">
+              <span *ngIf="regiStrationForm.get('subTopicName')?.hasError('pattern');">Sub Topic Name is not
+                valid</span>
+              <span *ngIf="regiStrationForm.get('subTopicName')?.hasError('required')">Sub Topic Name is required</span>
+            </span>
+          </div>
+          <!-- status -->
+          <div class="col-md-6 form-group">
+            <div class="">
+              <label for=""><strong>Status</strong></label>
+            </div>
+            <nz-select class="w-100" formControlName="status"
+              [ngClass]="{ 'is-invalid': regiStrationForm.get('status')?.touched && regiStrationForm.get('status')?.invalid }"
+              nzAllowClear>
+              <nz-option nzLabel="Active" nzValue="Active"></nz-option>
+              <nz-option nzLabel="In-Active" nzValue="inactive"></nz-option>
+            </nz-select>
+            <span class="invalid-feedback">
+              <span *ngIf="regiStrationForm.get('status')?.hasError('required')" class="text-danger">
+                Status is required
+              </span>
+            </span>
+          </div>
+          <!-- submit btn -->
+          <div class="col-md-12 my-3">
+            <button class="btn btn_color" [disabled]="isLoading || regiStrationForm.invalid"
+              (click)="submitNewSubTopic()">
+              <i class="fa" [ngClass]="{ 'fa-spin fa-spinner': isLoading }"></i>
+              {{ isLoading ? 'Processing' : 'Submit' }}
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="closeSubmitDialog()" color="primary">Dismiss</button>
+  </mat-dialog-actions>
+</ng-template>

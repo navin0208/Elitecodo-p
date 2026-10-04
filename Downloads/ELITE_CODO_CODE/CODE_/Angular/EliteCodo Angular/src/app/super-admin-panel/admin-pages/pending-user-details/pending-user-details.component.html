@@ -1,0 +1,104 @@
+<!-- pending-user-details.component.html -->
+<nz-spin [nzSpinning]="loading">
+    <div class="container-fluid p-4">
+        <!-- Page Header -->
+        <div class="header-section">
+            <nz-page-header nzTitle="User Details" [nzSubtitle]="user?.email">
+            </nz-page-header>
+        </div>
+
+        <div class="content-section" *ngIf="user">
+            <div nz-row [nzGutter]="24">
+                <!-- User Profile Card -->
+                <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="8">
+                    <nz-card class="profile-card">
+                        <div class="text-center">
+                            <nz-avatar [nzSize]="128" [nzSrc]="user.avatarUrl" nzIcon="user">
+                            </nz-avatar>
+                            <h2 class="mt-3 mb-1">{{user.name}}</h2>
+                            <nz-tag [nzColor]="getStatusColor(user.status)">
+                                <i nz-icon [nzType]="userTypeIcons[user.userType]"></i>
+                                {{user.userType | titlecase}}
+                            </nz-tag>
+                            <nz-divider></nz-divider>
+                            <nz-badge [nzStatus]="getStatusBadge(user.status)" [nzText]="user.status | titlecase">
+                            </nz-badge>
+                        </div>
+                    </nz-card>
+                </div>
+
+                <!-- User Details -->
+                <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="16">
+                    <nz-card>
+                        <nz-tabset>
+                            <!-- Contact Information Tab -->
+                            <nz-tab nzTitle="Contact Information">
+                                <nz-descriptions [nzColumn]="1">
+                                    <nz-descriptions-item nzTitle="Email">
+                                        <i nz-icon nzType="mail" class="mx-2"></i> {{user.email}}
+                                    </nz-descriptions-item>
+                                    <nz-descriptions-item nzTitle="Phone">
+                                        <i nz-icon nzType="phone" class="mx-2"></i> {{user.contactNumber}}
+                                    </nz-descriptions-item>
+                                    <nz-descriptions-item nzTitle="Registration Date">
+                                        <i nz-icon nzType="calendar" class="mx-2"></i> {{user.registrationDate |
+                                        date:'MMM d, y'}}
+                                    </nz-descriptions-item>
+                                </nz-descriptions>
+                            </nz-tab>
+
+                            <!-- Account Status Tab -->
+                            <nz-tab nzTitle="Account Status">
+                                <nz-timeline>
+                                    <nz-timeline-item [nzColor]="getStatusColor(user.status)">
+                                        <p>Registration Submitted</p>
+                                        <p>{{user.registrationDate | date:'MMM d, y'}}</p>
+                                    </nz-timeline-item>
+                                    <nz-timeline-item
+                                        [nzColor]="user.status === 'Pending' ? 'blue' : getStatusColor(user.status)">
+                                        <p>Status: {{user.status | titlecase}}</p>
+                                        <p *ngIf="user.status !== 'Pending'">Updated: {{user.registrationDate |
+                                            date:'MMM d, y'}}</p>
+                                    </nz-timeline-item>
+                                </nz-timeline>
+
+                            </nz-tab>
+                        </nz-tabset>
+
+                        <!-- Action Buttons - BOTH DISABLED AFTER ANY ACTION -->
+                        <nz-divider></nz-divider>
+                        <div class="action-buttons">
+                            <button 
+                                nz-button 
+                                nzType="primary" 
+                                [nzLoading]="loading"
+                                [disabled]="user.status === 'Active' || isActionPerformed" 
+                                (click)="activateUser()">
+                                <i nz-icon nzType="check-circle"></i>
+                                Activate User
+                            </button>
+                            <button 
+                                nz-button 
+                                nzDanger 
+                                [nzLoading]="loading" 
+                                [disabled]="user.status === 'Rejected' || isActionPerformed"
+                                (click)="rejectUser()">
+                                <i nz-icon nzType="close-circle"></i>
+                                Reject User
+                            </button>
+                        </div>
+                        
+                        <!-- Status message after action -->
+                        <div *ngIf="isActionPerformed" class="mt-3 text-center">
+                            <nz-alert 
+                                nzType="success" 
+                                nzMessage="Action completed successfully. Redirecting to Dashboard..."
+                                nzShowIcon>
+                            </nz-alert>
+                        </div>
+                    </nz-card>
+                </div>
+            </div>
+        </div>
+    </div>
+</nz-spin>

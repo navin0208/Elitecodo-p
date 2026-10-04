@@ -1,0 +1,150 @@
+<section [ngStyle]="{ 'background-color':http.getBackgroundColor()}">
+
+    <div class="parent-notification-container">
+        <nz-row [nzGutter]="16">
+            <!-- Notification Options -->
+            <nz-col [nzSpan]="24">
+                <nz-card nzTitle="Students Communication & Reporting">
+                    <nz-row [nzGutter]="16">
+                        <!-- Send General Notification to All Parents -->
+                        <div class="col-md-6">
+                            <nz-col>
+                                <nz-card nzTitle="Send General Notification">
+                                    <form>
+                                        <div class="form-group">
+                                            <label>Notification Title</label>
+                                            <input nz-input [(ngModel)]="generalNotificationforAll.title"
+                                                name="generalTitle" placeholder="Enter notification title" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Notification Content</label>
+                                            <textarea nz-input [(ngModel)]="generalNotificationforAll.content"
+                                                name="generalContent" [nzAutosize]="{ minRows: 4, maxRows: 6 }"
+                                                placeholder="Enter notification details"></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Upload Report</label>
+                                            <nz-upload nzType="drag" [nzMultiple]="false" nzAccept=".pdf,.doc,.docx"
+                                                (nzChange)="handleFileUpload($event,'General')">
+                                                <div class="ant-upload-drag-icon">
+                                                    <i nz-icon nzType="inbox"></i>
+                                                </div>
+                                                <p class="ant-upload-text">
+                                                    Click or drag report file to this area
+                                                </p>
+                                            </nz-upload>
+                                        </div>
+                                        <button nz-button nzType="primary" [disabled]="uploadInProgress"
+                                            (click)="sendGeneralNotification()">
+                                            Send to All Students
+                                        </button>
+                                    </form>
+                                </nz-card>
+                            </nz-col>
+                        </div>
+                        <div class="col-md-6">
+                            <!-- Send Student-Specific Report -->
+                            <nz-col>
+                                <nz-card nzTitle="Send Student Report">
+                                    <form>
+                                        <div class="form-group">
+                                            <label>Select Students</label>
+                                            <nz-select [(ngModel)]="generalNotificationforSigle.selectedStudents"
+                                                name="students" nzPlaceHolder="Select students" nzShowSearch
+                                                nzMode="multiple" (nzOnSearch)="onSearch($event)">
+                                                <nz-option *ngFor="let student of filteredStudents"
+                                                    [nzValue]="student.id"
+                                                    [nzLabel]="student.firstName + ' ' + student.lastName + ' (' + student.email + ')'"></nz-option>
+                                            </nz-select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Report Type</label>
+                                            <nz-select [(ngModel)]="generalNotificationforSigle.reportType"
+                                                name="reportType" nzPlaceHolder="Select report type">
+                                                <nz-option nzValue="monthly" nzLabel="Monthly Report"></nz-option>
+                                                <nz-option nzValue="quarterly" nzLabel="Quarterly Report"></nz-option>
+                                                <nz-option nzValue="yearly" nzLabel="Yearly Report"></nz-option>
+                                            </nz-select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Upload Report</label>
+                                            <nz-upload nzType="drag" [nzMultiple]="false" nzAccept=".pdf,.doc,.docx"
+                                                (nzChange)="handleFileUpload($event,'Student')">
+                                                <div class="ant-upload-drag-icon">
+                                                    <i nz-icon nzType="inbox"></i>
+                                                </div>
+                                                <p class="ant-upload-text">
+                                                    Click or drag report file to this area
+                                                </p>
+                                            </nz-upload>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Notification Title</label>
+                                            <input nz-input [(ngModel)]="generalNotificationforSigle.title"
+                                                name="generalTitle" placeholder="Enter notification title" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Notification Content</label>
+                                            <textarea nz-input [(ngModel)]="generalNotificationforSigle.content"
+                                                name="generalContent" [nzAutosize]="{ minRows: 4, maxRows: 6 }"
+                                                placeholder="Enter notification details"></textarea>
+                                        </div>
+
+                                        <button nz-button nzType="primary" (click)="sendStudentReport()"
+                                            [disabled]=" !generalNotificationforSigle.reportType|| !generalNotificationforSigle.title || !generalNotificationforSigle.content">
+                                            Send Report to Student
+                                        </button>
+                                    </form>
+                                </nz-card>
+                            </nz-col>
+                        </div>
+                    </nz-row>
+
+                    <!-- Sent Notifications History -->
+                    <nz-card nzTitle="Notification History" style="margin-top: 16px;">
+                        <nz-table #notificationTable [nzData]="notifications">
+                            <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Title</th>
+                                    <th>Content</th>
+                                    <th>Students</th>
+                                    <th>Report Type</th>
+                                    <!-- <th>Actions</th> -->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let notification of notificationTable.data">
+                                    <td>{{ notification.type }}</td>
+                                    <td>{{ notification.title }}</td>
+                                    <td>{{ notification.content }}</td>
+                                    <td>
+                                        <!-- For report type - show student names -->
+                                        <span
+                                            *ngIf="notification.type === 'report' && notification.students && notification.students.length > 0"
+                                            class="transparent-bg">
+                                            {{ getStudentNames(notification.students) }}
+                                        </span>
+                                        <span *ngIf="notification.type === 'general'" class="transparent-bg">
+                                            All Students
+                                        </span>
+                                    </td>
+                                    <td>{{ notification.reportType || 'N/A' }}</td>
+                                    <!-- <td>
+                                        <button nz-button nzType="link" (click)="resendNotification(notification)">
+                                            Resend
+                                        </button>
+                                    </td> -->
+                                </tr>
+                            </tbody>
+                        </nz-table>
+                    </nz-card>
+                </nz-card>
+            </nz-col>
+        </nz-row>
+    </div>
+
+</section>

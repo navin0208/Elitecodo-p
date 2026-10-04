@@ -1,0 +1,152 @@
+<section [ngStyle]="{ 'background-color':http.getBackgroundColor()}">
+  <!-- practice-test-report.component.html -->
+  <!-- practice-test-report.component.html -->
+  <div class="practice-test-container">
+    <!-- Hero Section -->
+    <div class="hero-section">
+      <h1 class="hero-title">Practice Test Performance</h1>
+      <p class="hero-subtitle">Track your learning progress and improve your skills</p>
+
+      <nz-space class="filter-container">
+        <nz-select *nzSpaceItem [(ngModel)]="selectedSubject" (ngModelChange)="onSubjectChange($event)"
+          class="subject-select" nzBorderless>
+          <nz-option *ngFor="let subject of subjects" [nzValue]="subject.value" [nzLabel]="subject.label">
+          </nz-option>
+        </nz-select>
+
+        <!-- <nz-range-picker *nzSpaceItem [(ngModel)]="dateRange" (ngModelChange)="onDateRangeChange($event)" nzBorderless>
+        </nz-range-picker> -->
+      </nz-space>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content-section">
+      <!-- Performance Overview Cards -->
+      <div nz-row [nzGutter]="[16, 16]">
+        <!-- Overall Score Card -->
+        <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8">
+          <nz-card class="metric-card score-card">
+            <div class="metric-content">
+              <div class="metric-icon">
+                <i nz-icon nzType="trophy" nzTheme="fill"></i>
+              </div>
+              <div class="metric-details">
+                <h3>Overall Score</h3>
+                <nz-progress [nzPercent]="animatedAverageScore" nzType="circle" [nzWidth]="80"
+                  class="score-progress"></nz-progress>
+                <!-- <p class="metric-trend positive">
+                  <i nz-icon nzType="arrow-up"></i> 5% vs last month
+                </p> -->
+              </div>
+            </div>
+          </nz-card>
+        </div>
+
+        <!-- Tests Completed Card -->
+        <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8">
+          <nz-card class="metric-card tests-card">
+            <div class="metric-content">
+              <div class="metric-icon">
+                <i nz-icon nzType="file-done" nzTheme="fill"></i>
+              </div>
+              <div class="metric-details">
+                <h3>Tests Completed</h3>
+                <div class="big-number">{{ animatedTotalTests }}</div>
+                <!-- <p class="metric-trend positive">
+                  <i nz-icon nzType="plus-circle"></i> 3 this week
+                </p> -->
+              </div>
+            </div>
+          </nz-card>
+        </div>
+
+        <!-- Time Spent Card -->
+        <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8">
+          <nz-card class="metric-card time-card">
+            <div class="metric-content">
+              <div class="metric-icon">
+                <i nz-icon nzType="clock-circle" nzTheme="fill"></i>
+              </div>
+              <div class="metric-details">
+                <h3>Total Time Spent</h3>
+                <div class="big-number">{{ animatedTotalTime }}m</div>
+                <!-- <p class="metric-trend neutral">
+                  <i nz-icon nzType="field-time"></i> 2.5m this week
+                </p> -->
+              </div>
+            </div>
+          </nz-card>
+        </div>
+
+      </div>
+
+      <!-- Performance Charts Section -->
+      <div nz-row [nzGutter]="[16, 16]" class="charts-section">
+        <!-- Subject Performance Chart -->
+        <div nz-col [nzXs]="24" [nzMd]="12">
+          <nz-card nzTitle="Subject Performance" class="chart-card">
+            <div echarts [options]="subjectChartOption" class="chart"></div>
+          </nz-card>
+        </div>
+
+        <!-- Progress Timeline Chart -->
+        <div nz-col [nzXs]="24" [nzMd]="12">
+          <nz-card nzTitle="Progress Timeline" class="chart-card">
+            <div echarts [options]="timelineChartOption" class="chart"></div>
+          </nz-card>
+        </div>
+      </div>
+
+      <!-- Recent Tests Table -->
+      <nz-card nzTitle="Recent Test Reports" class="reports-card">
+        <nz-table #basicTable [nzData]="testReports" [nzLoading]="loading" nzShowSizeChanger [nzPageSize]="5">
+          <thead>
+            <tr>
+              <th>Test Name</th>
+              <th>Subject</th>
+              <th>Date</th>
+              <th>Performance</th>
+              <th>Time</th>
+              <th>Status</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let report of basicTable.data" class="test-row">
+              <td>
+                <span class="test-name">{{report.testName}}</span>
+                <br>
+                <small>{{report.totalQuestions}} questions</small>
+              </td>
+              <td>
+                <nz-tag [nzColor]="getSubjectColor(report.subjectName)">
+                  {{report.subjectName}}
+                </nz-tag>
+              </td>
+              <td>{{report.date | date:'mediumDate'}}</td>
+              <td>
+                <div class="performance-cell">
+                  <nz-progress [nzPercent]="report.score" nzSize="small" [nzStrokeColor]="getScoreColor(report.score)">
+                  </nz-progress>
+                  <small>{{report.correctAnswers}}/{{report.totalQuestions}} correct</small>
+                </div>
+              </td>
+              <td>{{report.timeTaken}}</td>
+              <td>
+                <nz-tag [nzColor]="report.improvement > 0 ? 'success' : 'warning'" class="status-tag">
+                  <i nz-icon [nzType]="report.improvement > 0 ? 'rise' : 'fall'"></i>
+                  {{report.improvement}}% {{report.improvement > 0 ? 'Improvement' : 'Decline'}}
+                </nz-tag>
+              </td>
+              <!-- <td>
+                <button nz-button nzType="primary" nzShape="round" (click)="viewTestDetails(report)">
+                  View Details
+                </button>
+              </td> -->
+            </tr>
+          </tbody>
+        </nz-table>
+      </nz-card>
+    </div>
+  </div>
+</section>

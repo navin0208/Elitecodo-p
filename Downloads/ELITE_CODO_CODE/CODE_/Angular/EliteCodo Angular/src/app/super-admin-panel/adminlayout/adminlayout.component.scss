@@ -1,0 +1,288 @@
+// General layout
+// -----------------------------
+:host {
+  display: flex;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.app-layout {
+  height: 100vh;
+  display: flex;
+  overflow: hidden; // Prevent double scrollbars
+}
+// -----------------------------
+// Sidebar styling
+// -----------------------------
+.menu-sidebar {
+  position: relative;
+  z-index: 10;
+  min-height: 100vh;
+  box-shadow: 2px 0 6px rgba(0, 21, 41, 0.35);
+  transition: all 0.3s ease;
+}
+.sidebar-logo {
+  position: relative;
+  height: 64px;
+  padding-left: 24px;
+  overflow: hidden;
+  line-height: 64px;
+  background: #001529;
+  transition: all 0.3s;
+  img {
+    display: inline-block;
+    height: 32px;
+    width: 32px;
+    vertical-align: middle;
+    transition: all 0.3s;
+  }
+  h1 {
+    display: inline-block;
+    margin: 0 0 0 20px;
+    color: #fff;
+    font-weight: 600;
+    font-size: 14px;
+    font-family: Avenir, Helvetica Neue, Arial, Helvetica, sans-serif;
+    vertical-align: middle;
+    transition: opacity 0.3s;
+  }
+}
+// -----------------------------
+// Menu & submenu styling
+// -----------------------------
+[nz-menu] {
+  height: calc(100vh - 64px);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+[nz-submenu] {
+  position: relative;
+  ul {
+    padding-left: 0;
+    li {
+      padding-left: 12px;
+    }
+  }
+}
+.ant-menu-submenu-title,
+.ant-menu-submenu-arrow {
+  transition: all 0.3s;
+}
+.ant-menu-submenu-inline {
+  > .ant-menu-submenu-title:hover .ant-menu-submenu-arrow {
+    color: #1890ff;
+  }
+  &.ant-menu-submenu-open > .ant-menu-submenu-title .ant-menu-submenu-arrow {
+    transform: rotate(180deg);
+  }
+  > .ant-menu-submenu-title .ant-menu-submenu-arrow {
+    right: 16px;
+    transition: transform 0.3s;
+  }
+}
+.ant-menu-inline {
+  .ant-menu-item,
+  .ant-menu-submenu-title {
+    width: 100%;
+  }
+  .ant-menu-item::after {
+    border-right: 3px solid #1890ff;
+  }
+  .ant-menu-submenu-title {
+    padding-right: 34px !important;
+  }
+}
+.ant-menu-submenu-popup {
+  position: absolute;
+}
+// -----------------------------
+// Header styling
+// -----------------------------
+nz-header {
+  padding: 0;
+  width: 100%;
+  z-index: 2;
+}
+.app-header {
+  position: relative;
+  height: 64px;
+  padding: 0;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+  display: flex;
+  align-items: center;
+}
+.header-trigger {
+  height: 64px;
+  padding: 0 24px;
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  &:hover {
+    color: #1890ff;
+  }
+}
+// -----------------------------
+// Content area
+// -----------------------------
+nz-content {
+  flex: 1;
+  margin: 15px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.inner-content {
+  padding: 24px;
+  background: #fff;
+  border-radius: 4px;
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+// -----------------------------
+// User profile & dropdown
+// -----------------------------
+.my_accout {
+  position: absolute;
+  right: 10px;
+  top: 10%;
+}
+.account {
+  .action {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+    .profile {
+      position: relative;
+      width: 50px;
+      height: 35px;
+      border-radius: 50%;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f8f8f8; // optional
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+        display: block;
+      }
+    }
+  }
+  .menu {
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+    p {
+      margin: 0;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+    ul {
+      padding: 0;
+      margin: 5px auto;
+      list-style: none;
+      li {
+        display: flex;
+        align-items: center;
+        color: #f44336;
+        font-weight: 500;
+        cursor: pointer;
+        padding: 3px 0;
+        i {
+          margin-right: 8px;
+        }
+        &:hover {
+          opacity: 0.8;
+        }
+        &.logout {
+          position: absolute;
+          bottom: 16px;
+          left: 0;
+          width: 100%;
+          padding: 0 16px;
+        }
+      }
+    }
+  }
+}
+// -----------------------------
+// Buttons
+// -----------------------------
+.btn-claaa {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  width: 36px;
+  padding: 0;
+  border-radius: 4px;
+  transition: all 0.3s;
+  // &:hover {
+  //   background-color: #E6F7FF;
+  //   border-color: #1890FF;
+  // }
+}
+// -----------------------------
+// Responsive adjustments
+// -----------------------------
+@media (max-width: 992px) {
+  .sidebar-logo h1 {
+    opacity: 0;
+  }
+  nz-content {
+    margin: 10px;
+  }
+  .inner-content {
+    padding: 16px;
+  }
+}
+@media (max-width: 768px) {
+  .app-header {
+    padding-right: 50px;
+  }
+  .my_accout .menu p {
+    display: none;
+  }
+  .account .menu ul {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+    padding: 8px 0;
+    width: 120px;
+    z-index: 100;
+    li {
+      padding: 8px 16px;
+    }
+  }
+}
+// -----------------------------
+// Scrollbar customization
+// -----------------------------
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+  &:hover {
+    background: #a8a8a8;
+  }
+}
+
+

@@ -1,0 +1,243 @@
+<section class="dashboard-section" [ngStyle]="{ 'background-color': http.getBackgroundColor() }">
+    <div class="dashboard-container">
+        <!-- Header Section -->
+        <nz-page-header class="site-page-header" nzTitle="Student Performance Analytics">
+            <nz-page-header-subtitle>Real-time monitoring and analysis</nz-page-header-subtitle>
+            <nz-breadcrumb nz-page-header-breadcrumb>
+                <nz-breadcrumb-item>Dashboard</nz-breadcrumb-item>
+                <nz-breadcrumb-item>Student Analytics</nz-breadcrumb-item>
+            </nz-breadcrumb>
+        </nz-page-header>
+
+        <!-- Stats Cards -->
+        <div nz-row [nzGutter]="[16, 16]" class="stats-row">
+            <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8">
+                <nz-card class="stats-card" [nzBorderless]="true">
+                    <nz-statistic [nzValue]="totalStudents" [nzTitle]="'Total Students'" [nzPrefix]="userTemplate"
+                        [nzValueStyle]="{ color: '#3f8600' }">
+                    </nz-statistic>
+                    <ng-template #userTemplate>
+                        <i nz-icon nzType="team" nzTheme="twotone"></i>
+                    </ng-template>
+                </nz-card>
+            </div>
+
+            <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8">
+                <nz-card class="stats-card" [nzBorderless]="true">
+                    <nz-statistic [nzValue]="formattedClassAverage" [nzTitle]="'Class Average'"
+                        [nzPrefix]="chartTemplate" [nzSuffix]="'%'" [nzValueStyle]="{ color: '#cf1322' }">
+                    </nz-statistic>
+                    <ng-template #chartTemplate>
+                        <i nz-icon nzType="rise" nzTheme="twotone"></i>
+                    </ng-template>
+                </nz-card>
+            </div>
+
+            <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8">
+                <nz-card class="stats-card" [nzBorderless]="true">
+                    <nz-statistic [nzValue]="formattedAttendanceRate" [nzTitle]="'Attendance Rate'"
+                        [nzPrefix]="attendanceTemplate" [nzSuffix]="'%'" [nzValueStyle]="{ color: '#096dd9' }">
+                    </nz-statistic>
+                    <ng-template #attendanceTemplate>
+                        <i nz-icon nzType="calendar" nzTheme="twotone"></i>
+                    </ng-template>
+                </nz-card>
+            </div>
+        </div>
+
+        <!-- Performance Chart -->
+        <nz-card class="chart-card" nzTitle="Class Performance Trend">
+            <div *ngIf="chartData.length > 0; else chartLoading" echarts [options]="chartOption"
+                class="performance-chart"></div>
+            <ng-template #chartLoading>
+                <div class="chart-placeholder">
+                    <nz-spin nzSimple></nz-spin>
+                </div>
+            </ng-template>
+        </nz-card>
+
+        <!-- Main Content -->
+        <nz-card class="main-table-card">
+            <div class="table-header">
+                <nz-space>
+                    <nz-input-group *nzSpaceItem [nzSuffix]="searchTemplate" class="search-box">
+                        <input type="text" nz-input placeholder="Search students..." [(ngModel)]="searchText" />
+                    </nz-input-group>
+                    <ng-template #searchTemplate>
+                        <i nz-icon nzType="search"></i>
+                    </ng-template>
+                    <button *nzSpaceItem nz-button nzType="primary" (click)="refresh()" [nzLoading]="loading">
+                        <i nz-icon nzType="sync"></i>Refresh
+                    </button>
+                </nz-space>
+            </div>
+
+            <nz-table #studentsTable [nzData]="students" [nzLoading]="loading" [nzShowSizeChanger]="true"
+                class="custom-table">
+                <thead>
+                    <tr>
+                        <th nzWidth="60px"></th>
+                        <th>Roll No</th>
+                        <th>Student Details</th>
+                        <th>Performance</th>
+                        <th>Attendance</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <ng-container *ngIf="students.length > 0; else noStudents">
+                        <ng-template ngFor let-student [ngForOf]="studentsTable.data">
+                            <tr>
+                                <td [nzExpand]="student.expand" (click)="student.expand = !student.expand"></td>
+                                <td>{{ student.rollNo }}</td>
+                                <td>
+                                    <div class="student-info">
+                                        <nz-avatar [nzText]="student.name[0]" [nzSize]="40"
+                                            [ngStyle]="{ backgroundColor: '#87d068' }">
+                                        </nz-avatar>
+
+                                        <div class="student-details">
+                                            <div class="student-name">{{ student.name }}</div>
+                                            <div class="student-class">{{ student.class }}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="performance-cell">
+                                        <nz-progress [nzPercent]="student.average"
+                                            [nzStatus]="getProgressStatus(student.average)"
+                                            [nzStrokeColor]="{ '0%': '#108ee9', '100%': '#87d068' }"
+                                            [nzShowInfo]="true">
+                                        </nz-progress>
+                                    </div>
+                                </td>
+                                <td>
+                                    <nz-progress [nzPercent]="student.attendance" [nzType]="'circle'" [nzWidth]="50"
+                                        [nzStrokeColor]="student.attendance >= 90 ? '#87d068' : '#faad14'">
+                                    </nz-progress>
+                                </td>
+                                <td>
+                                    <nz-tag [nzColor]="getStatusColor(student.status)">
+                                        {{ student.status }}
+                                    </nz-tag>
+                                </td>
+                                <td>
+                                    <nz-button-group>
+                                        <button nz-button nzType="default" nz-tooltip nzTooltipTitle="View Details"
+                                            (click)="viewExamDetails(student.id)">
+                                            <i nz-icon nzType="eye"></i>
+                                        </button>
+                                    </nz-button-group>
+                                </td>
+                            </tr>
+                            <tr [nzExpand]="student.expand">
+                                <td colspan="7">
+                                    <div class="expanded-content">
+                                        <!-- Student Performance Details -->
+                                        <div nz-row [nzGutter]="16">
+                                            <div nz-col [nzSpan]="16">
+                                                <nz-card nzTitle="Recent Performance" class="details-card">
+                                                    <nz-table #resultsTable [nzData]="student.results"
+                                                        [nzShowPagination]="false" class="results-table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Subject</th>
+                                                                <th>Marks</th>
+                                                                <th>Grade</th>
+                                                                <th>Improvement</th>
+                                                            </tr>
+                                                        </thead>
+                <tbody>
+                    <tr *ngFor="let result of student.results">
+                        <td>
+                            <i nz-icon [nzType]="getSubjectIcon(result.subject)" class="subject-icon"></i>
+                            {{ result.subject }}
+                        </td>
+                        <td>
+                            <nz-tag [nzColor]="getScoreColor(result.marks)">
+                                {{ result.marks }}/{{ result.total }}
+                            </nz-tag>
+                        </td>
+                        <td>
+                            <nz-tag [nzColor]="getGradeColor(result.grade)">
+                                {{ result.grade }}
+                            </nz-tag>
+                        </td>
+                        <td>
+                            <span class="improvement" [class.positive]="result.improvement > 0">
+                                <i nz-icon [nzType]="result.improvement >= 0 ? 'rise' : 'fall'" [nzTheme]="'twotone'"
+                                    [nzTwotoneColor]="result.improvement >= 0 ? '#52c41a' : '#f5222d'">
+                                </i>
+                                {{ result.improvement }}%
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </nz-table>
+        </nz-card>
+    </div>
+
+    <div nz-col [nzSpan]="8">
+        <!-- Individual Progress Chart -->
+        <nz-card nzTitle="Progress Trend" class="trend-card">
+            <div echarts [options]="getStudentChartOptions(student)" class="trend-chart"></div>
+        </nz-card>
+    </div>
+    </div>
+
+    <!-- Additional Statistics -->
+    <div nz-row [nzGutter]="16" class="stats-summary">
+        <div nz-col [nzSpan]="6">
+            <nz-statistic [nzValue]="student.average" [nzTitle]="'Overall Average'" [nzSuffix]="'%'"
+                [nzValueStyle]="{ color: '#3f8600' }">
+            </nz-statistic>
+        </div>
+        <div nz-col [nzSpan]="6">
+            <nz-statistic [nzValue]="student.attendance" [nzTitle]="'Attendance Rate'" [nzSuffix]="'%'"
+                [nzValueStyle]="{ color: '#cf1322' }">
+            </nz-statistic>
+        </div>
+        <div nz-col [nzSpan]="6">
+            <nz-statistic [nzValue]="getTopSubjectScore(student)" [nzTitle]="'Highest Score'" [nzSuffix]="'%'"
+                [nzValueStyle]="{ color: '#096dd9' }">
+            </nz-statistic>
+        </div>
+        <div nz-col [nzSpan]="6">
+            <nz-statistic [nzValue]="getAverageImprovement(student)" [nzTitle]="'Avg. Improvement'" [nzSuffix]="'%'"
+                [nzValueStyle]="{ color: '#08979c' }">
+            </nz-statistic>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+        <button nz-button nzType="primary" nzGhost>
+            <i nz-icon nzType="printer"></i>Print Report
+        </button>
+        <button nz-button nzType="default">
+            <i nz-icon nzType="mail"></i>Contact Parent
+        </button>
+        <button nz-button nzType="dashed">
+            <i nz-icon nzType="schedule"></i>Schedule Meeting
+        </button>
+    </div>
+    </div>
+    </td>
+    </tr>
+    </ng-template>
+    </ng-container>
+
+    <ng-template #noStudents>
+        <tr>
+            <td colspan="7" class="no-data">
+                <nz-empty nzNotFoundContent="No students found" [nzNotFoundImage]="loading ? 'simple' : 'default'">
+                </nz-empty>
+            </td>
+        </tr>
+    </ng-template>
+    </tbody>
+    </nz-table>
+    </nz-card>
+    </div>
+</section>
