@@ -1,0 +1,417 @@
+diff --git a/services/pdfService.js b/services/pdfService.js
+index 67e1eb2..329560c 100644
+--- a/services/pdfService.js
++++ b/services/pdfService.js
+@@ -1,194 +1,218 @@
+-// services/pdfService.js
+-import puppeteer from 'puppeteer-core';
+-import chromium from '@sparticuz/chromium';
+-import ejs from 'ejs';
+-import { fileURLToPath } from 'url';
+-import path from 'path';
+-
+-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+-
+-/* ---------- template paths ---------- */
+-const templates = {
+-  simple: path.join(__dirname, '..', 'templates', 'pdfTemplate.ejs'),
+-  formatted: path.join(
+-    __dirname,
+-    '..',
+-    'templates',
+-    'pdfTemplate2.ejs'
+-  ),
+-  formatted3: path.join(
+-    __dirname,
+-    '..',
+-    'templates',
+-    'pdfTemplate3.ejs'
+-  ),
+-  chapter: path.join(
+-    __dirname,
+-    '..',
+-    'templates',
+-    'pdfTemplateChapter.ejs'
+-  ),
+-  omr: path.join(__dirname, '..', 'templates', 'omrTemplate.ejs'),
+-  ansKey: {
+-    CHINTAMANI: path.join(
+-      __dirname,
+-      '..',
+-      'templates',
+-      'answerKeyTemplate.ejs'
+-    ),
+-    Probitech: path.join(__dirname, '..', 'templates', 'AnsKey.ejs'),
+-    TEST_PLANNERS: path.join(
+-      __dirname,
+-      '..',
+-      'templates',
+-      'AnsKey1.ejs'
+-    ),
+-  },
+-  ansKeyChapter: path.join(
+-    __dirname,
+-    '..',
+-    'templates',
+-    'ansKeyChapter.ejs'
+-  ),
+-};
+-
+-/* ---------- constants ---------- */
+-const LOGOS = {
+-  CHINTAMANI:
+-    'https://zplusglobalmarketinsights.com/auctionBanksImages/image%20(1).png',
+-  Probitech:
+-    'https://zplusglobalmarketinsights.com/auctionBanksImages/Screenshot%202025-05-19%20173311.png',
+-  TEST_PLANNERS:
+-    'https://res.cloudinary.com/dbixocagj/image/upload/v1748338725/image_16_ytvwhh.png',
+-};
+-const ormLogo =
+-  'https://zplusglobalmarketinsights.com/auctionBanksImages/image.png';
+-
+-/* ---------- helpers ---------- */
+-function stripStyles(html) {
+-  if (typeof html !== 'string') return '';
+-  return html.replace(/\s*style=(["'])(?:(?!\1).)*\1/g, '');
+-}
+-
+-function sanitize(dto) {
+-  dto.logoUrl = LOGOS[dto.institute] || null;
+-  dto.ormLogo = ormLogo;
+-  dto.subjects?.forEach((subj) => {
+-    subj.questions?.forEach((q) => {
+-      [
+-        'question',
+-        'option1',
+-        'option2',
+-        'option3',
+-        'option4',
+-      ].forEach((key) => {
+-        q[key] = stripStyles(q[key]);
+-      });
+-    });
+-  });
+-}
+-
+-function sanitizeOmr(dto) {
+-  dto.ormLogo = ormLogo;
+-}
+-
+-/* ---------- Chrome launch ---------- */
+-async function launchBrowser() {
+-  console.log('Launching Puppeteer with @sparticuz/chromium...');
+-  const executablePath = await chromium.executablePath();
+-
+-  return puppeteer.launch({
+-    args: chromium.args,
+-    defaultViewport: chromium.defaultViewport,
+-    executablePath,
+-    headless: chromium.headless,
+-  });
+-}
+-
+-/* ---------- core render ---------- */
+-async function renderPdf(html, options = {}) {
+-  let browser;
+-  try {
+-    browser = await launchBrowser();
+-    const page = await browser.newPage();
+-    await page.setContent(html, { waitUntil: 'networkidle0' });
+-
+-    return await page.pdf({
+-      format: 'A4',
+-      printBackground: true,
+-      margin: {
+-        top: '10mm',
+-        right: '10mm',
+-        bottom: '10mm',
+-        left: '10mm',
+-      },
+-      ...options,
+-    });
+-  } finally {
+-    if (browser) await browser.close();
+-  }
+-}
+-
+-/* ---------- public API ---------- */
+-export async function generatePdfBuffer(dto) {
+-  sanitize(dto);
+-  const html = await ejs.renderFile(templates.simple, { dto });
+-  return renderPdf(html);
+-}
+-
+-export async function generateFormattedPdfBuffer(dto) {
+-  sanitize(dto);
+-  const html = await ejs.renderFile(templates.formatted, { dto });
+-  return renderPdf(html);
+-}
+-
+-export async function generateFormattedPdfBuffer3(dto) {
+-  sanitize(dto);
+-  const html = await ejs.renderFile(templates.formatted3, { dto });
+-  return renderPdf(html);
+-}
+-
+-export async function generateChapterPdfBuffer(dto) {
+-  sanitize(dto);
+-  const html = await ejs.renderFile(templates.chapter, { dto });
+-  return renderPdf(html);
+-}
+-
+-export async function generateOmrPdfBuffer(dto) {
+-  sanitizeOmr(dto);
+-  const html = await ejs.renderFile(templates.omr, { dto });
+-  return renderPdf(html, {
+-    margin: { top: '0mm', bottom: '0mm', left: '0mm', right: '0mm' },
+-  });
+-}
+-
+-export async function generateAnswerKeyPdfBuffer(dto) {
+-  if (
+-    !dto.institute ||
+-    !dto.answers ||
+-    Object.keys(dto.answers).length === 0
+-  ) {
+-    throw new Error(
+-      'Answer-key DTO must contain institute and non-empty answers map'
+-    );
+-  }
+-  dto.logoUrl = LOGOS[dto.institute] || null;
+-
+-  const templatePath = templates.ansKey[dto.institute];
+-  if (!templatePath)
+-    throw new Error(
+-      `No answer-key template for institute "${dto.institute}"`
+-    );
+-
+-  const html = await ejs.renderFile(templatePath, { dto });
+-  return renderPdf(html);
+-}
+-
+-export async function generateChAnswerKeyPdfBuffer(dto) {
+-  if (!dto.answers || Object.keys(dto.answers).length === 0) {
+-    throw new Error('answers map is required');
+-  }
+-  dto.institute = 'CHINTAMANI';
+-  const html = await ejs.renderFile(templates.ansKeyChapter, { dto });
+-  return renderPdf(html);
+-}
++// services/pdfService.js
++import puppeteer from 'puppeteer-core';
++import chromium from '@sparticuz/chromium';
++import ejs from 'ejs';
++import { fileURLToPath } from 'url';
++import path from 'path';
++
++const __dirname = path.dirname(fileURLToPath(import.meta.url));
++
++/* ---------- template paths ---------- */
++const templates = {
++  simple: path.join(__dirname, '..', 'templates', 'pdfTemplate.ejs'),
++  formatted: path.join(
++    __dirname,
++    '..',
++    'templates',
++    'pdfTemplate2.ejs'
++  ),
++  formatted3: path.join(
++    __dirname,
++    '..',
++    'templates',
++    'pdfTemplate3.ejs'
++  ),
++  chapter: path.join(
++    __dirname,
++    '..',
++    'templates',
++    'pdfTemplateChapter.ejs'
++  ),
++  omr: path.join(__dirname, '..', 'templates', 'omrTemplate.ejs'),
++  ansKey: {
++    CHINTAMANI: path.join(
++      __dirname,
++      '..',
++      'templates',
++      'answerKeyTemplate.ejs'
++    ),
++    Probitech: path.join(__dirname, '..', 'templates', 'AnsKey.ejs'),
++    TEST_PLANNERS: path.join(
++      __dirname,
++      '..',
++      'templates',
++      'AnsKey1.ejs'
++    ),
++  },
++  ansKeyChapter: path.join(
++    __dirname,
++    '..',
++    'templates',
++    'ansKeyChapter.ejs'
++  ),
++};
++
++/* ---------- constants ---------- */
++const LOGOS = {
++  CHINTAMANI:
++    'https://zplusglobalmarketinsights.com/auctionBanksImages/image%20(1).png',
++  Probitech:
++    'https://zplusglobalmarketinsights.com/auctionBanksImages/Screenshot%202025-05-19%20173311.png',
++  TEST_PLANNERS:
++    'https://res.cloudinary.com/dbixocagj/image/upload/v1748338725/image_16_ytvwhh.png',
++};
++const ormLogo =
++  'https://zplusglobalmarketinsights.com/auctionBanksImages/image.png';
++
++/* ---------- helpers ---------- */
++function stripStyles(html) {
++  if (typeof html !== 'string') return '';
++  return html.replace(/\s*style=(["'])(?:(?!\1).)*\1/g, '');
++}
++
++function sanitize(dto) {
++  dto.logoUrl = LOGOS[dto.institute] || null;
++  dto.ormLogo = ormLogo;
++  dto.subjects?.forEach((subj) => {
++    subj.questions?.forEach((q) => {
++      [
++        'question',
++        'option1',
++        'option2',
++        'option3',
++        'option4',
++      ].forEach((key) => {
++        q[key] = stripStyles(q[key]);
++      });
++    });
++  });
++}
++
++function sanitizeOmr(dto) {
++  dto.ormLogo = ormLogo;
++}
++
++/* ---------- Chrome launch ---------- */
++async function launchBrowser() {
++  // In Docker / on a server a system Chromium is installed and advertised via
++  // PUPPETEER_EXECUTABLE_PATH. Prefer it: the @sparticuz build is meant for
++  // AWS Lambda and fails on many regular Linux/ARM hosts.
++  const systemChrome = process.env.PUPPETEER_EXECUTABLE_PATH;
++  if (systemChrome) {
++    console.log(`Launching Puppeteer with system Chromium: ${systemChrome}`);
++    return puppeteer.launch({
++      executablePath: systemChrome,
++      headless: true,
++      args: [
++        '--no-sandbox',
++        '--disable-setuid-sandbox',
++        '--disable-dev-shm-usage',
++        '--disable-gpu',
++      ],
++    });
++  }
++
++  console.log('Launching Puppeteer with @sparticuz/chromium...');
++  const executablePath = await chromium.executablePath();
++
++  return puppeteer.launch({
++    args: chromium.args,
++    defaultViewport: chromium.defaultViewport,
++    executablePath,
++    headless: chromium.headless,
++  });
++}
++
++/* ---------- core render ---------- */
++async function renderPdf(html, options = {}) {
++  let browser;
++  try {
++    browser = await launchBrowser();
++    const page = await browser.newPage();
++    // 'networkidle0' waits for every request to finish, so a single slow or
++    // unreachable image host made the whole document fail. Wait for the page
++    // load, then give images a bounded amount of time to arrive.
++    await page.setContent(html, { waitUntil: 'load', timeout: 60000 });
++    await page
++      .waitForNetworkIdle({ idleTime: 500, timeout: 15000 })
++      .catch(() => {});
++
++    return await page.pdf({
++      format: 'A4',
++      printBackground: true,
++      margin: {
++        top: '10mm',
++        right: '10mm',
++        bottom: '10mm',
++        left: '10mm',
++      },
++      ...options,
++    });
++  } finally {
++    if (browser) await browser.close();
++  }
++}
++
++/* ---------- public API ---------- */
++export async function generatePdfBuffer(dto) {
++  sanitize(dto);
++  const html = await ejs.renderFile(templates.simple, { dto });
++  return renderPdf(html);
++}
++
++export async function generateFormattedPdfBuffer(dto) {
++  sanitize(dto);
++  const html = await ejs.renderFile(templates.formatted, { dto });
++  return renderPdf(html);
++}
++
++export async function generateFormattedPdfBuffer3(dto) {
++  sanitize(dto);
++  const html = await ejs.renderFile(templates.formatted3, { dto });
++  return renderPdf(html);
++}
++
++export async function generateChapterPdfBuffer(dto) {
++  sanitize(dto);
++  const html = await ejs.renderFile(templates.chapter, { dto });
++  return renderPdf(html);
++}
++
++export async function generateOmrPdfBuffer(dto) {
++  sanitizeOmr(dto);
++  const html = await ejs.renderFile(templates.omr, { dto });
++  return renderPdf(html, {
++    margin: { top: '0mm', bottom: '0mm', left: '0mm', right: '0mm' },
++  });
++}
++
++export async function generateAnswerKeyPdfBuffer(dto) {
++  if (
++    !dto.institute ||
++    !dto.answers ||
++    Object.keys(dto.answers).length === 0
++  ) {
++    throw new Error(
++      'Answer-key DTO must contain institute and non-empty answers map'
++    );
++  }
++  dto.logoUrl = LOGOS[dto.institute] || null;
++
++  const templatePath = templates.ansKey[dto.institute];
++  if (!templatePath)
++    throw new Error(
++      `No answer-key template for institute "${dto.institute}"`
++    );
++
++  const html = await ejs.renderFile(templatePath, { dto });
++  return renderPdf(html);
++}
++
++export async function generateChAnswerKeyPdfBuffer(dto) {
++  if (!dto.answers || Object.keys(dto.answers).length === 0) {
++    throw new Error('answers map is required');
++  }
++  dto.institute = 'CHINTAMANI';
++  const html = await ejs.renderFile(templates.ansKeyChapter, { dto });
++  return renderPdf(html);
++}

@@ -15,7 +15,7 @@
             <a style="text-decoration: none;">
                 <li class="navbar-item logo-item">
                     <img [src]="sessionStorageObj.adminlogoImage && sessionStorageObj.adminlogoImage.startsWith('https://zplusglobalmarketinsights.com/') ? sessionStorageObj.adminlogoImage 
-                      : '../../../assets/images/elitecodo.png' " height="48" width="48">
+                      : '../../../assets/images/elitecodo.png' " height="48" width="48" onerror="this.onerror=null;this.src='assets/images/elitecodo.png'">
                     <p *ngIf="sessionStorageObj.className!=='null'" class="logo-text m-0 text-dark">
                         <span>{{ sessionStorageObj?.className || 'User' }}</span>
                     </p>
@@ -43,14 +43,10 @@
                 <a class="nav-link" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
                     aria-expanded="false">
                     <span class="avatar" aria-haspopup="true" aria-expanded="false" role="button" aria-label="avatar">
-                        <img [src]="sessionStorageObj.adminprofilePicture" height="100%" width="100%">
+                        <img [src]="sessionStorageObj.adminprofilePicture" height="100%" width="100%" onerror="this.onerror=null;this.src='assets/images/elitecodo.png'">
                     </span>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item" (click)="goBack()">Go Back</a></li>
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
                     <li><a class="dropdown-item logout_btn" (click)="Logout()">Log Out</a></li>
                 </ul>
             </li>

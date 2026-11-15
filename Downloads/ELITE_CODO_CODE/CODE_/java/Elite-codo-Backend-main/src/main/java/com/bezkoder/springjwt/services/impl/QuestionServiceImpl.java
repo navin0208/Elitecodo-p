@@ -52,6 +52,18 @@ public class QuestionServiceImpl implements QuestionService {
     @Autowired
     private PatternRepository patternRepository;
 
+    /**
+     * Only admins / super admins may publish questions directly.
+     * Every other author (teacher, institute ...) goes through the approval flow.
+     */
+    private boolean canSelfApprove(User user) {
+        if (user == null || user.getRoles() == null) {
+            return false;
+        }
+        return user.getRoles().stream().anyMatch(r ->
+                r.getName() == ERole.ROLE_ADMIN || r.getName() == ERole.ROLE_SUPER_ADMIN);
+    }
+
     @Override
     public MainResponse create(QuestionRequest questionRequest) {
         System.out.println("QR = " + questionRequest);
@@ -80,6 +92,9 @@ public class QuestionServiceImpl implements QuestionService {
         try {
             BeanUtils.copyProperties(questionRequest, questionMaster);
             questionMaster.setDate(new Date());
+            // Approval flow: never trust the status sent by the client.
+            // New questions from teachers stay "Pending" until an admin accepts them.
+            questionMaster.setStatus(canSelfApprove(teacher.get()) ? "Accepted" : "Pending");
             questionMaster.setEntranceExamMaster(entranceExamMaster.get());
             questionMaster.setUser(teacher.get());
             questionMaster.setSubjectMaster(subjectMaster.get());
@@ -196,10 +211,17 @@ public class QuestionServiceImpl implements QuestionService {
                 .orElseThrow(() -> new RuntimeException("Question not found with ID: " + questionRequest.getQuestionId()));
 
         try {
+            final String existingStatus = questionMaster.getStatus();
+            final User existingOwner = questionMaster.getUser();
             BeanUtils.copyProperties(questionRequest, questionMaster);
+            // Approval flow: only an admin may change the approval status
+            // through update; teachers keep whatever status the question has.
+            if (!canSelfApprove(teacher.get())) {
+                questionMaster.setStatus(existingStatus);
+            }
             questionMaster.setDate(new Date());
             questionMaster.setEntranceExamMaster(entranceExamMaster.get());
-            questionMaster.setUser(teacher.get());
+            questionMaster.setUser(existingOwner != null ? existingOwner : teacher.get());
             questionMaster.setSubjectMaster(subjectMaster.get());
             questionMaster.setStandardMaster(standardMaster.get());
             questionMaster.setChapterMaster(chapterMaster.get());
@@ -847,8 +869,18 @@ public class QuestionServiceImpl implements QuestionService {
         MainResponse mainResponse = new MainResponse();
         Optional<QuestionMaster> questionMaster = this.questionRepository.findById(questionId);
         if (questionMaster.isPresent()) {
-            this.questionRepository.deleteById(questionId);
-            mainResponse.setMessage("Question Deleted Successfully");
+            try {
+                this.questionRepository.deleteById(questionId);
+                mainResponse.setMessage("Question Deleted Successfully");
+            } catch (org.springframework.dao.DataIntegrityViolationException e) {
+                // The question is already used in a test / submission, so it cannot
+                // be physically removed. Retire it instead so it disappears from lists
+                // and from new tests while old results stay intact.
+                QuestionMaster qm = questionMaster.get();
+                qm.setStatus("Deleted");
+                this.questionRepository.save(qm);
+                mainResponse.setMessage("Question is used in existing tests, so it was archived instead of deleted");
+            }
             mainResponse.setResponseCode(HttpStatus.OK.value());
             mainResponse.setFlag(true);
         } else {

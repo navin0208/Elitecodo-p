@@ -46,7 +46,7 @@
               <div class="exam-item" *ngFor="let item of examByStudent" (click)="routToBoardDash(item)">
                 <div class="exam-card">
                   <div class="exam-image">
-                    <img [src]="item.image" [alt]="item.entranceExamName" >
+                    <img [src]="item.image" [alt]="item.entranceExamName" onerror="this.onerror=null;this.src='assets/images/elitecodo.png'">
                   </div>
                   <div class="exam-details">
                     <h3>{{item.entranceExamName}}</h3>

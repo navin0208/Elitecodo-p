@@ -162,8 +162,37 @@ export class TestComponent {
 
     this.getDataOFquestiontype();
     this.getDataOFquestionlevel();
-    this.getSubjectsdata();
-    this.chapterweightagebystudentdata();
+    // The exam id is only stored when the student clicks a board on the home
+    // page. After a refresh / new tab it is missing, which left the Standard,
+    // Subject and filter dropdowns empty. Resolve it from the route if needed.
+    this.ensureEntranceExamId(() => {
+      this.getSubjectsdata();
+      this.chapterweightagebystudentdata();
+    });
+  }
+
+  private ensureEntranceExamId(done: () => void): void {
+    const stored = sessionStorage.getItem('entranceExamIdOfStudent');
+    if (stored && stored !== 'null' && stored !== 'undefined') {
+      done();
+      return;
+    }
+
+    const studentId = sessionStorage.getItem('studentId');
+    const boardName = this.activateROut.snapshot.paramMap.get('name');
+    this.http.getRequest(`api/auth/studententranceexams/${studentId}`).subscribe({
+      next: (exams: any) => {
+        const list: any[] = Array.isArray(exams) ? exams : [];
+        const match =
+          list.find((e) => e?.entranceExamName === boardName) ||
+          (list.length === 1 ? list[0] : null);
+        if (match?.entranceExamId) {
+          sessionStorage.setItem('entranceExamIdOfStudent', String(match.entranceExamId));
+        }
+        done();
+      },
+      error: () => done()
+    });
   }
 
   getSubjectsdata() {

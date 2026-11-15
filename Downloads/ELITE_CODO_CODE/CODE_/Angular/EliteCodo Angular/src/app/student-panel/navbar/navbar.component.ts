@@ -40,6 +40,14 @@ export class NavbarComponent {
   }
 
   goBack(): void {
+    // After an exam the previous history entry is the finished exam page,
+    // which immediately redirects away, so "back" appeared to do nothing.
+    // From exam pages go to the board dashboard instead.
+    const match = this.router.url.match(/^\/student\/([^\/?#]+)\/(exam-completion|exam-portal)/);
+    if (match) {
+      this.router.navigateByUrl(`student/${match[1]}/dashboard`);
+      return;
+    }
     this.location.back();
   }
   toggleNotifications() {

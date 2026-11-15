@@ -216,14 +216,25 @@ const ViewQuestions = () => {
   const editorRef5 = useRef(null);
 
   const handleDelete = async () => {
+    // Nothing selected (e.g. called without a chosen question) - do nothing.
+    if (questionToDelete === null || questionToDelete === undefined) {
+      return;
+    }
     try {
-      const res = await httpClient.delete(
-        `api/question/delete/${questionToDelete}`
+      await httpClient.delete(
+        `/api/question/delete/${questionToDelete}`
       );
-      GetActiveQuestions();
       setOpen(false);
+      setQuestionToDelete(null);
+      GetActiveQuestions();
     } catch (error) {
       console.log('Error deleting question:', error);
+      setOpen(false);
+      setQuestionToDelete(null);
+      window.alert(
+        error?.response?.data?.message ||
+          'Unable to delete this question. Please try again.'
+      );
     }
   };
 
@@ -267,10 +278,6 @@ const ViewQuestions = () => {
   useEffect(() => {
     GetActiveQuestionsFromSearchString();
     // GetActiveQuestions();
-  }, []);
-
-  useEffect(() => {
-    handleDelete();
   }, []);
 
   const handleFilterChange = (e) => {
@@ -358,6 +365,10 @@ const ViewQuestions = () => {
       setOpenEdit(false);
     } catch (error) {
       console.log('Error updating question:', error);
+      window.alert(
+        error?.response?.data?.message ||
+          'Unable to save the question. Please try again.'
+      );
     } finally {
       setloader(false);
     }
@@ -2342,6 +2353,13 @@ const ViewQuestions = () => {
                                 }}
                                 onInstanceReady={(event) => {
                                   editorRef5.current = event.editor;
+                                  // Load the existing solution so it is shown
+                                  // and is not lost when the question is saved
+                                  if (editObjTemp?.solution) {
+                                    event.editor.setData(
+                                      editObjTemp.solution
+                                    );
+                                  }
 
                                   // Hide all .cke_top elements
                                   const topEditorElements =
@@ -2452,7 +2470,7 @@ const ViewQuestions = () => {
                           </button>
                           <button
                             onClick={() => {
-                              handleDelete(obj);
+                              handleDelete();
                             }}
                             className='px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors duration-300 flex items-center gap-2'
                           >

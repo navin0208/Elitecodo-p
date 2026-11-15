@@ -3342,6 +3342,17 @@ public class UserServiceImpl implements UserService {
             String paymentId = signUpRequest.getPaymentId();
             String paymentStatus = signUpRequest.getPaymentStatus();
 
+            // Accounts created by an admin / super admin / institute from the
+            // management panels carry a creatorId and are not paid for by the
+            // account itself. Payment is only mandatory for self-registration.
+            boolean createdByAdmin = signUpRequest.getCreatorId() != null
+                    && (paymentId == null || paymentId.trim().isEmpty());
+
+            if (createdByAdmin) {
+                paymentId = "ADMIN_CREATED";
+                paymentStatus = "Completed";
+            }
+
             if (paymentId == null || paymentId.trim().isEmpty()) {
 
                 logger.warn(
