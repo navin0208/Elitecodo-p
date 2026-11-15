@@ -86,7 +86,7 @@ public class QuestionServiceImpl implements QuestionService {
         }
 
         Optional<QuestionType> questionType = Optional.ofNullable(this.questionTypeRepository.findById(questionRequest.getQuestionTypeId()).orElseThrow(() -> new RuntimeException("Question type not found")));
-        Optional<PatternMaster> patternMaster = this.patternRepository.findById(questionRequest.getPatternId());
+        Optional<PatternMaster> patternMaster = questionRequest.getPatternId() != null ? this.patternRepository.findById(questionRequest.getPatternId()) : Optional.empty();
 
         QuestionMaster questionMaster = new QuestionMaster();
         try {
@@ -205,7 +205,7 @@ public class QuestionServiceImpl implements QuestionService {
         );
 
         // FIXED: Remove .get() without checking
-        Optional<PatternMaster> patternMaster = this.patternRepository.findById(questionRequest.getPatternId());
+        Optional<PatternMaster> patternMaster = questionRequest.getPatternId() != null ? this.patternRepository.findById(questionRequest.getPatternId()) : Optional.empty();
 
         QuestionMaster questionMaster = this.questionRepository.findById(questionRequest.getQuestionId())
                 .orElseThrow(() -> new RuntimeException("Question not found with ID: " + questionRequest.getQuestionId()));

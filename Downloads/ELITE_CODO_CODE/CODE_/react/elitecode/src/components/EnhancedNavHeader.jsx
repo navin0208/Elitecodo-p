@@ -2,6 +2,13 @@ import { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 
+// Shown when a logo / profile picture URL cannot be loaded (e.g. the image host is down)
+const FALLBACK_IMAGE =
+  'data:image/svg+xml;utf8,' +
+  encodeURIComponent(
+    "<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48'><rect width='48' height='48' rx='24' fill='#e5e7eb'/><circle cx='24' cy='19' r='8' fill='#9ca3af'/><path d='M8 42c2-9 9-13 16-13s14 4 16 13' fill='#9ca3af'/></svg>"
+  );
+
 const EnhancedNavHeader = () => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -283,6 +290,10 @@ const EnhancedNavHeader = () => {
                     src={adminLogoImage}
                     alt='Logo'
                     style={styles.logo}
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = FALLBACK_IMAGE;
+                    }}
                   />
                 </div>
                 <span style={styles.className}>{className}</span>
@@ -317,6 +328,10 @@ const EnhancedNavHeader = () => {
                     src={adminProfilePicture}
                     alt='Profile'
                     style={styles.profileImage}
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = FALLBACK_IMAGE;
+                    }}
                   />
                 </button>
                 {dropdownOpen && (

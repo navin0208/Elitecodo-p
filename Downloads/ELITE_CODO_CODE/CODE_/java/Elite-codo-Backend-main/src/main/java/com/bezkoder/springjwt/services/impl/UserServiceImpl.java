@@ -3254,8 +3254,8 @@ public class UserServiceImpl implements UserService {
                 subjectResponses.add(subjectResponse);
             }
 
-//            standardResponse.setSubjects(subjectResponses);
-//            standardResponses.add(standardResponse);
+            standardResponse.setSubjects(subjectResponses);
+            standardResponses.add(standardResponse);
         }
 
         logger.info("Student data fetched for ID {}: {} standards found", id, standardResponses.size());
