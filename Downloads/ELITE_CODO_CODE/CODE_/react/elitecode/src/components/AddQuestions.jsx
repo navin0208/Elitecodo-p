@@ -34,6 +34,15 @@ const AddQuestions = () => {
   let { userId, colorCode, entranceExamId, entranceExamName } =
     useParams();
 
+  if (!userId || userId === 'null' || userId === 'undefined') {
+    const sessionTeacherId = typeof window !== 'undefined' ? sessionStorage.getItem('teacherId') : null;
+    const qUserId = searchParams.get('userId');
+    userId = sessionTeacherId || qUserId || '7';
+  }
+  if (!entranceExamId || entranceExamId === 'null' || entranceExamId === 'undefined') {
+    entranceExamId = searchParams.get('entranceExamId') || '1';
+  }
+
   const [createQuestion, setCreateQuestion] = useState({
     id: Number(userId),
     entranceExamId: null,

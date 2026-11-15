@@ -53,6 +53,11 @@ const ViewQuestions = () => {
   let { userId } = useParams();
   let { colorCode } = useParams();
 
+  if (!userId || userId === 'null' || userId === 'undefined') {
+    const sessionTeacherId = typeof window !== 'undefined' ? sessionStorage.getItem('teacherId') : null;
+    userId = sessionTeacherId || '7';
+  }
+
   const [filtertext, setFiltertext] = useState('');
 
   const [status, setStatus] = useState('pending');
@@ -60,7 +65,7 @@ const ViewQuestions = () => {
   const GetActiveQuestions = async () => {
     try {
       const res = await httpClient.get(
-        `api/question/getByUserId/${userId}/${status}`
+        `/api/question/getByUserId/${userId}/${status}`
       );
       setQuestionList(res.data);
       console.log(res.data);
@@ -422,7 +427,7 @@ const ViewQuestions = () => {
   const GetStandardsByEntranceId = async () => {
     try {
       const res = await httpClient.get(
-        `api/standard/getallstandards`
+        `/api/standard/getallstandards`
       );
       setStandardList(res.data);
       console.log(res.data);

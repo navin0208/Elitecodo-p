@@ -14,8 +14,14 @@ import EditQuestion from './components/EditQuestion';
 
 
 const App = () => {
+  const basename =
+    typeof window !== 'undefined' &&
+    window.location.pathname.startsWith('/question-portal')
+      ? '/question-portal'
+      : '';
+
   return (
-    <Router>
+    <Router basename={basename}>
       <div className='App'>
         <Routes>
           {/* Default Route */}
@@ -29,6 +35,14 @@ const App = () => {
             path='/create-question/:colorCode/:entranceExamId/:entranceExamName/:userId'
             element={<AddQuestions />}
           />
+          <Route
+            path='/create-question/:colorCode/:userId'
+            element={<AddQuestions />}
+          />
+          <Route
+            path='/create-question'
+            element={<AddQuestions />}
+          />
 
           {/* Login */}
           <Route
@@ -36,14 +50,22 @@ const App = () => {
             element={<Login />}
           />
 
-        <Route
-          path="/edit-question/:questionId"
-          element={<EditQuestion />}
-        />
+          <Route
+            path="/edit-question/:questionId"
+            element={<EditQuestion />}
+          />
 
           {/* Question List */}
           <Route
             path='/question-list/:colorCode/:entranceExamId/:entranceExamName/:userId'
+            element={<ViewQuestions />}
+          />
+          <Route
+            path='/question-list/:colorCode/:userId'
+            element={<ViewQuestions />}
+          />
+          <Route
+            path='/question-list'
             element={<ViewQuestions />}
           />
 

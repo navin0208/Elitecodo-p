@@ -103,7 +103,7 @@ export class BoardDashboardComponent {
     this.route.navigateByUrl(`student/${boardName}/${board}`);
     let studentID = sessionStorage.getItem('studentId');
     this.BackgroundColor = localStorage.getItem('backgroundColor');
-    let modiField = this.BackgroundColor.replace('#', '');
+    let modiField = this.BackgroundColor ? this.BackgroundColor.replace('#', '') : 'default';
     console.log(modiField);
 
     if (board == 'AddQuestion') {

@@ -2,6 +2,7 @@
   "name": "elitecode",
   "version": "0.1.0",
   "private": true,
+  "homepage": "/question-portal",
   "dependencies": {
     "@nextui-org/react": "^2.4.6",
     "@reduxjs/toolkit": "^2.5.0",

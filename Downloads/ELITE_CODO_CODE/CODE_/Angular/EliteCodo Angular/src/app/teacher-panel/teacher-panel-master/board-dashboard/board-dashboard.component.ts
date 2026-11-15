@@ -98,7 +98,7 @@ export class BoardDashboardComponent {
     this.route.navigateByUrl(`teacher/${boardName}/${board}`)
     let teacherID = sessionStorage.getItem('teacherId');
     this.BackgroundColor = localStorage.getItem('backgroundColor');
-    let modiField = this.BackgroundColor.replace("#", "")
+    let modiField = this.BackgroundColor ? this.BackgroundColor.replace("#", "") : 'default';
     console.log(modiField)
 
 

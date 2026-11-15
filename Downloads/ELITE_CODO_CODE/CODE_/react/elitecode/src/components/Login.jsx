@@ -83,7 +83,8 @@ const Login = () => {
       if (response.data && response.data.accessToken) {
         localStorage.setItem('accessToken', response.data.accessToken);
         localStorage.setItem('user', JSON.stringify(response.data));
-        alert('Login successful!');
+        const teacherId = response.data.id || 7;
+        navigate(`/create-question/default/1/Exam_Ash/${teacherId}`);
       }
     } catch (error) {
       console.error('Login error:', error);
