@@ -40,7 +40,7 @@ jobs:
           mvn -B -q -DskipTests package
           mkdir -p "$RUNNER_TEMP/out/backend"
           cp builds/elearning-0.0.1-SNAPSHOT.jar "$RUNNER_TEMP/out/backend/app.jar"
-          unzip -l "$RUNNER_TEMP/out/backend/app.jar" 2>/dev/null | grep -q BOOT-INF/lib
+          test "$(stat -c%s "$RUNNER_TEMP/out/backend/app.jar")" -gt 100000000
       - name: Student/teacher/admin site (Angular)
         working-directory: ${{ env.ROOT }}/Angular/EliteCodo Angular
         env:
