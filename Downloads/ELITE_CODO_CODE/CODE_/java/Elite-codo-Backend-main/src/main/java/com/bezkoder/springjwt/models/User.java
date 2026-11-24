@@ -7,6 +7,9 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import com.bezkoder.springjwt.utils.MaskedStringSerializer;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.ToString;
@@ -43,12 +46,15 @@ public class User {
   @Size(max = 50)
   @Email
   private String email;
+  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
   private Integer otp;
 
   @NotBlank
   @Size(max = 120)
+  @JsonSerialize(using = MaskedStringSerializer.class)
   private String password;
 
+  @JsonSerialize(using = MaskedStringSerializer.class)
   private String confirmPassword;
 
   private String className;

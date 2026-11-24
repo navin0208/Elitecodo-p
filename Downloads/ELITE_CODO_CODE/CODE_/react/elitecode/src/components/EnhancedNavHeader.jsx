@@ -47,7 +47,8 @@ const EnhancedNavHeader = () => {
   };
   const logout = () => {
     sessionStorage.clear();
-    window.location.href = 'https://elitecodo.com/';
+    // Same host the portal is served from (production, staging or a test server)
+    window.location.href = `${window.location.origin}/`;
   };
   // Inline styles for when Tailwind isn't rendering
   const styles = {
@@ -264,7 +265,7 @@ const EnhancedNavHeader = () => {
                 id='backButton'
                 // onClick={goBack}
                 onClick={() =>
-                  (window.location.href = `http://elitecodo.com/teacher/${entranceExamName}/dashboard`)
+                  (window.location.href = `${window.location.origin}/teacher/${entranceExamName}/dashboard`)
                 }
                 style={styles.backButton}
               >
