@@ -37,7 +37,9 @@ jobs:
         working-directory: ${{ env.ROOT }}/java/Elite-codo-Backend-main
         run: |
           rm -f builds/*.jar
-          mvn -B -q -DskipTests package
+          mvn -B -q -DskipTests package > "$RUNNER_TEMP/mvn.log" 2>&1 || {
+            grep -E 'ERROR|BUILD|Could not' "$RUNNER_TEMP/mvn.log" | head -8 | cut -c1-350 | sed 's/^/::error::/'
+            tail -40 "$RUNNER_TEMP/mvn.log"; exit 1; }
           mkdir -p "$RUNNER_TEMP/out/backend"
           cp builds/elearning-0.0.1-SNAPSHOT.jar "$RUNNER_TEMP/out/backend/app.jar"
           test "$(stat -c%s "$RUNNER_TEMP/out/backend/app.jar")" -gt 100000000
