@@ -26,10 +26,6 @@ jobs:
           AUTH="AUTHORIZATION: basic $(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)"
           git -c http.extraheader="$AUTH" fetch -q --depth 1 origin "$GITHUB_SHA"
           git checkout -q FETCH_HEAD
-      - uses: actions/setup-java@d1374f8ac74474200d16ef8ecee22c7ae7a51880 # v6.3.0
-        with:
-          distribution: temurin
-          java-version: '17'
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: '18'
@@ -37,7 +33,9 @@ jobs:
         working-directory: ${{ env.ROOT }}/java/Elite-codo-Backend-main
         run: |
           rm -f builds/*.jar
-          mvn -B -q -DskipTests package > "$RUNNER_TEMP/mvn.log" 2>&1 || {
+          # Maven 3.9 on purpose: Maven 4 rejects the duplicate dependencies in pom.xml
+          docker run --rm -u "$(id -u):$(id -g)" -e HOME=/tmp -e MAVEN_CONFIG= -v "$PWD:/w" -w /w maven:3.9-eclipse-temurin-17 \
+            mvn -B -q -Dmaven.repo.local=/tmp/m2 -DskipTests package > "$RUNNER_TEMP/mvn.log" 2>&1 || {
             grep -E 'ERROR|BUILD|Could not' "$RUNNER_TEMP/mvn.log" | head -8 | cut -c1-350 | sed 's/^/::error::/'
             tail -40 "$RUNNER_TEMP/mvn.log"; exit 1; }
           mkdir -p "$RUNNER_TEMP/out/backend"
