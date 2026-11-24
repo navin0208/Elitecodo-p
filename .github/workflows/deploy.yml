@@ -1,0 +1,121 @@
+# push to Test  ->  build  ->  you approve  ->  deploy to the server  ->  main is updated
+name: Test to production
+
+on:
+  push:
+    branches: [Test]
+
+permissions:
+  contents: read
+
+env:
+  ROOT: Downloads/ELITE_CODO_CODE/CODE_
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@d1374f8ac74474200d16ef8ecee22c7ae7a51880 # v6.3.0
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '18'
+      - name: Backend (Java)
+        working-directory: ${{ env.ROOT }}/java/Elite-codo-Backend-main
+        run: |
+          rm -f builds/*.jar
+          mvn -B -q -DskipTests package
+          mkdir -p "$RUNNER_TEMP/out/backend"
+          cp builds/elearning-0.0.1-SNAPSHOT.jar "$RUNNER_TEMP/out/backend/app.jar"
+          unzip -l "$RUNNER_TEMP/out/backend/app.jar" 2>/dev/null | grep -q BOOT-INF/lib
+      - name: Student/teacher/admin site (Angular)
+        working-directory: ${{ env.ROOT }}/Angular/EliteCodo Angular
+        env:
+          NG_CLI_ANALYTICS: 'false'
+          NODE_OPTIONS: --max-old-space-size=6144
+        run: |
+          npm ci --legacy-peer-deps --no-audit --no-fund
+          npx ng build --configuration production --output-path "$RUNNER_TEMP/out/www/angular"
+      - name: Question portal (React)
+        working-directory: ${{ env.ROOT }}/react/elitecode
+        env:
+          CI: 'false'
+        run: |
+          npm ci --legacy-peer-deps --no-audit --no-fund
+          BUILD_PATH="$RUNNER_TEMP/out/www/react" npm run build
+      - name: Pack
+        run: |
+          find "$RUNNER_TEMP/out" -type l -delete
+          tar -C "$RUNNER_TEMP/out" -czf "$RUNNER_TEMP/bundle.tgz" backend www
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: bundle
+          path: ${{ runner.temp }}/bundle.tgz
+          retention-days: 30
+          if-no-files-found: error
+
+  deploy:
+    name: Deploy (needs approval)
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    environment:
+      name: production
+      url: http://137.23.33.13/
+    concurrency:
+      group: deploy-production
+      cancel-in-progress: false
+    permissions:
+      contents: write   # to move main forward after a successful deployment
+      actions: read
+    steps:
+      - name: Refuse to run without an approval rule
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/$GITHUB_REPOSITORY/environments/production" \
+            --jq '[.protection_rules[]? | select(.type=="required_reviewers")] | length' | grep -qx '[1-9][0-9]*' \
+            || { echo "::error::The 'production' environment has no required reviewer, so nothing is deployed."; exit 1; }
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          filter: blob:none
+          sparse-checkout: .github
+          persist-credentials: false
+      - name: Only move forward
+        run: |
+          git fetch -q origin main Test
+          git merge-base --is-ancestor "$GITHUB_SHA" origin/Test || { echo "::error::This commit is no longer on Test."; exit 1; }
+          git merge-base --is-ancestor origin/main "$GITHUB_SHA" || { echo "::error::main already has newer or different changes; push Test again and approve the newest run."; exit 1; }
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: bundle
+          path: ${{ runner.temp }}
+      - name: Deploy to the server
+        env:
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+        run: |
+          [ -n "$DEPLOY_SSH_KEY" ] || { echo "::error::DEPLOY_SSH_KEY is not set."; exit 1; }
+          umask 077; mkdir -p ~/.ssh
+          printf '%s\n' "$DEPLOY_SSH_KEY" > ~/.ssh/deploy
+          echo '137.23.33.13 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK2dY3mAvKFzlafHPnSPLk+CLW6Zp0PgoSsRxQI6BJqG' > ~/.ssh/known_hosts
+          ssh -i ~/.ssh/deploy -o BatchMode=yes -o StrictHostKeyChecking=yes -o ServerAliveInterval=20 \
+            ubuntu@137.23.33.13 "deploy $GITHUB_SHA" < "$RUNNER_TEMP/bundle.tgz"
+          rm -f ~/.ssh/deploy
+      - name: Check the live site
+        run: |
+          test "$(curl -fsS --retry 5 --retry-all-errors http://137.23.33.13/version.txt)" = "$GITHUB_SHA"
+          curl -fsS http://137.23.33.13/api/auth/countof
+      - name: Update main
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git push "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "$GITHUB_SHA:refs/heads/main"
+          echo "Deployed and moved main to \`${GITHUB_SHA:0:9}\`" >> "$GITHUB_STEP_SUMMARY"
